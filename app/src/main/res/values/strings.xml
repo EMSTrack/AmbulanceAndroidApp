@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">CruzRojaMobile</string>
+    <string-array name="status_updates">
+        <item>Departed from Hospital.</item>
+        <item>Just picked up patient and heading towards Hospital.</item>
+        <item>On break.</item>
+
+        <!--><item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item> </!-->
+
+    </string-array>
 </resources>
