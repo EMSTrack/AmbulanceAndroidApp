@@ -48,7 +48,7 @@ public class GPS extends AppCompatActivity {
      * If you delete textview1 DELETE THIS METHOD TODO
      * @param s
      */
-    private void print(String s){
+    private void display(String s){
         TextView t = (TextView) findViewById(R.id.textView1);
         t.setText(s);
     }
@@ -72,10 +72,13 @@ public class GPS extends AppCompatActivity {
         double lat = gps.getLatitude(); // returns latitude
         double lon = gps.getLongitude(); // returns longitude
 
-        String s = new String();
-        s += "Lat: " + lat + ". Lon: " + lon;
+        //String s = new String();
+        //s += "Lat: " + lat + ". Lon: " + lon;
 
-        this.print(s);
+        LocationPoint loc = new LocationPoint(lon, lat);
+        this.display(loc.toString());
+
+       // this.display(s);
     }
 
 
