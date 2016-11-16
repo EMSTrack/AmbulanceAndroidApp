@@ -14,8 +14,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 /**
  * Java Class that implements code for the GPS Activity
+ * Methods for lists and buttons are here.
  */
 public class GPS extends AppCompatActivity {
 
@@ -97,6 +105,9 @@ public class GPS extends AppCompatActivity {
        // this.display(s);
     }
 
+    /**
+     *
+     */
     private void doStuffWrapper() {
             // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
@@ -109,10 +120,82 @@ public class GPS extends AppCompatActivity {
     }
 
 
+    /**
+     *
+     * @param view
+     */
     public void UpdateGPS(View view) {
 
         doStuff();
     }
 
+    /**
+     *
+     * @param view
+     */
+    public void broadcast(View view){
+        final TextView mTextView = (TextView) findViewById(R.id.text);
 
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://www.google.com";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                      //  mTextView.setText("Response is: "+ response.substring(0,500));
+                        toasting("Response is: "+ response.substring(0,500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mTextView.setText("That didn't work!");
+                toasting("That didn't work!!!!");
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
+
+    /**
+     *
+     * @param view
+     */
+    public void broadcastCruzRoja(View view){
+        final TextView mTextView = (TextView) findViewById(R.id.text);
+
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=\"thisisandroid\"";
+        /** Insert Java method here to get the location, turn into string, and
+         * concat with URL  */
+
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        //  mTextView.setText("Response is: "+ response.substring(0,500));
+                        toasting("Response is: "+ response.substring(0, response.length()));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mTextView.setText("That didn't work!");
+                toasting("That didn't work!!!!");
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
 }
