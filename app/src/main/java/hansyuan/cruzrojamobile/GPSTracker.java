@@ -10,6 +10,8 @@ package hansyuan.cruzrojamobile;
  * is done by the GPS class.
  */
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Service;
 
 //package com.example.gpstracking;
@@ -19,17 +21,26 @@ import android.app.Service;
         import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
-        import android.location.Location;
+import android.content.pm.PackageManager;
+import android.location.Location;
         import android.location.LocationListener;
         import android.location.LocationManager;
-        import android.os.Bundle;
+import android.os.Build;
+import android.os.Bundle;
         import android.os.IBinder;
         import android.provider.Settings;
-        import android.util.Log;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 public class GPSTracker extends Service implements LocationListener {
 
-    private final Context mContext;
+    private Context mContext;
+    private static LocationManager m_locationManager;
+    private static String provider;
+    private static final int REQUEST_COARSE_LOCATION = 999;
+    private static final int REQUEST_FINE_LOCATION = 998;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -57,6 +68,31 @@ public class GPSTracker extends Service implements LocationListener {
         this.mContext = context;
         getLocation();
     }
+    public void startListenLocation(Context context) {
+
+        this.mContext = context;
+        m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+        if (!getLastKnownLocationIfAllowed())
+            ActivityCompat.requestPermissions(
+                    (Activity) mContext,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_COARSE_LOCATION);
+    }
+
+
+    public boolean getLastKnownLocationIfAllowed() {
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            Location location = m_locationManager.getLastKnownLocation(provider);
+            return true;
+        }
+
+        return false;
+    }
+
 
     public Location getLocation() {
         try {
@@ -70,6 +106,16 @@ public class GPSTracker extends Service implements LocationListener {
             // getting network status
             isNetworkEnabled = locationManager
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            /** Test */
+            if (!getLastKnownLocationIfAllowed()) {
+
+                ActivityCompat.requestPermissions(
+                        (Activity) mContext,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_FINE_LOCATION);
+            }
+
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
@@ -92,6 +138,18 @@ public class GPSTracker extends Service implements LocationListener {
                             }
                         }
                     }
+                    /** Adding code to check for location permission*/
+                    int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+                    if (currentapiVersion >= Build.VERSION_CODES.M){
+                        //Request Permission at Runtime!
+
+
+
+
+                    } else{
+                        // do something for phones running an SDK before lollipop
+                    }
+
                     // TODO This is the original isGPSEnabled if-statement.
                     if (isGPSEnabled) {
                         if (location == null) {
@@ -224,6 +282,7 @@ public class GPSTracker extends Service implements LocationListener {
         // Showing Alert Message
         alertDialog.show();
     }
+
 
     @Override
     public void onLocationChanged(Location location) {

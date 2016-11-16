@@ -1,11 +1,15 @@
 package hansyuan.cruzrojamobile;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +43,8 @@ public class GPS extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
+        //checkLocationPermission();
+
         //doStuff();
         doStuffWrapper();
 
@@ -52,6 +58,22 @@ public class GPS extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
     }
+/*
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_COARSE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    myLocationManager.getLastKnownLocationIfAllowed();
+                } else {
+                    //Permission denied
+                }
+                return;
+            }
+        }
+    }
+*/
+
+
 
     /**
      * Automatically initiate a toast based on the string parameter
@@ -66,6 +88,40 @@ public class GPS extends AppCompatActivity {
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
+/*
+    protected void checkLocationPermission(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CONTACTS)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                private void showPermissionDialog() {
+                    if (!LocationController.checkPermission(this)) {
+                        ActivityCompat.requestPermissions(
+                                this,
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                PERMISSION_LOCATION_REQUEST_CODE);
+                    }
+                }
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+                System.out.println("lol this does nothing! ");
+            }
+        }
+    }*/
 
     /**
      * Will set the textview as the string you pass in.
@@ -86,7 +142,7 @@ public class GPS extends AppCompatActivity {
     private void doStuff(){
 
         gps = new GPSTracker( this );
-
+        gps.getLastKnownLocationIfAllowed();
         //GPSTracker gps = new GPSTracker(this); not sure why this exists.
 
         if(gps.canGetLocation()){
