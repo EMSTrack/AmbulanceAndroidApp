@@ -80,9 +80,7 @@ public class GPSTracker extends Service implements LocationListener {
                     REQUEST_COARSE_LOCATION);
     }
 
-    /**
-     * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
-     */
+
     public boolean getLastKnownLocationIfAllowed() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

@@ -14,9 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,35 +26,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Java Class AND ACTIVITY
- * implements code for the GPS Activity
+ * Java Class that implements code for the GPS Activity
  * Methods for lists and buttons are here.
  */
-public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
+public class GPS extends AppCompatActivity {
 
     GPSTracker gps;
     String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
-    Handler clockedHandler = new Handler();
-    Runnable clockedHandlerTask = new Runnable()
-        {
-        @Override
-        public void run () {
-            broadcast();
-            clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
-            if ( !clockEnable.isChecked() ) {
-                stopRepeatingTask();
-            }
-        }
-    };
-
-
-    Switch clockEnable;
-
-
-
-
-
 
 
     /**
@@ -75,39 +51,15 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         // Dropdown Menu (spinner)
         Spinner spinner = (Spinner) findViewById(R.id.statusupdate);
-
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.status_updates, android.R.layout.simple_spinner_item);
-
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
-
-        clockEnable = (Switch) findViewById(R.id.clockSwitch);
-        clockEnable.setOnCheckedChangeListener(this);
     }
-
-
-
-
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked){
-            startRepeatingTask();
-        }
-        else{
-            stopRepeatingTask();
-        }
-    }
-
-
-
-    /*
+/*
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_COARSE_LOCATION: {
@@ -120,16 +72,9 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
             }
         }
     }
-    */
+*/
 
-    void startRepeatingTask(){
-        clockedHandlerTask.run();
-    }
 
-    void stopRepeatingTask()
-    {
-        clockedHandler.removeCallbacks(clockedHandlerTask);
-    }
 
     /**
      * Automatically initiate a toast based on the string parameter
@@ -144,7 +89,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-    /*
+/*
     protected void checkLocationPermission(){
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
@@ -202,7 +147,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         //GPSTracker gps = new GPSTracker(this); not sure why this exists.
 
         if(gps.canGetLocation()){
-            this.toasting("Got location.");
+            this.toasting("Yeah");
         }
 
         double lat = gps.getLatitude(); // returns latitude
@@ -274,41 +219,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     }
 
 
-    /*
-    * THIS IS A TEST METHOD
-    * YES, IT IS OVERLOADING.
-    *
-    * */
-
-    public void broadcast(){
-        final TextView mTextView = (TextView) findViewById(R.id.text);
-
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://www.google.com";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: "+ response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                toasting("That didn't work!!!!");
-            }
-        });
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-
 
     /**
      *
@@ -318,12 +228,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
         Spinner mySpinner=(Spinner) findViewById(R.id.statusupdate);
+        String status = mySpinner.getSelectedItem().toString();
 
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String status = mySpinner.getSelectedItem().toString();
         String url = this.url + status;
 
         /** Insert Java method here to get the location, turn into string, and

@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">CruzRojaMobile</string>
     <string-array name="status_updates">
-        <item>Departed from Hospital.</item>
-        <item>Just picked up patient and heading towards Hospital.</item>
-        <item>On break.</item>
+        <item>Left_hospital.</item>
+        <item>Heading_To_Hospital_with_Patient.</item>
+        <item>Off.</item>
 
         <!--><item>Mars</item>
         <item>Jupiter</item>
