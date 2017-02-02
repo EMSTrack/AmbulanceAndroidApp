@@ -6,6 +6,8 @@ package hansyuan.cruzrojamobile;
  * This class bundles information together to send out.
  * May need to add additional data types.
  *
+ * Keep in mind that 
+ *
  * There should not be a no-args constructor.
  */
 
