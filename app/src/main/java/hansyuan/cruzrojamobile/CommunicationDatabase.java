@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 /**
+ *  HELLO HANS!!!!!!
  * Class and Activity for creating code to communicate with database.
  *
  * This class may or may not be used in the future.
