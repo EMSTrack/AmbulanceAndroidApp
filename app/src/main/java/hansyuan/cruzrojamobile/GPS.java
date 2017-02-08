@@ -35,6 +35,9 @@ import com.android.volley.toolbox.Volley;
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
 
     GPSTracker gps;
+
+
+    //
     String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     Handler clockedHandler = new Handler();
@@ -52,11 +55,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
     Switch clockEnable;
-
-
-
-
-
 
 
     /**
