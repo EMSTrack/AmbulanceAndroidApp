@@ -37,15 +37,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     public final static int DELAY_START = 2000;
 
     GPSTracker gps;
-<<<<<<< HEAD
-
 
     //
     String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
-=======
+
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
->>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
+
     Handler clockedHandler = new Handler();
     Switch clockEnable;
     Spinner spinner;
