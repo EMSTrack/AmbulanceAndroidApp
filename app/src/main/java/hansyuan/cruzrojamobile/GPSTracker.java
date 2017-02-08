@@ -63,10 +63,60 @@ public class GPSTracker extends Service implements LocationListener {
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
+<<<<<<< HEAD
+=======
+
+
+
+
+
+    /**
+     * The constructor is required to have the context, which is the GPS activity.
+     */
+>>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
     }
+<<<<<<< HEAD
+
+    public void startListenLocation(Context context) {
+
+        this.mContext = context;
+        m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+        if (!getLastKnownLocationIfAllowed())
+            ActivityCompat.requestPermissions(
+                    (Activity) mContext,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_COARSE_LOCATION);
+    }
+=======
+>>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
+
+    /**
+     * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
+     *
+     * This method resolves operating system version differences when requesting
+     * permission for locations.
+     */
+    public boolean getLastKnownLocationIfAllowed() {
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            Location location = m_locationManager.getLastKnownLocation(provider);
+            return true;
+        }
+
+        return false;
+    }
+
+<<<<<<< HEAD
+=======
+
 
     public void startListenLocation(Context context) {
 
@@ -80,21 +130,12 @@ public class GPSTracker extends Service implements LocationListener {
                     REQUEST_COARSE_LOCATION);
     }
 
+
     /**
-     * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
+     * Initializes needed variables, checks if
+     * @return
      */
-    public boolean getLastKnownLocationIfAllowed() {
-
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            provider = LocationManager.GPS_PROVIDER;
-            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            Location location = m_locationManager.getLastKnownLocation(provider);
-            return true;
-        }
-
-        return false;
-    }
-
+>>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext
@@ -120,6 +161,7 @@ public class GPSTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no network provider is enabled
+                this.canGetLocation = false;
             } else {
                 this.canGetLocation = true;
                 // First get location from Network Provider

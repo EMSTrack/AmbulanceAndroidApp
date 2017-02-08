@@ -6,6 +6,10 @@ package hansyuan.cruzrojamobile;
  * This class bundles information together to send out.
  * May need to add additional data types.
  *
+ * Keep in mind that the strings should be matching the
+ * agreed specification between the  server team and the
+ * mobile team
+ *
  * There should not be a no-args constructor.
  */
 

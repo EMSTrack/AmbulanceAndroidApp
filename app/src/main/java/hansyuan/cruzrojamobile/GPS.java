@@ -33,16 +33,33 @@ import com.android.volley.toolbox.Volley;
  * Methods for lists and buttons are here.
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
+    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+    public final static int DELAY_START = 2000;
 
     GPSTracker gps;
+<<<<<<< HEAD
 
 
     //
     String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+=======
+    String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
+>>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
     Handler clockedHandler = new Handler();
+    Switch clockEnable;
+    Spinner spinner;
+
+
+    //The following is a declaration, instantiation, with a lambda function defined.
+    //Terrible style.
     Runnable clockedHandlerTask = new Runnable()
         {
+            /** todo Perhaps the method should also refresh the location first otherwise
+             * it will just keep transmitting the same thing.
+             *
+             * Also, I think it's currently hooked up to the Google broadcaster. 
+             */
         @Override
         public void run () {
             broadcast();
@@ -54,11 +71,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     };
 
 
-    Switch clockEnable;
 
+    Switch clockEnable;
 
     /**
      * Default method
+     * Always called when an activity is created.
      * @param savedInstanceState
      */
     @Override
@@ -66,13 +84,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
-        //checkLocationPermission();
+        //checkLocationPermission(); //Might be needed, might not.
 
-        //doStuff();
-        doStuffWrapper();
+        timeDelay(DELAY_START);
+        tryGPS(); //MUST BE CALLED AFTER THE DELAY
 
         // Dropdown Menu (spinner)
-        Spinner spinner = (Spinner) findViewById(R.id.statusupdate);
+        spinner = (Spinner) findViewById(R.id.statusupdate);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -83,7 +101,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
 
         clockEnable = (Switch) findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
@@ -105,20 +122,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
-    /*
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_COARSE_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    myLocationManager.getLastKnownLocationIfAllowed();
-                } else {
-                    //Permission denied
-                }
-                return;
-            }
-        }
-    }
-    */
 
     void startRepeatingTask(){
         clockedHandlerTask.run();
@@ -142,40 +145,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-    /*
-    protected void checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                private void showPermissionDialog() {
-                    if (!LocationController.checkPermission(this)) {
-                        ActivityCompat.requestPermissions(
-                                this,
-                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                                PERMISSION_LOCATION_REQUEST_CODE);
-                    }
-                }
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-                System.out.println("lol this does nothing! ");
-            }
-        }
-    }*/
 
     /**
      * Will set the textview as the string you pass in.
@@ -188,19 +157,21 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     }
 
     /**
-     * Does stuff:
-     *
      * creates a new GPSTracker instance
-     * detects whether it can find GPS.
+     * detects whether it can find GPS first
+     * If it can't, then simply stop immediately.
      */
-    private void doStuff(){
-
+    private void tryGPS(){
         gps = new GPSTracker( this );
         gps.getLastKnownLocationIfAllowed();
         //GPSTracker gps = new GPSTracker(this); not sure why this exists.
 
         if(gps.canGetLocation()){
             this.toasting("Got location.");
+        }
+        else{
+            this.toasting("Could not get location.");
+            return;
         }
 
         double lat = gps.getLatitude(); // returns latitude
@@ -218,15 +189,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     /**
      *
      */
-    private void doStuffWrapper() {
+    private void timeDelay(int milliseconds) {
             // Execute some code after 2 seconds have passed
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
-                public void run() {
-                    doStuff();
-                }
-            }, 2000);
+                public void run(){}}, //Run nothing
+                    milliseconds); //Delay Set
     }
 
 
@@ -235,8 +204,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param view
      */
     public void UpdateGPS(View view) {
-
-        doStuff();
+        tryGPS();
     }
 
     /**
@@ -244,6 +212,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param view
      */
     public void broadcast(View view){
+        /*
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
 
@@ -267,15 +236,15 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
                 toasting("That didn't work!!!!");
             }
         });
-// Add the request to the RequestQueue.
+    // Add the request to the RequestQueue.
         queue.add(stringRequest);
+        */
+        broadcast();
     }
 
 
     /*
-    * THIS IS A TEST METHOD
-    * YES, IT IS OVERLOADING.
-    *
+    * This
     * */
 
     public void broadcast(){
@@ -309,7 +278,8 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
     /**
-     *
+     * Thie method will compile together the location point information, append
+     * it to the url, and then do a GET request on the URL.
      * @param view
      */
     public void broadcastCruzRoja(View view){
@@ -320,11 +290,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-
         String status = mySpinner.getSelectedItem().toString();
-        String url = this.url + status;
 
-        /** Insert Java method here to get the location, turn into string, and
+        String url = this.url + status; // Incomplete
+        // todo May need to do a method call to locationpoint or something here.
+
+        /** TODO Insert Java method here to get the location, turn into string, and
          * concat with URL  */
 
 
@@ -344,7 +315,8 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
                 toasting("That didn't work!!!!");
             }
         });
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest); // Not sure about this.
     }
 }
