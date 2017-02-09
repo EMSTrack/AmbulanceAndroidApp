@@ -1,5 +1,8 @@
 package hansyuan.cruzrojamobile;
 
+import android.location.Location;
+import java.util.Calendar;
+
 /**
  * Created by Hans on 10/29/2016.
  *
@@ -24,16 +27,31 @@ class LocationPoint {
     //GPS
     double lon;
     double lat;
+    //NEED TIME
+    int time;
+    String status;
+    Calendar calendar;
+    /**
+     * Constructor for LocationPoint
+     * @param location
+     */
+    public LocationPoint (Location location) {
+        this.lon = location.getLongitude();
+        this.lat = location.getLatitude();
+        calendar = Calendar.getInstance();
+        time = calendar.get(Calendar.SECOND);
+    }
 
     /**
      * Constructor for LocationPoint.
-     *
      * @param lat
      * @param lon
      */
     public LocationPoint(double lon, double lat){
         this.lon = lon;
         this.lat = lat;
+        calendar = Calendar.getInstance();
+        time = calendar.get(Calendar.SECOND);
     }
 
     /**
@@ -44,4 +62,20 @@ class LocationPoint {
     public String toString(){
         return "Longitude: " + lon + "\nLatitude: " + lat;
     }
+
+
+    //.equals(locationpoint) (checks if 2 locationPoints are the same)
+    private boolean equals(LocationPoint otherLocation) {
+        if (this.lon == otherLocation.lon && this.lat == otherLocation.lat) {
+            return true;
+        }
+        return false;
+    }
+
+    //.within(locationpoint, int ) int = meters (checks this.locationpoint);
+    private boolean within(LocationPoint otherLocation, int distance) {
+
+        return true;
+    }
+
  }
