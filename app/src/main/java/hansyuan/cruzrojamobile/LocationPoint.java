@@ -11,6 +11,13 @@ package hansyuan.cruzrojamobile;
  * mobile team
  *
  * There should not be a no-args constructor.
+ *
+ * TODO
+ * 1. Don't need to change everything to String. We may be able to use JSON objects directly.
+ * Will need to confirm with server team.
+ * 2. The creation of the LocationPoint should be saved into the phone.
+ * 3. The creation of a Location Point should be pushed onto the stack.
+ *
  */
 
 class LocationPoint {
