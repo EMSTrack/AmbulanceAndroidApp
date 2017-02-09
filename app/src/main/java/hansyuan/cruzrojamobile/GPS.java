@@ -54,7 +54,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
     //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    public final static int INTERVAL = 1000 * 12 ;  // ( ____ sec * (1000 ms / 1 sec))
+    public final static int INTERVAL = 1000 * 8 ;  // ( ____ sec * (1000 ms / 1 sec))
 
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
 
@@ -107,8 +107,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         //checkLocationPermission(); //Might be needed, might not.
 
+
+        /* TODO This activity will NO LONGER automatically check a new location upon starting.
+
         timeDelay(DELAY_START);
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
+        */
 
         // Dropdown Menu (spinner)
         spinner = (Spinner) findViewById(R.id.statusupdate);

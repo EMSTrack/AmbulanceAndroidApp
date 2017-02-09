@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
     }
 
 
@@ -31,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void OpenGPS(View view) {
+        OpenGPS();
+    }
 
+    // The no-arg activity starter for the GPS activity.
+    private void OpenGPS() {
         Intent i = new Intent(this, GPS.class);
         startActivity(i);
     }
