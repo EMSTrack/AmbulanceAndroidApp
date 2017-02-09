@@ -13,7 +13,7 @@ package hansyuan.cruzrojamobile;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
-
+import java.util.Calendar; //needed for testing how calendar works
 //package com.example.gpstracking;
 
         import android.app.AlertDialog;
@@ -35,9 +35,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class GPSTracker extends Service implements LocationListener {
-
-    private Context mContext;
     private static LocationManager m_locationManager;
+    private Context mContext;
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
@@ -63,36 +62,12 @@ public class GPSTracker extends Service implements LocationListener {
 
     // Declaring a Location Manager
     protected LocationManager locationManager;
-<<<<<<< HEAD
-=======
 
 
-
-
-
-    /**
-     * The constructor is required to have the context, which is the GPS activity.
-     */
->>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
     }
-<<<<<<< HEAD
-
-    public void startListenLocation(Context context) {
-
-        this.mContext = context;
-        m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
-        if (!getLastKnownLocationIfAllowed())
-            ActivityCompat.requestPermissions(
-                    (Activity) mContext,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_COARSE_LOCATION);
-    }
-=======
->>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
 
     /**
      * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
@@ -114,28 +89,13 @@ public class GPSTracker extends Service implements LocationListener {
         return false;
     }
 
-<<<<<<< HEAD
-=======
-
-
-    public void startListenLocation(Context context) {
-
-        this.mContext = context;
-        m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
-        if (!getLastKnownLocationIfAllowed())
-            ActivityCompat.requestPermissions(
-                    (Activity) mContext,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_COARSE_LOCATION);
-    }
 
 
     /**
      * Initializes needed variables, checks if
      * @return
      */
->>>>>>> b25a4bcf1c075836ccb1a1969d781e29dedbbf40
+
     public Location getLocation() {
         try {
             locationManager = (LocationManager) mContext
@@ -329,6 +289,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        LocationPoint newLocation = new LocationPoint(location);
+
+        //check current location w/last location getLocation
+
     }
 
     @Override
