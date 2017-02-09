@@ -62,6 +62,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     //Switch clockEnable;
     Spinner spinner;
     Spinner mySpinner;
+    Switch clockEnable;
 
 
     //The following is a declaration, instantiation, with a lambda function defined.
@@ -83,6 +84,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
             mySpinner=(Spinner) findViewById(R.id.statusupdate);
             toasting(mySpinner.getSelectedItem().toString());
 
+
             //a Delay is done:
             clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
             if ( !clockEnable.isChecked() ) {
@@ -93,7 +95,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
-    Switch clockEnable;
+
 
     /**
      * Default method
@@ -134,10 +136,29 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     }
 
+    /** For the following three methods, stop the clock when the activity, in any way, is left. */
 
+    @Override
+    protected void onPause() {
+        super.onPause(); // This is required for some reason.
+        clockEnable.setChecked(false);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop(); // Same.
+        clockEnable.setChecked(false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy(); // Same.
+        clockEnable.setChecked(false);
+    }
 
     /**
+     * Anytime we want to do a time delay, use this method.
      *
+     * This method can be copy and pasted as ubiquitiously as the toast method.
      */
     private void timeDelay(int milliseconds) {
         // Execute some code after 2 seconds have passed

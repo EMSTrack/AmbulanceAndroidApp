@@ -78,6 +78,8 @@ class LocationPoint {
     }
 
 
+
+
     //.equals(locationpoint) (checks if 2 locationPoints are the same)
     private boolean equals(LocationPoint otherLocation) {
         if (this.lon == otherLocation.lon && this.lat == otherLocation.lat) {
