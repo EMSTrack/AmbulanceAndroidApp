@@ -44,7 +44,7 @@ import com.android.volley.toolbox.Volley;
  *
  * The stack that will try to continually push most recent
  * data to the server might use the LP's method that will
- * return a new JSONObject. 
+ * return a new JSONObject.
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
@@ -54,13 +54,14 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
     //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+    public final static int INTERVAL = 1000 * 12 ;  // ( ____ sec * (1000 ms / 1 sec))
 
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
 
     Handler clockedHandler = new Handler();
     //Switch clockEnable;
     Spinner spinner;
+    Spinner mySpinner;
 
 
     //The following is a declaration, instantiation, with a lambda function defined.
@@ -68,13 +69,21 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     Runnable clockedHandlerTask = new Runnable()
         {
             /** todo Perhaps the method should also refresh the location first otherwise
-             * it will just keep transmitting the same thing.
+             * Repeats whatever is in the run method.
              *
              * Also, I think it's currently hooked up to the Google broadcaster. 
              */
         @Override
         public void run () {
-            broadcast();
+
+            //TODO Clocked methods are here:
+
+            tryGPS();           // get an updated location
+            broadcast();        // Do a GET request to Google.
+            mySpinner=(Spinner) findViewById(R.id.statusupdate);
+            toasting(mySpinner.getSelectedItem().toString());
+
+            //a Delay is done:
             clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
             if ( !clockEnable.isChecked() ) {
                 stopRepeatingTask();
@@ -123,7 +132,17 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
-
+    /**
+     *
+     */
+    private void timeDelay(int milliseconds) {
+        // Execute some code after 2 seconds have passed
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run(){}}, //Run nothing
+                milliseconds); //Delay Set
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -175,6 +194,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * creates a new GPSTracker instance
      * detects whether it can find GPS first
      * If it can't, then simply stop immediately.
+     *
+     * For now, this creates a new GPSTracker every single time I run the ability to get an
+     * updated location. This might not be efficient but for now it's okay and we should focus
+     * on improving the connection with the server.
      */
     private void tryGPS(){
         gps = new GPSTracker( this );
@@ -201,17 +224,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
        // this.display(s);
     }
 
-    /**
-     *
-     */
-    private void timeDelay(int milliseconds) {
-            // Execute some code after 2 seconds have passed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run(){}}, //Run nothing
-                    milliseconds); //Delay Set
-    }
+
 
 
     /**
@@ -300,7 +313,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     public void broadcastCruzRoja(View view){
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
-        Spinner mySpinner=(Spinner) findViewById(R.id.statusupdate);
+        mySpinner=(Spinner) findViewById(R.id.statusupdate);
 
 
         // Instantiate the RequestQueue.
