@@ -31,6 +31,20 @@ import com.android.volley.toolbox.Volley;
  * Java Class AND ACTIVITY
  * implements code for the GPS Activity
  * Methods for lists and buttons are here.
+ *
+ * TODO
+ * Location Point should probably be its own entity.
+ *
+ * Then
+ * when the LP is used to store data inside the phone, there
+ * might be a method specific to the I/O that will parse the
+ * LP Object. Or, LP might have the toString method modified
+ * so that when we print to the file, we can just call the
+ * toString method, and the save the time.
+ *
+ * The stack that will try to continually push most recent
+ * data to the server might use the LP's method that will
+ * return a new JSONObject. 
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
@@ -38,7 +52,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     GPSTracker gps;
 
-    //
+
     //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
 

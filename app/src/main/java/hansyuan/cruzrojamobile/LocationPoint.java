@@ -1,6 +1,9 @@
 package hansyuan.cruzrojamobile;
 
 import android.location.Location;
+
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 /**
@@ -20,6 +23,7 @@ import java.util.Calendar;
  * Will need to confirm with server team.
  * 2. The creation of the LocationPoint should be saved into the phone.
  * 3. The creation of a Location Point should be pushed onto the stack.
+ * We might need a separate toString method for the filenames.
  *
  */
 
@@ -61,6 +65,16 @@ class LocationPoint {
     @Override
     public String toString(){
         return "Longitude: " + lon + "\nLatitude: " + lat;
+    }
+
+    /**
+     * This method will return a JSON Object.
+     * When we decide if and how to use JSONs to transmit information, we could come
+     * up with a format for the JSON object.
+     * @return
+     */
+    public JSONObject getJSON(){
+        return null;
     }
 
 
