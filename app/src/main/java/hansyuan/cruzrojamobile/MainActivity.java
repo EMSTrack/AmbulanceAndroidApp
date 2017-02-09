@@ -40,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void openInfo(View view) {
+        openInfo();
+    }
+
+    private void openInfo(){
+        //Intent z = ;
+        startActivity (new Intent (this, demo_viewTransmission.class));
+    }
+
 
 
 } // end class

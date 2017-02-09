@@ -344,8 +344,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String status = mySpinner.getSelectedItem().toString();
+        String lon = "?longitude=1.2345";
+        String latt = "?lattitude=5.4321";
 
-        String url = this.url + status; // Incomplete
+        String url = this.url + status + lon + latt; // arbitrary values for lon and lat
         // todo May need to do a method call to locationpoint or something here.
 
         /** TODO Insert Java method here to get the location, turn into string, and
