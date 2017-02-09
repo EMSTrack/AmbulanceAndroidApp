@@ -33,13 +33,19 @@ import com.android.volley.toolbox.Volley;
  * Methods for lists and buttons are here.
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
-    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+    //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
 
     GPSTracker gps;
+
+    //
+    //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
+    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
+
     Handler clockedHandler = new Handler();
-    Switch clockEnable;
+    //Switch clockEnable;
     Spinner spinner;
 
 
@@ -64,6 +70,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
+    Switch clockEnable;
 
     /**
      * Default method
@@ -95,6 +102,9 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         clockEnable = (Switch) findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
+
+        //Sets the listener. TODO: check if gps is on, if not, toast
+
     }
 
 
