@@ -1,11 +1,12 @@
 package hansyuan.cruzrojamobile;
 
 import android.location.Location;
+import java.text.SimpleDateFormat; //used for time
+import java.util.Date; //used for 'time'
+import static android.location.Location.distanceBetween; //used for distanceBetween
+import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import static android.location.Location.distanceBetween;
 
 /**
  * Created by Hans on 10/29/2016.
@@ -18,6 +19,14 @@ import static android.location.Location.distanceBetween;
  * mobile team
  *
  * There should not be a no-args constructor.
+ *
+ * TODO
+ * 1. Don't need to change everything to String. We may be able to use JSON objects directly.
+ * Will need to confirm with server team.
+ * 2. The creation of the LocationPoint should be saved into the phone.
+ * 3. The creation of a Location Point should be pushed onto the stack.
+ * We might need a separate toString method for the filenames.
+ *
  */
 
 class LocationPoint {
@@ -61,6 +70,7 @@ class LocationPoint {
         return "Longitude: " + lon + "\nLatitude: " + lat;
     }
 
+
     /** Name: setTime
      * sets 'time' to current time
      */
@@ -68,6 +78,18 @@ class LocationPoint {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
         time = simpleDateFormat.format(new Date());
     }
+
+
+    /**
+     * This method will return a JSON Object.
+     * When we decide if and how to use JSONs to transmit information, we could come
+     * up with a format for the JSON object.
+     * @return
+     */
+    public JSONObject getJSON(){
+        return null;
+    }
+
 
 
     /** Name: .equals

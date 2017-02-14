@@ -11,47 +11,7 @@
     tools:context="hansyuan.cruzrojamobile.GPS">
 
     <TextView
-        android:text="Current Status:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_alignBottom="@+id/statusupdate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="23dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <Button
-        android:text="Update Location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/Update"
-        android:onClick="UpdateGPS"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="141dp"
-        android:id="@+id/statusupdate"
-        android:layout_below="@+id/textView1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="BroadcastGoogle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/broadcast"
-        android:layout_below="@+id/Update"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="broadcast" />
-
-    <TextView
-        android:text="Long/Lat"
+        android:text="Longitude:\nLatitude:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView1"
@@ -61,28 +21,64 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="13dp" />
 
-    <Button
-        android:text="cruz roja attempt"
+    <TextView
+        android:text="Current Status:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/textView1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/broadcastCruz"
-        android:onClick="broadcastCruzRoja" />
+        android:layout_marginTop="38dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:id="@+id/statusupdate"
+        android:layout_alignTop="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text='Enable to clock to continually check for current location, display the current status, and attempt to connect to Google.com. While the clock is on, try to disable the location. Also try to change the "Current Status" above. The toast messages will simulate a transmission to the database. '
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Switch
         android:text="Clocking:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/clockSwitch"
-        android:layout_marginRight="21dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="24dp"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
         android:checked="false"
+        android:layout_below="@+id/textView3"
+        android:layout_alignLeft="@+id/broadcastCruz"
+        android:layout_alignStart="@+id/broadcastCruz" />
+
+    <Button
+        android:text="send info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/broadcastCruz"
+        android:onClick="broadcastCruzRoja"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="The button below will transmit info currently gathered to the actual server. Once the information is there, the info can be utilized. Try this with the wifi off."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:layout_above="@+id/broadcastCruz"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
