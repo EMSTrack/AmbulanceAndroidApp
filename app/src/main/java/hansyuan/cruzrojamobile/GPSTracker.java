@@ -298,10 +298,6 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
-    /** Name: changed
-     *
-     * @return
-     */
 
     @Override
     public void onLocationChanged(Location location) {
