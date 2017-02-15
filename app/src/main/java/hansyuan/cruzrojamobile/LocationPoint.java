@@ -35,6 +35,7 @@ class LocationPoint {
     double lat;
     //NEED TIME
     String time;
+    String name;
     String status;
 
     /**
@@ -110,7 +111,7 @@ class LocationPoint {
      * Returns a boolean. Sets boolean to true if otherlocation LocationPoint
      * is within  'distance' of this LocationPoint. Calls on helper function.
      */
-    private boolean within(LocationPoint otherLocation, double distance) {
+    public boolean within(LocationPoint otherLocation, double distance) {
         double within = distanceBetweenTwoPlaces(this, otherLocation);
 
         if (within <= distance) {

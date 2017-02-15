@@ -63,10 +63,20 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
+    //Used in LocationListener to check whether to add a new locationPoint
+    LocationPoint lastKnownLocation;
+
 
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
+    }
+
+    /** Name: getLastKnowLocation
+     *  Returns LocationPoint lastKnownLocation
+     */
+    public LocationPoint getLastKnownLocation() {
+        return lastKnownLocation;
     }
 
     /**
@@ -83,6 +93,7 @@ public class GPSTracker extends Service implements LocationListener {
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             Location location = m_locationManager.getLastKnownLocation(provider);
+            lastKnownLocation = new LocationPoint (location);
             return true;
         }
 
@@ -290,8 +301,11 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         LocationPoint newLocation = new LocationPoint(location);
-
-        //check current location w/last location getLocation
+        //check current location with last location
+        if (!newLocation.within(lastKnownLocation, 50)) {
+            return;
+        }
+        lastKnownLocation = newLocation;
 
     }
 
