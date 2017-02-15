@@ -85,7 +85,7 @@ public class GPSTracker extends Service implements LocationListener {
      * This method resolves operating system version differences when requesting
      * permission for locations.
      */
-    public boolean getLastKnownLocationIfAllowed() {
+    public LocationPoint getLastKnownLocationIfAllowed() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
@@ -94,10 +94,10 @@ public class GPSTracker extends Service implements LocationListener {
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             Location location = m_locationManager.getLastKnownLocation(provider);
             lastKnownLocation = new LocationPoint (location);
-            return true;
+            return lastKnownLocation;
         }
 
-        return false;
+        return null;
     }
 
 
@@ -121,7 +121,7 @@ public class GPSTracker extends Service implements LocationListener {
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             /** Test */
-            if (!getLastKnownLocationIfAllowed()) {
+            if (getLastKnownLocationIfAllowed() == null) {
 
                 ActivityCompat.requestPermissions(
                         (Activity) mContext,
@@ -298,6 +298,11 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
+    /** Name: changed
+     *
+     * @return
+     */
+
     @Override
     public void onLocationChanged(Location location) {
         LocationPoint newLocation = new LocationPoint(location);
@@ -306,6 +311,8 @@ public class GPSTracker extends Service implements LocationListener {
             return;
         }
         lastKnownLocation = newLocation;
+
+        //TODO add writeToFile code
 
     }
 

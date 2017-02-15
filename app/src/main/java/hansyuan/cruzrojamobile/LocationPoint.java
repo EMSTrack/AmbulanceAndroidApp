@@ -30,12 +30,12 @@ import org.json.JSONObject;
  */
 
 class LocationPoint {
+    String name;
     //GPS
     double lon;
     double lat;
     //NEED TIME
     String time;
-    String name;
     String status;
 
     /**
@@ -59,6 +59,15 @@ class LocationPoint {
         this.lat = lat;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
         time = simpleDateFormat.format(new Date());
+    }
+
+
+    /** Name: setName
+     * @param newName
+     * Sets the locationPoint's name
+     */
+    public void setName(String newName) {
+        name = newName;
     }
 
 
