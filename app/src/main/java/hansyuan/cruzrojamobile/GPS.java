@@ -31,6 +31,20 @@ import com.android.volley.toolbox.Volley;
  * Java Class AND ACTIVITY
  * implements code for the GPS Activity
  * Methods for lists and buttons are here.
+ *
+ * TODO
+ * Location Point should probably be its own entity.
+ *
+ * Then
+ * when the LP is used to store data inside the phone, there
+ * might be a method specific to the I/O that will parse the
+ * LP Object. Or, LP might have the toString method modified
+ * so that when we print to the file, we can just call the
+ * toString method, and the save the time.
+ *
+ * The stack that will try to continually push most recent
+ * data to the server might use the LP's method that will
+ * return a new JSONObject.
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
@@ -38,15 +52,17 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     GPSTracker gps;
 
-    //
+
     //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+    public final static int INTERVAL = 1000 * 8 ;  // ( ____ sec * (1000 ms / 1 sec))
 
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
 
     Handler clockedHandler = new Handler();
     //Switch clockEnable;
     Spinner spinner;
+    Spinner mySpinner;
+    Switch clockEnable;
 
 
     //The following is a declaration, instantiation, with a lambda function defined.
@@ -54,13 +70,22 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     Runnable clockedHandlerTask = new Runnable()
         {
             /** todo Perhaps the method should also refresh the location first otherwise
-             * it will just keep transmitting the same thing.
+             * Repeats whatever is in the run method.
              *
              * Also, I think it's currently hooked up to the Google broadcaster. 
              */
         @Override
         public void run () {
-            broadcast();
+
+            //TODO Clocked methods are here:
+
+            tryGPS();           // get an updated location
+            broadcast();        // Do a GET request to Google.
+            mySpinner=(Spinner) findViewById(R.id.statusupdate);
+            toasting(mySpinner.getSelectedItem().toString());
+
+
+            //a Delay is done:
             clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
             if ( !clockEnable.isChecked() ) {
                 stopRepeatingTask();
@@ -70,7 +95,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
-    Switch clockEnable;
+
 
     /**
      * Default method
@@ -84,8 +109,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         //checkLocationPermission(); //Might be needed, might not.
 
+
+        /* TODO This activity will NO LONGER automatically check a new location upon starting.
+
         timeDelay(DELAY_START);
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
+        */
 
         // Dropdown Menu (spinner)
         spinner = (Spinner) findViewById(R.id.statusupdate);
@@ -107,9 +136,38 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     }
 
+    /** For the following three methods, stop the clock when the activity, in any way, is left. */
 
+    @Override
+    protected void onPause() {
+        super.onPause(); // This is required for some reason.
+        clockEnable.setChecked(false);
+    }
+    @Override
+    protected void onStop(){
+        super.onStop(); // Same.
+        clockEnable.setChecked(false);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy(); // Same.
+        clockEnable.setChecked(false);
+    }
 
+    /**
+     * Anytime we want to do a time delay, use this method.
+     *
+     * This method can be copy and pasted as ubiquitiously as the toast method.
+     */
+    private void timeDelay(int milliseconds) {
+        // Execute some code after 2 seconds have passed
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run(){}}, //Run nothing
+                milliseconds); //Delay Set
+    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -161,6 +219,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * creates a new GPSTracker instance
      * detects whether it can find GPS first
      * If it can't, then simply stop immediately.
+     *
+     * For now, this creates a new GPSTracker every single time I run the ability to get an
+     * updated location. This might not be efficient but for now it's okay and we should focus
+     * on improving the connection with the server.
      */
     private void tryGPS(){
         gps = new GPSTracker( this );
@@ -187,17 +249,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
        // this.display(s);
     }
 
-    /**
-     *
-     */
-    private void timeDelay(int milliseconds) {
-            // Execute some code after 2 seconds have passed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run(){}}, //Run nothing
-                    milliseconds); //Delay Set
-    }
+
 
 
     /**
@@ -286,14 +338,16 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     public void broadcastCruzRoja(View view){
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
-        Spinner mySpinner=(Spinner) findViewById(R.id.statusupdate);
+        mySpinner=(Spinner) findViewById(R.id.statusupdate);
 
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String status = mySpinner.getSelectedItem().toString();
+        String lon = "?longitude=1.2345";
+        String latt = "?lattitude=5.4321";
 
-        String url = this.url + status; // Incomplete
+        String url = this.url + status + lon + latt; // arbitrary values for lon and lat
         // todo May need to do a method call to locationpoint or something here.
 
         /** TODO Insert Java method here to get the location, turn into string, and

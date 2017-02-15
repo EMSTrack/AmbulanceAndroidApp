@@ -11,12 +11,22 @@
     tools:context="hansyuan.cruzrojamobile.MainActivity">
 
     <Button
+        android:text="check Info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="189dp"
+        android:id="@+id/button3"
+        android:onClick="openInfo" />
+
+    <Button
         android:text="To GPS Activity"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="OpenGPS" />
+        android:onClick="OpenGPS"
+        android:layout_above="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp" />
 </RelativeLayout>
