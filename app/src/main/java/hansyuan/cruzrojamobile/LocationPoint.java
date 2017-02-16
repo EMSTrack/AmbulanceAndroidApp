@@ -30,6 +30,7 @@ import org.json.JSONObject;
  */
 
 class LocationPoint {
+    String name;
     //GPS
     double lon;
     double lat;
@@ -42,6 +43,7 @@ class LocationPoint {
      * @param location
      */
     public LocationPoint (Location location) {
+        name = "";
         this.lon = location.getLongitude();
         this.lat = location.getLatitude();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
@@ -54,10 +56,20 @@ class LocationPoint {
      * @param lon
      */
     public LocationPoint(double lon, double lat){
+        name = "";
         this.lon = lon;
         this.lat = lat;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
         time = simpleDateFormat.format(new Date());
+    }
+
+
+    /** Name: setName
+     * @param newName
+     * Sets the locationPoint's name
+     */
+    public void setName(String newName) {
+        name = newName;
     }
 
 
@@ -67,9 +79,20 @@ class LocationPoint {
      */
     @Override
     public String toString(){
-        return "Longitude: " + lon + "\nLatitude: " + lat;
+        return "Name: " + name + " Time: " + time + " Longitude: " + lon + " Latitude: " + lat;
     }
 
+    public String getTime() {
+        return time;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCoordinates () {
+        return "Longitude: " + lon + "Latitude: " + lat;
+    }
 
     /** Name: setTime
      * sets 'time' to current time
@@ -110,7 +133,7 @@ class LocationPoint {
      * Returns a boolean. Sets boolean to true if otherlocation LocationPoint
      * is within  'distance' of this LocationPoint. Calls on helper function.
      */
-    private boolean within(LocationPoint otherLocation, double distance) {
+    public boolean within(LocationPoint otherLocation, double distance) {
         double within = distanceBetweenTwoPlaces(this, otherLocation);
 
         if (within <= distance) {

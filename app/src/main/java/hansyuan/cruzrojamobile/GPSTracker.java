@@ -13,6 +13,8 @@ package hansyuan.cruzrojamobile;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
+
+import java.io.FileOutputStream;
 import java.util.Calendar; //needed for testing how calendar works
 //package com.example.gpstracking;
 
@@ -27,7 +29,8 @@ import android.location.Location;
         import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-        import android.os.IBinder;
+import android.os.Environment;
+import android.os.IBinder;
         import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -63,10 +66,26 @@ public class GPSTracker extends Service implements LocationListener {
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
+    //Used in LocationListener to check whether to add a new locationPoint
+    LocationPoint lastKnownLocation;
+
+
+
+
+    
+
+
 
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
+    }
+
+    /** Name: getLastKnowLocation
+     *  Returns LocationPoint lastKnownLocation
+     */
+    public LocationPoint getLastKnownLocation() {
+        return lastKnownLocation;
     }
 
     /**
@@ -75,7 +94,7 @@ public class GPSTracker extends Service implements LocationListener {
      * This method resolves operating system version differences when requesting
      * permission for locations.
      */
-    public boolean getLastKnownLocationIfAllowed() {
+    public LocationPoint getLastKnownLocationIfAllowed() {
 
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
@@ -83,10 +102,11 @@ public class GPSTracker extends Service implements LocationListener {
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             Location location = m_locationManager.getLastKnownLocation(provider);
-            return true;
+            lastKnownLocation = new LocationPoint (location);
+            return lastKnownLocation;
         }
 
-        return false;
+        return null;
     }
 
 
@@ -110,7 +130,7 @@ public class GPSTracker extends Service implements LocationListener {
                     .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             /** Test */
-            if (!getLastKnownLocationIfAllowed()) {
+            if (getLastKnownLocationIfAllowed() == null) {
 
                 ActivityCompat.requestPermissions(
                         (Activity) mContext,
@@ -287,11 +307,17 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
+
     @Override
     public void onLocationChanged(Location location) {
         LocationPoint newLocation = new LocationPoint(location);
+        //check current location with last location
+        if (!newLocation.within(lastKnownLocation, 50)) {
+            return;
+        }
+        lastKnownLocation = newLocation;
 
-        //check current location w/last location getLocation
+        //TODO add writeToFile code
 
     }
 
@@ -311,5 +337,48 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
+    
+
+/*START OF FILE CODE*************************************************/
+//check if storage is writerable
+public boolean isExternalStorageWritable() {
+    String state = Environment.getExternalStorageState();
+    if (Environment.MEDIA_MOUNTED.equals(state)) {
+        return true;
+    }
+    return false;
+}
+//printerwrite, andorid equivilant
+/* Checks if external storage is available to at least read */
+public boolean isExternalStorageReadable() {
+    String state = Environment.getExternalStorageState();
+    if (Environment.MEDIA_MOUNTED.equals(state) ||
+            Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        return true;
+    }
+    return false;
+}
+
+//Method to write locatoins points to external stoage
+//parameters: locationPointer point: object, carrying time of location
+public void writeLocationsToFile( LocationPoint point){
+    //write to file i/o and must figure out whether to add to stack
+    //or have julia add it to mainactivity.buffstack, as well as
+    //gettime() instead of to string once i merge
+    String filename = point.getTime();
+    String string = point.getTime();
+    FileOutputStream outputStream;
+
+    try {
+        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+        outputStream.write(string.getBytes());
+        outputStream.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+}
+/***********************END OF RAMMY CODE*****************************/
+
 
 }
