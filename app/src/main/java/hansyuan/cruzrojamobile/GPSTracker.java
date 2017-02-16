@@ -369,12 +369,18 @@ public void writeLocationsToFile( LocationPoint point){
     String string = point.getTime();
     FileOutputStream outputStream;
 
-    try {
-        outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-        outputStream.write(string.getBytes());
-        outputStream.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+    if(isExternalStorageWritable()) {
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream.write(string.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    else{
+
+
     }
 
 }
