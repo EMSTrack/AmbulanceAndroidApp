@@ -13,7 +13,12 @@ import java.util.Stack;
 
 /**
  * Created by sinan on 2/8/2017.
- */
+ *
+ *
+ *
+ *
+ * DOUBLE TESTING THAT IS MORE INTENSE
+ * */
 
 public class StackLP {
 
