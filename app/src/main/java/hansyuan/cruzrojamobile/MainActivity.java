@@ -9,6 +9,9 @@ import android.view.View;
  * This is the main activity -- the default screen
  */
 public class MainActivity extends AppCompatActivity {
+
+    //global StackLP variable
+    static StackLP buffStack;
    // GoogleApiClient mGoogleApiClient;
 
     /**
@@ -19,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        buffStack = new StackLP();
         this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
     }
 
