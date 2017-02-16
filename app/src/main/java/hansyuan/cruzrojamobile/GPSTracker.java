@@ -316,9 +316,7 @@ public class GPSTracker extends Service implements LocationListener {
             return;
         }
         lastKnownLocation = newLocation;
-
-        //TODO add writeToFile code
-
+        writeLocationsToFile(newLocation);
     }
 
     @Override
