@@ -52,7 +52,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     GPSTracker gps;
 
-
     //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     public final static int INTERVAL = 1000 * 8 ;  // ( ____ sec * (1000 ms / 1 sec))
 
@@ -302,7 +301,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     public void broadcast(){
         final TextView mTextView = (TextView) findViewById(R.id.text);
-
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
