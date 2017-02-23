@@ -55,8 +55,8 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     //Switch clockEnable;
     Spinner spinner;
     Spinner mySpinner;
-    Switch clockEnable;
-
+    Switch clockEnable;             // The switch for clock enable.
+    Switch listenerEnable;          // The switch for location listener
 
     //The following is a declaration, instantiation, with a lambda function defined.
     Runnable clockedHandlerTask = new Runnable()
@@ -72,6 +72,8 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
             tryGPS();           // get an updated location
             broadcast();        // Do a GET request to Google.
             mySpinner=(Spinner) findViewById(R.id.statusupdate);
+            listenerEnable = (Switch) findViewById(R.id.locationListener);
+
             toasting(mySpinner.getSelectedItem().toString());
 
             //a Delay is done:
