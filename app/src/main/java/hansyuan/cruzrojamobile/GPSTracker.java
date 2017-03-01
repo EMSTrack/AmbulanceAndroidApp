@@ -341,7 +341,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         //check current location with last location
-        if (!newLocation.within(lastKnownLocation, DISTANCE)) {
+        if (newLocation.within(lastKnownLocation, DISTANCE)) {
             toasting ("Returned from the onLocationChanged." );
             return;
         }
