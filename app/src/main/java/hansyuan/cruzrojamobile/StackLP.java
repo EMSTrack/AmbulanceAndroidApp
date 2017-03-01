@@ -1,5 +1,9 @@
 package hansyuan.cruzrojamobile;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -9,6 +13,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Stack;
 
 /**
@@ -33,7 +40,7 @@ public class StackLP {
         s = new Stack<LocationPoint>();
     }
 
-    //stackLP ctor where the stack has a unique name
+    //stackLP constructor where the stack has a unique name
     StackLP(String inputName) {
         s = new Stack<LocationPoint>();
         name = inputName;
@@ -72,23 +79,26 @@ public class StackLP {
             }
         });*/
 
-        if (serverSent) {
+        if (isInternetWorking()) {
             s.pop();
             return true; //return true if pop happened
         }
         return false;
     }
 
-
-    //not needed for now, not finished either
-    //find method
-    /*public boolean find(LocationPoint toFind) {
-        Iterator<LocationPoint> it = s.iterator();
-        while(it.hasNext()) {
-     }
-    }*/
-
-    //insert
+    public boolean isInternetWorking() {
+        boolean success = false;
+        try {
+            URL url = new URL("https://google.com");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(10000);
+            connection.connect();
+            success = connection.getResponseCode() == 200;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 
 
 
