@@ -330,7 +330,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         toasting("ON LOCATION CHANGED");
         if (location == null) {
-            System.out.println("\nonLocationChanged, location is null");
+            toasting("onLocationChanged, location is null");
         }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
