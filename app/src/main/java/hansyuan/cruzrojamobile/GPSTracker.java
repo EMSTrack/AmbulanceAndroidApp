@@ -43,6 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
+    private final int DISTANCE = 15;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -323,7 +324,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
-        if (!newLocation.within(lastKnownLocation, 50)) {
+        if (!newLocation.within(lastKnownLocation, DISTANCE)) {
             return;
         }
         lastKnownLocation = newLocation;
@@ -350,7 +351,9 @@ public class GPSTracker extends Service implements LocationListener {
     }
     
 
-/*START OF FILE CODE*************************************************/
+/*START OF FILE I/O CODE*************************************************/
+
+
 //check if storage is writerable
 public boolean isExternalStorageWritable() {
     String state = Environment.getExternalStorageState();
@@ -372,7 +375,7 @@ public boolean isExternalStorageReadable() {
 
 //Method to write locatoins points to external stoage
 //parameters: locationPointer point: object, carrying time of location
-public void writeLocationsToFile( LocationPoint point){
+public void writeLocationsToFile( LocationPoint point ){
     //write to file i/o and must figure out whether to add to stack
     //or have julia add it to mainactivity.buffstack, as well as
     //gettime() instead of to string once i merge
@@ -381,6 +384,7 @@ public void writeLocationsToFile( LocationPoint point){
     FileOutputStream outputStream;
 
     if(isExternalStorageWritable()) {
+        toasting("Written.");
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(string.getBytes());
@@ -390,8 +394,7 @@ public void writeLocationsToFile( LocationPoint point){
         }
     }
     else{
-
-
+        toasting("Not writable");
     }
 
 }
