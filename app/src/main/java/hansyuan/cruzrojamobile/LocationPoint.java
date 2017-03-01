@@ -136,6 +136,9 @@ class LocationPoint {
     public boolean within(LocationPoint otherLocation, double distance) {
         double within = distanceBetweenTwoPlaces(this, otherLocation);
 
+        System.out.println("Within: " + within);
+        System.out.println("Distance: " + distance);
+
         if (within <= distance) {
             return true;
         } else {
