@@ -131,7 +131,7 @@ class LocationPoint {
      * @param otherLocation
      * @param distance
      * Returns a boolean. Sets boolean to true if otherlocation LocationPoint
-     * is within  'distance' of this LocationPoint. Calls on helper function.
+     * is within  'distance' meters of this LocationPoint. Calls on helper function.
      */
     public boolean within(LocationPoint otherLocation, double distance) {
         double within = distanceBetweenTwoPlaces(this, otherLocation);
@@ -158,7 +158,6 @@ class LocationPoint {
      */
     public double distanceBetweenTwoPlaces(LocationPoint ourLocation, LocationPoint p1) {
         double distance = MIN_DIST + 1;
-
         distanceBetween(p1.lat, p1.lon, ourLocation.lat, ourLocation.lon, results);
         distance = results[0];
         return distance;
