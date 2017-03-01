@@ -64,7 +64,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     // The textview for the Listener source, it should always tell you what
     // the source of the listener is.
-    TextView debugListenerSource = (TextView) findViewById(R.id.ListenerSource);
+    TextView debugListenerSource;
 
 
     //The following is a declaration, instantiation, with a lambda function defined.
@@ -112,7 +112,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
         */
         gps = new GPSTracker(this);
-
+        debugListenerSource = (TextView) findViewById(R.id.ListenerSource);
         // Dropdown Menu (spinner)
         spinner = (Spinner) findViewById(R.id.statusupdate);
 
