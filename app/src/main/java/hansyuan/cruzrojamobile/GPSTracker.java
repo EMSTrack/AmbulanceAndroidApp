@@ -40,9 +40,10 @@ import android.widget.Toast;
 public class GPSTracker extends Service implements LocationListener {
     private static LocationManager m_locationManager;
     private Context mContext;
+    private static Context mContext2;
     private static String provider;
-    private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
+    private final int DISTANCE = 44;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -71,15 +72,19 @@ public class GPSTracker extends Service implements LocationListener {
 
 
 
-
-    
-
-
-
     public GPSTracker(Context context) {
         this.mContext = context;
-        getLocation();
+        this.mContext2 = context;
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
 
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, DISTANCE, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, DISTANCE, this);
+
+        }
+        getLocation();
         toasting("CREATED GPSTRACKER");
     }
 
@@ -320,17 +325,37 @@ public class GPSTracker extends Service implements LocationListener {
         toast.show();
     }
 
+    public static void toasting2(String toToast){
+        CharSequence text = toToast;
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(mContext2, text, duration);
+        toast.show();
+    }
+
     @Override
     public void onLocationChanged(Location location) {
-        toasting("ON LOCATION CHANGED");
+        System.out.println("\nOnLocationChanged\n");
         if (location == null) {
-            System.out.println("\nonLocationChanged, location is null");
-        }
-        LocationPoint newLocation = new LocationPoint(location);
-        //check current location with last location
-        if (!newLocation.within(lastKnownLocation, 50)) {
+            toasting("onLocationChanged, location is null");
             return;
         }
+        //if we don't have an original location
+        LocationPoint newLocation = new LocationPoint(location);
+        if (lastKnownLocation == null) {
+            System.out.println("\nPrevious location was null\n");
+            toasting("previous location was null");
+            lastKnownLocation = newLocation;
+            writeLocationsToFile(newLocation);
+            return;
+        }
+
+        //check current location with last location
+        if (newLocation.within(lastKnownLocation, DISTANCE)) {
+            toasting ("Returned from the onLocationChanged." );
+            return;
+        }
+        toasting("ON LOCATION CHANGED");
         lastKnownLocation = newLocation;
         System.out.println("\n LOCATION IS BEING WRITTEN\n");
         toasting("LOCATION IS BEING WRITTEN");
@@ -355,7 +380,9 @@ public class GPSTracker extends Service implements LocationListener {
     }
     
 
-/*START OF FILE CODE*************************************************/
+/*START OF FILE I/O CODE*************************************************/
+
+
 //check if storage is writerable
 public boolean isExternalStorageWritable() {
     String state = Environment.getExternalStorageState();
@@ -377,7 +404,7 @@ public boolean isExternalStorageReadable() {
 
 //Method to write locatoins points to external stoage
 //parameters: locationPointer point: object, carrying time of location
-public void writeLocationsToFile( LocationPoint point){
+public void writeLocationsToFile( LocationPoint point ){
     //write to file i/o and must figure out whether to add to stack
     //or have julia add it to mainactivity.buffstack, as well as
     //gettime() instead of to string once i merge
@@ -386,17 +413,20 @@ public void writeLocationsToFile( LocationPoint point){
     FileOutputStream outputStream;
 
     if(isExternalStorageWritable()) {
+
         try {
+
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(string.getBytes());
+            toasting("Written.");
             outputStream.close();
         } catch (Exception e) {
+            toasting("Exception was thrown.");
             e.printStackTrace();
         }
     }
     else{
-
-
+        toasting("Not writable");
     }
 
 }
