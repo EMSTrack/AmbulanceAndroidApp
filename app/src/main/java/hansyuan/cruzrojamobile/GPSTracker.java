@@ -72,15 +72,20 @@ public class GPSTracker extends Service implements LocationListener {
 
 
 
-
-    
-
-
-
     public GPSTracker(Context context) {
         this.mContext = context;
-        getLocation();
 
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+        }
+        getLocation();
         toasting("CREATED GPSTRACKER");
     }
 
