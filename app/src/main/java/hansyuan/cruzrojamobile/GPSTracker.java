@@ -40,6 +40,7 @@ import android.widget.Toast;
 public class GPSTracker extends Service implements LocationListener {
     private static LocationManager m_locationManager;
     private Context mContext;
+    private static Context mContext2;
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 44;
@@ -73,6 +74,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public GPSTracker(Context context) {
         this.mContext = context;
+        this.mContext2 = context;
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
 
@@ -320,6 +322,14 @@ public class GPSTracker extends Service implements LocationListener {
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(mContext, text, duration);
+        toast.show();
+    }
+
+    public static void toasting2(String toToast){
+        CharSequence text = toToast;
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(mContext2, text, duration);
         toast.show();
     }
 

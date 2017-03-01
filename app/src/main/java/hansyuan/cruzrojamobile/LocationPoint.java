@@ -163,6 +163,7 @@ class LocationPoint {
         distanceBetween(p1.lat, p1.lon, ourLocation.lat, ourLocation.lon, results);
         distance = results[0];
         System.out.println("\nDISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
+        GPSTracker.toasting2("DISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
         return distance;
     }
 
