@@ -43,7 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
-    private final int DISTANCE = 5;
+    private final int DISTANCE = 30;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -327,15 +327,17 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        toasting("ON LOCATION CHANGED");
+
         if (location == null) {
             toasting("onLocationChanged, location is null");
         }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
         if (!newLocation.within(lastKnownLocation, DISTANCE)) {
+            toasting ("Returned from the onLocationChanged." );
             return;
         }
+        toasting("ON LOCATION CHANGED");
         lastKnownLocation = newLocation;
         System.out.println("\n LOCATION IS BEING WRITTEN\n");
         toasting("LOCATION IS BEING WRITTEN");
