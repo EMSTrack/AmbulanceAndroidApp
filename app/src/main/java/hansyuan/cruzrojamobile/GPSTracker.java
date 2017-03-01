@@ -381,6 +381,7 @@ public void writeLocationsToFile( LocationPoint point){
     //write to file i/o and must figure out whether to add to stack
     //or have julia add it to mainactivity.buffstack, as well as
     //gettime() instead of to string once i merge
+    toasting("write location to file");
     String filename = point.getTime();
     String string = point.getTime();
     FileOutputStream outputStream;
@@ -398,7 +399,6 @@ public void writeLocationsToFile( LocationPoint point){
     }
     else{
         toasting("not writable");
-
 
     }
 
