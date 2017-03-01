@@ -43,7 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
-    private final int DISTANCE = 15;
+    private final int DISTANCE = 5;
 
     // flag for GPS status
     boolean isGPSEnabled = false;

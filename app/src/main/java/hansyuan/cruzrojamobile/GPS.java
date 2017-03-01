@@ -56,7 +56,16 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     Spinner spinner;
     Spinner mySpinner;
     Switch clockEnable;             // The switch for clock enable.
+
+
+
     Switch listenerEnable;          // The switch for location listener
+
+
+    // The textview for the Listener source, it should always tell you what
+    // the source of the listener is.
+    TextView debugListenerSource = (TextView) findViewById(R.id.ListenerSource);
+
 
     //The following is a declaration, instantiation, with a lambda function defined.
     Runnable clockedHandlerTask = new Runnable()
