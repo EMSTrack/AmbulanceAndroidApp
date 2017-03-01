@@ -157,6 +157,7 @@ class LocationPoint {
         double distance = MIN_DIST + 1;
         distanceBetween(p1.lat, p1.lon, ourLocation.lat, ourLocation.lon, results);
         distance = results[0];
+        System.out.println("\nDISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
         return distance;
     }
 

@@ -82,7 +82,6 @@ public class GPSTracker extends Service implements LocationListener {
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
         }
         getLocation();
