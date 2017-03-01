@@ -43,6 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
+    private final int DISTANCE = 15;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -328,7 +329,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
-        if (!newLocation.within(lastKnownLocation, 50)) {
+        if (!newLocation.within(lastKnownLocation, DISTANCE)) {
             return;
         }
         lastKnownLocation = newLocation;
@@ -388,6 +389,7 @@ public void writeLocationsToFile( LocationPoint point ){
     FileOutputStream outputStream;
 
     if(isExternalStorageWritable()) {
+        toasting("Written.");
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(string.getBytes());
