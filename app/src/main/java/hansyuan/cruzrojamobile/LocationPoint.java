@@ -1,5 +1,6 @@
 package hansyuan.cruzrojamobile;
 
+import android.content.Context;
 import android.location.Location;
 import java.text.SimpleDateFormat; //used for time
 import java.util.Date; //used for 'time'
