@@ -43,7 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
-    private final int DISTANCE = 30;
+    private final int DISTANCE = 44;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -396,12 +396,15 @@ public void writeLocationsToFile( LocationPoint point ){
     FileOutputStream outputStream;
 
     if(isExternalStorageWritable()) {
-        toasting("Written.");
+
         try {
+
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(string.getBytes());
+            toasting("Written.");
             outputStream.close();
         } catch (Exception e) {
+            toasting("Exception was thrown.");
             e.printStackTrace();
         }
     }
