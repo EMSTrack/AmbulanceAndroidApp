@@ -35,8 +35,7 @@ import com.android.volley.toolbox.Volley;
  * TODO
  * Location Point should probably be its own entity.
  *
- * Then
- * when the LP is used to store data inside the phone, there
+ * Then when the LP is used to store data inside the phone, there
  * might be a method specific to the I/O that will parse the
  * LP Object. Or, LP might have the toString method modified
  * so that when we print to the file, we can just call the
@@ -48,24 +47,18 @@ import com.android.volley.toolbox.Volley;
  */
 public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
+    public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
-
     GPSTracker gps;
-
-    //String url ="http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    public final static int INTERVAL = 1000 * 8 ;  // ( ____ sec * (1000 ms / 1 sec))
-
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-
     Handler clockedHandler = new Handler();
     //Switch clockEnable;
     Spinner spinner;
     Spinner mySpinner;
-    Switch clockEnable;
-
+    Switch clockEnable;             // The switch for clock enable.
+    Switch listenerEnable;          // The switch for location listener
 
     //The following is a declaration, instantiation, with a lambda function defined.
-    //Terrible style.
     Runnable clockedHandlerTask = new Runnable()
         {
             /** todo Perhaps the method should also refresh the location first otherwise
@@ -75,14 +68,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
              */
         @Override
         public void run () {
-
             //TODO Clocked methods are here:
-
             tryGPS();           // get an updated location
             broadcast();        // Do a GET request to Google.
             mySpinner=(Spinner) findViewById(R.id.statusupdate);
-            toasting(mySpinner.getSelectedItem().toString());
+            listenerEnable = (Switch) findViewById(R.id.locationListener);
 
+            toasting(mySpinner.getSelectedItem().toString());
 
             //a Delay is done:
             clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
@@ -91,9 +83,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
             }
         }
     };
-
-
-
 
 
     /**
@@ -108,13 +97,12 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
         //checkLocationPermission(); //Might be needed, might not.
 
-
         /* TODO This activity will NO LONGER automatically check a new location upon starting.
 
         timeDelay(DELAY_START);
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
         */
-
+        gps = new GPSTracker(this);
         // Dropdown Menu (spinner)
         spinner = (Spinner) findViewById(R.id.statusupdate);
 
@@ -156,7 +144,6 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
     /**
      * Anytime we want to do a time delay, use this method.
-     *
      * This method can be copy and pasted as ubiquitiously as the toast method.
      */
     private void timeDelay(int milliseconds) {
@@ -178,13 +165,9 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         }
     }
 
-
-
-
     void startRepeatingTask(){
         clockedHandlerTask.run();
     }
-
     void stopRepeatingTask()
     {
         clockedHandler.removeCallbacks(clockedHandlerTask);
@@ -224,7 +207,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * on improving the connection with the server.
      */
     private void tryGPS(){
-        gps = new GPSTracker( this );
+        //gps = new GPSTracker( this );
         gps.getLastKnownLocationIfAllowed();
         //GPSTracker gps = new GPSTracker(this); not sure why this exists.
 
@@ -250,47 +233,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
 
 
 
-
-    /**
-     *
-     * @param view
-     */
-    public void UpdateGPS(View view) {
-        tryGPS();
-    }
-
-    /**
-     *
-     * @param view
-     */
     public void broadcast(View view){
-        /*
-        final TextView mTextView = (TextView) findViewById(R.id.text);
-
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url ="http://www.google.com";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                      //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: "+ response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                toasting("That didn't work!!!!");
-            }
-        });
-    // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-        */
         broadcast();
     }
 
@@ -322,7 +265,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
                 toasting("That didn't work!!!!");
             }
         });
-// Add the request to the RequestQueue.
+        // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
