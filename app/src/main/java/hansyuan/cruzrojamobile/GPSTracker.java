@@ -375,8 +375,11 @@ public void writeLocationsToFile( LocationPoint point){
         } catch (Exception e) {
             e.printStackTrace();
         }
+        toasting("it is writable writable");
+
     }
     else{
+        toasting("not writable");
 
 
     }
