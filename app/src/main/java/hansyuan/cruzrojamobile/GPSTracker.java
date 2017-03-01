@@ -79,6 +79,8 @@ public class GPSTracker extends Service implements LocationListener {
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation();
+
+        toasting("CREATED GPSTRACKER");
     }
 
     /** Name: getLastKnowLocation
@@ -102,6 +104,10 @@ public class GPSTracker extends Service implements LocationListener {
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             Location location = m_locationManager.getLastKnownLocation(provider);
+            System.out.println("\nGET LAST KNOWN LOCATION");
+            if (location == null ) {
+                return null;
+            }
             lastKnownLocation = new LocationPoint (location);
             return lastKnownLocation;
         }
@@ -306,16 +312,28 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.show();
     }
 
+    public void toasting(String toToast){
+        CharSequence text = toToast;
+        int duration = Toast.LENGTH_SHORT;
 
+        Toast toast = Toast.makeText(mContext, text, duration);
+        toast.show();
+    }
 
     @Override
     public void onLocationChanged(Location location) {
+        toasting("ON LOCATION CHANGED");
+        if (location == null) {
+            System.out.println("\nonLocationChanged, location is null");
+        }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
         if (!newLocation.within(lastKnownLocation, 50)) {
             return;
         }
         lastKnownLocation = newLocation;
+        System.out.println("\n LOCATION IS BEING WRITTEN\n");
+        toasting("LOCATION IS BEING WRITTEN");
         writeLocationsToFile(newLocation);
     }
 

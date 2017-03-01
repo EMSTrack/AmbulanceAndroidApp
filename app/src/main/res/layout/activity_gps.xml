@@ -41,16 +41,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text='Enable to clock to continually check for current location, display the current status, and attempt to connect to Google.com. While the clock is on, try to disable the location. Also try to change the "Current Status" above. The toast messages will simulate a transmission to the database. '
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <Switch
         android:text="Clocking:"
         android:layout_width="wrap_content"
@@ -58,9 +48,10 @@
         android:id="@+id/clockSwitch"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
         android:checked="false"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/statusupdate"
         android:layout_alignLeft="@+id/broadcastCruz"
-        android:layout_alignStart="@+id/broadcastCruz" />
+        android:layout_alignStart="@+id/broadcastCruz"
+        android:layout_marginTop="37dp" />
 
     <Button
         android:text="send info"
@@ -68,17 +59,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/broadcastCruz"
         android:onClick="broadcastCruzRoja"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/locationListener"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:text="The button below will transmit info currently gathered to the actual server. Once the information is there, the info can be utilized. Try this with the wifi off."
+    <Switch
+        android:text="Listening "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:layout_above="@+id/broadcastCruz"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/locationListener"
+        android:layout_below="@+id/clockSwitch"
+        android:layout_alignRight="@+id/broadcastCruz"
+        android:layout_alignEnd="@+id/broadcastCruz"
+        android:layout_marginTop="34dp" />
 
 </RelativeLayout>
