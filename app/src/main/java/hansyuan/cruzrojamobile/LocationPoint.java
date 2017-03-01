@@ -134,6 +134,9 @@ class LocationPoint {
      * is within  'distance' meters of this LocationPoint. Calls on helper function.
      */
     public boolean within(LocationPoint otherLocation, double distance) {
+        if (otherLocation == null)
+            return false;
+
         double within = distanceBetweenTwoPlaces(this, otherLocation);
 
         System.out.println("Within: " + within);
