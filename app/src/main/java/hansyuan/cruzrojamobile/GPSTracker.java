@@ -43,6 +43,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_COARSE_LOCATION = 999;
     private static final int REQUEST_FINE_LOCATION = 998;
+    private final int DISTANCE = 5;
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -71,15 +72,20 @@ public class GPSTracker extends Service implements LocationListener {
 
 
 
-
-    
-
-
-
     public GPSTracker(Context context) {
         this.mContext = context;
-        getLocation();
 
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
+        }
+        getLocation();
         toasting("CREATED GPSTRACKER");
     }
 
@@ -324,11 +330,11 @@ public class GPSTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         toasting("ON LOCATION CHANGED");
         if (location == null) {
-            System.out.println("\nonLocationChanged, location is null");
+            toasting("onLocationChanged, location is null");
         }
         LocationPoint newLocation = new LocationPoint(location);
         //check current location with last location
-        if (!newLocation.within(lastKnownLocation, 50)) {
+        if (!newLocation.within(lastKnownLocation, DISTANCE)) {
             return;
         }
         lastKnownLocation = newLocation;
@@ -355,7 +361,9 @@ public class GPSTracker extends Service implements LocationListener {
     }
     
 
-/*START OF FILE CODE*************************************************/
+/*START OF FILE I/O CODE*************************************************/
+
+
 //check if storage is writerable
 public boolean isExternalStorageWritable() {
     String state = Environment.getExternalStorageState();
@@ -377,18 +385,23 @@ public boolean isExternalStorageReadable() {
 
 //Method to write locatoins points to external stoage
 //parameters: locationPointer point: object, carrying time of location
-public void writeLocationsToFile( LocationPoint point){
+public void writeLocationsToFile( LocationPoint point ){
     //write to file i/o and must figure out whether to add to stack
     //or have julia add it to mainactivity.buffstack, as well as
     //gettime() instead of to string once i merge
     toasting("write location to file");
     String filename = point.getTime();
+    toasting("filename is "+ filename);
     String string = point.getTime();
+    toasting("string is "+string);
     FileOutputStream outputStream;
 
     if(isExternalStorageWritable()) {
+        toasting("Written.");
         try {
             outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+            toasting("outstream is "+ outputStream);
+
             outputStream.write(string.getBytes());
             outputStream.close();
         } catch (Exception e) {
