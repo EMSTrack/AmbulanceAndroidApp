@@ -84,6 +84,7 @@ class LocationPoint {
     }
 
     public String getTime() {
+            setTime();
         return time;
     }
 
