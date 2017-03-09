@@ -1,17 +1,20 @@
 package hansyuan.cruzrojamobile;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -129,11 +132,47 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         clockEnable = (Switch) findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
 
+        //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        System.err.println("Permission: " + isStoragePermissionGranted());
+        //requestPermission();
+        ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        /*if (isStoragePermissionGranted()){
+
+        }*/
+
         //Sets the listener. TODO: check if gps is on, if not, toast
 
     }
 
     /** For the following three methods, stop the clock when the activity, in any way, is left. */
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+
+                return true;
+            } else {
+
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+
+            return true;
+        }
+    }
+    private void requestPermission() {
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -286,10 +325,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * it to the url, and then do a GET request on the URL.
      * @param view
      */
-    public void broadcastCruzRoja(View view){
+    public void broadcastCruzRoja(View view) {
         final TextView mTextView = (TextView) findViewById(R.id.text);
 
-        mySpinner=(Spinner) findViewById(R.id.statusupdate);
+        mySpinner = (Spinner) findViewById(R.id.statusupdate);
 
 
         // Instantiate the RequestQueue.
@@ -312,7 +351,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: "+ response.substring(0, response.length()));
+                        toasting("Response is: " + response.substring(0, response.length()));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -325,4 +364,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         // Add the request to the RequestQueue.
         queue.add(stringRequest); // Not sure about this.
     }
+
 }
+
+

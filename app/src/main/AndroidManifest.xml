@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- THIS IS A COMMENT. DO NOT PLACE ANY CODE OR COMMENTS ABOVE THIS LINE. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hansyuan.cruzrojamobile">
 
+    <!-- ALL PERMISSION DECLARATIONS GO HERE -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- END SECTION FOR PERMISSION DECLARATIONS
+        INSTALL THE APP. THEN CHECK THE PERMISSION SETTINGS IN ANDROID.
+        If the permission is missing, SOMETHING IS WRONG -->
+
 
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         package="com.google.android.gms.location.sample.basiclocationsample">
-        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-        <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-        //allow to read and write for now
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     </manifest>
 
     <application

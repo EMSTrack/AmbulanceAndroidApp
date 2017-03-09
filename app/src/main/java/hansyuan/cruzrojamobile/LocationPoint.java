@@ -100,7 +100,7 @@ class LocationPoint {
      * sets 'time' to current time
      */
     private void setTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy__hh_mm_ss");
         time = simpleDateFormat.format(new Date());
     }
 
