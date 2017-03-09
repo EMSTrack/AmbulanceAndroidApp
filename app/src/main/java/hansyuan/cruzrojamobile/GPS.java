@@ -115,7 +115,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
         */
         gps = new GPSTracker(this);
-        debugListenerSource = (TextView) findViewById(R.id.ListenerSource);
+
         // Dropdown Menu (spinner)
         spinner = (Spinner) findViewById(R.id.statusupdate);
 
