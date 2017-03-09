@@ -1,5 +1,6 @@
 package hansyuan.cruzrojamobile;
 
+import android.content.Context;
 import android.location.Location;
 import java.text.SimpleDateFormat; //used for time
 import java.util.Date; //used for 'time'
@@ -131,10 +132,14 @@ class LocationPoint {
      * @param otherLocation
      * @param distance
      * Returns a boolean. Sets boolean to true if otherlocation LocationPoint
-     * is within  'distance' of this LocationPoint. Calls on helper function.
+     * is within  'distance' meters of this LocationPoint. Calls on helper function.
      */
     public boolean within(LocationPoint otherLocation, double distance) {
+        if (otherLocation == null)
+            return false;
+
         double within = distanceBetweenTwoPlaces(this, otherLocation);
+
 
         if (within <= distance) {
             return true;
@@ -155,9 +160,10 @@ class LocationPoint {
      */
     public double distanceBetweenTwoPlaces(LocationPoint ourLocation, LocationPoint p1) {
         double distance = MIN_DIST + 1;
-
         distanceBetween(p1.lat, p1.lon, ourLocation.lat, ourLocation.lon, results);
         distance = results[0];
+        System.out.println("\nDISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
+        GPSTracker.toasting2("DISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
         return distance;
     }
 
