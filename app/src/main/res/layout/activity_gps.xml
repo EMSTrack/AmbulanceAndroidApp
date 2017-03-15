@@ -11,15 +11,15 @@
     tools:context="hansyuan.cruzrojamobile.GPS">
 
     <TextView
-        android:text="Longitude:\nLatitude:"
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_below="@+id/broadcast"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp" />
+        android:layout_below="@+id/broadcast"
+        android:layout_marginTop="13dp"
+        android:text="Longitude:\n\nLatitude:\n\nLast Recorded Time: \n\nLast Transmitted Time:\n\n"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView
         android:text="Current Status:"
@@ -48,10 +48,10 @@
         android:id="@+id/clockSwitch"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
         android:checked="false"
+        android:layout_marginTop="36dp"
         android:layout_below="@+id/statusupdate"
         android:layout_alignLeft="@+id/broadcastCruz"
-        android:layout_alignStart="@+id/broadcastCruz"
-        android:layout_marginTop="37dp" />
+        android:layout_alignStart="@+id/broadcastCruz" />
 
     <Button
         android:text="send info"
@@ -59,7 +59,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/broadcastCruz"
         android:onClick="broadcastCruzRoja"
-        android:layout_marginTop="41dp"
         android:layout_below="@+id/locationListener"
         android:layout_centerHorizontal="true" />
 
@@ -70,29 +69,6 @@
         android:id="@+id/locationListener"
         android:layout_below="@+id/clockSwitch"
         android:layout_alignRight="@+id/broadcastCruz"
-        android:layout_alignEnd="@+id/broadcastCruz"
-        android:layout_marginTop="34dp" />
-
-    <TextView
-        android:text="ListenerSource: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginBottom="31dp"
-        android:id="@+id/donotedit"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/donotedit"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/ListenerSource"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        android:layout_alignEnd="@+id/broadcastCruz" />
 
 </RelativeLayout>
