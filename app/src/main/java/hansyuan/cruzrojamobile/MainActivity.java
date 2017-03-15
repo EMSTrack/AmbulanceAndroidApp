@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity (new Intent (this, demo_viewTransmission.class));
     }
 
+    public void openFileView(View view){
+        startActivity (new Intent (this, LPBackupExplorer.class));
+    }
+
 
 
 } // end class

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!-- THIS IS A COMMENT. DO NOT PLACE ANY CODE OR COMMENTS ABOVE THIS LINE. -->
+<?xml version="1.0" encoding="utf-8"?><!-- THIS IS A COMMENT. DO NOT PLACE ANY CODE OR COMMENTS ABOVE THIS LINE. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hansyuan.cruzrojamobile">
 
@@ -10,14 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- END SECTION FOR PERMISSION DECLARATIONS
+    <!--
+         END SECTION FOR PERMISSION DECLARATIONS
         INSTALL THE APP. THEN CHECK THE PERMISSION SETTINGS IN ANDROID.
-        If the permission is missing, SOMETHING IS WRONG -->
-
+        If the permission is missing, SOMETHING IS WRONG
+    -->
 
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.google.android.gms.location.sample.basiclocationsample">
-    </manifest>
+        package="com.google.android.gms.location.sample.basiclocationsample"></manifest>
 
     <application
         android:allowBackup="true"
@@ -34,7 +32,8 @@
         </activity>
         <activity android:name=".GPS" />
         <activity android:name=".CommunicationDatabase" />
-        <activity android:name=".demo_viewTransmission"></activity>
+        <activity android:name=".demo_viewTransmission" />
+        <activity android:name=".LPBackupExplorer"></activity>
     </application>
 
 </manifest>
