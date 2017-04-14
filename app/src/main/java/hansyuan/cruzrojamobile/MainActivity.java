@@ -23,10 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buffStack = new StackLP();
-        this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
+        //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
     }
-
-
 
     /**
      * This is the method for opening a new activity.
