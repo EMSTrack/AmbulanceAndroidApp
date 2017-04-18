@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,12 +30,20 @@ public class demo_viewTransmission extends Fragment {
     TextView checkInfo;
     String result, url;
     View rootView;
+    Button refButton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_demo_view_transmission, container, false);
+        refButton = (Button) rootView.findViewById(R.id.button2);
 
+        refButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh(v);
+            }
+        });
 
         checkInfo = (TextView) rootView.findViewById(R.id.checkInfo);
         url = "http://cruzroja.ucsd.edu/ambulances/info/123456";
@@ -57,7 +66,7 @@ public class demo_viewTransmission extends Fragment {
         checkInfo.setText(this.result);
     }
 
-    private void refresh() {
+    public void refresh() {
       //git   toasting("refresh is run.");
 
         // Go to the URL and get the result.

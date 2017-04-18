@@ -17,9 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/textView4"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
+        android:id="@+id/textView4"/>
     <TextView
         android:text="TextView"
         android:layout_width="match_parent"
@@ -28,15 +26,12 @@
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="57dp"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
+        android:layout_marginTop="57dp"/>
     <Button
         android:text="refresh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"
-        android:onClick="refresh"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
