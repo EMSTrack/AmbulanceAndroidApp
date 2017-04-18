@@ -1,9 +1,12 @@
 package hansyuan.cruzrojamobile;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,18 +25,21 @@ import com.android.volley.toolbox.Volley;
  *
  *
  */
-public class demo_viewTransmission extends AppCompatActivity {
+public class demo_viewTransmission extends Fragment {
     TextView checkInfo;
     String result, url;
+    View rootView;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_view_transmission);
-        checkInfo = (TextView) findViewById(R.id.checkInfo);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.activity_demo_view_transmission, container, false);
+
+
+        checkInfo = (TextView) rootView.findViewById(R.id.checkInfo);
         url = "http://cruzroja.ucsd.edu/ambulances/info/123456";
         //refresh();
+        return rootView;
     }
 
 
@@ -55,7 +61,7 @@ public class demo_viewTransmission extends AppCompatActivity {
       //git   toasting("refresh is run.");
 
         // Go to the URL and get the result.
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -82,7 +88,7 @@ public class demo_viewTransmission extends AppCompatActivity {
     }
 
     public void toasting(String toToast){
-        Context context = getApplicationContext();
+        Context context = getContext();
         CharSequence text = toToast;
         int duration = Toast.LENGTH_SHORT;
 

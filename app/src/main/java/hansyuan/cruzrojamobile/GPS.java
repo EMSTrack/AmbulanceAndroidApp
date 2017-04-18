@@ -11,11 +11,14 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -48,7 +51,7 @@ import com.android.volley.toolbox.Volley;
  * data to the server might use the LP's method that will
  * return a new JSONObject.
  */
-public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
+public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
@@ -59,6 +62,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     Spinner spinner;
     Spinner mySpinner;
     Switch clockEnable;             // The switch for clock enable.
+    View rootView;
 
 
 
@@ -83,8 +87,8 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
             //TODO Clocked methods are here:
             tryGPS();           // get an updated location
             broadcast();        // Do a GET request to Google.
-            mySpinner=(Spinner) findViewById(R.id.statusupdate);
-            listenerEnable = (Switch) findViewById(R.id.locationListener);
+            mySpinner=(Spinner) rootView.findViewById(R.id.statusupdate);
+            listenerEnable = (Switch) rootView.findViewById(R.id.locationListener);
 
             toasting(mySpinner.getSelectedItem().toString());
 
@@ -103,9 +107,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param savedInstanceState
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gps);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+        rootView = inflater.inflate(R.layout.activity_gps, container, false);
 
         //checkLocationPermission(); //Might be needed, might not.
 
@@ -114,13 +119,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         timeDelay(DELAY_START);
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
         */
-        gps = new GPSTracker(this);
+        gps = new GPSTracker(rootView.getContext());
 
         // Dropdown Menu (spinner)
-        spinner = (Spinner) findViewById(R.id.statusupdate);
+        spinner = (Spinner) rootView.findViewById(R.id.statusupdate);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.status_updates, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
@@ -129,34 +134,35 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        clockEnable = (Switch) findViewById(R.id.clockSwitch);
+        clockEnable = (Switch) rootView.findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
 
         //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
         System.err.println("Permission: " + isStoragePermissionGranted());
         //requestPermission();
-        ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         /*if (isStoragePermissionGranted()){
 
         }*/
 
         //Sets the listener. TODO: check if gps is on, if not, toast
 
+        return rootView;
     }
 
     /** For the following three methods, stop the clock when the activity, in any way, is left. */
 
     public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
 
                 return true;
             } else {
 
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 return false;
             }
         }
@@ -167,26 +173,26 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     }
     private void requestPermission() {
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(this, "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(getActivity(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause(); // This is required for some reason.
         clockEnable.setChecked(false);
     }
     @Override
-    protected void onStop(){
+    public void onStop(){
         super.onStop(); // Same.
         clockEnable.setChecked(false);
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy(); // Same.
         clockEnable.setChecked(false);
     }
@@ -228,7 +234,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param toToast the string you display in a toast
      */
     public void toasting(String toToast){
-        Context context = getApplicationContext();
+        Context context = getContext();
         CharSequence text = toToast;
         int duration = Toast.LENGTH_SHORT;
 
@@ -242,7 +248,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param s
      */
     private void display(String s){
-        TextView t = (TextView) findViewById(R.id.textView1);
+        TextView t = (TextView) rootView.findViewById(R.id.textView1);
         t.setText(s);
     }
 
@@ -292,10 +298,10 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     * */
 
     public void broadcast(){
-        final TextView mTextView = (TextView) findViewById(R.id.text);
+        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
 
         // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url ="http://www.google.com";
 
         // Request a string response from the provided URL.
@@ -326,13 +332,13 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
      * @param view
      */
     public void broadcastCruzRoja(View view) {
-        final TextView mTextView = (TextView) findViewById(R.id.text);
+        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
 
-        mySpinner = (Spinner) findViewById(R.id.statusupdate);
+        mySpinner = (Spinner) rootView.findViewById(R.id.statusupdate);
 
 
         // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
         String status = mySpinner.getSelectedItem().toString();
         String lon = "?longitude=1.2345";
         String latt = "?lattitude=5.4321";
