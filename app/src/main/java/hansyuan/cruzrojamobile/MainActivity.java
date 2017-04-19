@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((AmbulanceApp) this.getApplication()).setContext(this); //allows global variables to work
         buffStack = new StackLP();
         this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
     }
