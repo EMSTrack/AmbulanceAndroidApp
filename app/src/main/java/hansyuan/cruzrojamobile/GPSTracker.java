@@ -308,9 +308,9 @@ public class GPSTracker extends Service implements LocationListener {
     /*START OF STACK CODE*************************************************/
     public void sendToStackLP(LocationPoint point) {
         stackLP.insert(point);
-        toasting("Point inserted to stack");
+        //toasting("Point inserted to stack");
         stackLP.popIfSent();
-        toasting("Popped successfully");
+        //toasting("Popped successfully");
     }
 
 

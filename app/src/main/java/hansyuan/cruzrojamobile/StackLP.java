@@ -21,11 +21,7 @@ import java.util.Stack;
 /**
  * Created by sinan on 2/8/2017.
  *
- *
- *
- *
- * DOUBLE TESTING THAT IS MORE INTENSE
- * */
+ */
 
 public class StackLP {
 
@@ -66,6 +62,10 @@ public class StackLP {
         //return false;
     }
 
+
+    /*
+     * returns a boolean indicating whether the Internet is working or not
+     */
     public boolean isInternetWorking() {
         boolean success = false;
         try {
@@ -79,7 +79,5 @@ public class StackLP {
         }
         return success;
     }
-
-
 
 }
