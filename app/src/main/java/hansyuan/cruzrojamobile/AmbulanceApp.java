@@ -18,6 +18,15 @@ import java.io.FileOutputStream;
 
 /**
  * Created by jkapi on 4/19/2017.
+ *
+ *
+ * To use a function:
+ * If it is not being used in an activity page:
+ * ((AmbulanceApp) mContext.getApplicationContext()).FUNCTIONYOUNEED();
+ * If it is being used in an activity page:
+ * ((AmbulanceApp) mContext.getApplication()).FUNCTIONYOUNEED()
+ *
+ *
  */
 
 public class AmbulanceApp extends Application {
