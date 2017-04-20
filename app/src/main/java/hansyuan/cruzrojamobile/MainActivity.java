@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * This is the method for opening a new activity.
      * Generalizable to any method whose only purpose is to load a new activity.

@@ -21,11 +21,7 @@ import java.util.Stack;
 /**
  * Created by sinan on 2/8/2017.
  *
- *
- *
- *
- * DOUBLE TESTING THAT IS MORE INTENSE
- * */
+ */
 
 public class StackLP {
 
@@ -57,35 +53,19 @@ public class StackLP {
     }
 
     //method that pops a locationPoint from the stack if the server had received the location
-    public boolean popIfSent() {
-        /*final TextView mTextView = (TextView) findViewById(R.id.text);
+    public void popIfSent() {
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: "+ response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-                toasting("That didn't work!!!!");
-            }
-        });*/
-
-        if (isInternetWorking()) {
+        if (isInternetWorking() && (!s.empty()) ) {
             s.pop();
-            return true; //return true if pop happened
+            //return true; //return true if pop happened
         }
-        return false;
+        //return false;
     }
 
+
+    /*
+     * returns a boolean indicating whether the Internet is working or not
+     */
     public boolean isInternetWorking() {
         boolean success = false;
         try {
@@ -99,7 +79,5 @@ public class StackLP {
         }
         return success;
     }
-
-
 
 }

@@ -33,6 +33,9 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 1;
+    private final int MINTIMEPERCHECK = 5000;
+    private StackLP stackLP = new StackLP();
+
 
     //Used in LocationListener to check whether to add a new locationPoint
     public LocationPoint lastKnownLocation;
@@ -300,7 +303,16 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-    
+
+
+    /*START OF STACK CODE*************************************************/
+    public void sendToStackLP(LocationPoint point) {
+        stackLP.insert(point);
+        //toasting("Point inserted to stack");
+        stackLP.popIfSent();
+        //toasting("Popped successfully");
+    }
+
 
 
 }
