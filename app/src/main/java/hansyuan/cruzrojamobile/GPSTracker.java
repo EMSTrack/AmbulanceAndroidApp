@@ -1,103 +1,89 @@
 package hansyuan.cruzrojamobile;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Service;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
 /**
  *
  * Created by Hans Yuan on 10/19/2016.
  *
  * Java Class Only:
  * Purpose is to get the GPS information from Android.
- * Use by creating a new instance of GPSTracker. This
- * is done by the GPS class.
+ * Use by creating a new instance of GPSTracker. This is done by the GPSActivity class.
  */
-
-import android.Manifest;
-import android.app.Activity;
-import android.app.Service;
-
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Calendar; //needed for testing how calendar works
-//package com.example.gpstracking;
-
-        import android.app.AlertDialog;
-        import android.app.Service;
-        import android.content.Context;
-        import android.content.DialogInterface;
-        import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-        import android.location.LocationListener;
-        import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.IBinder;
-        import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
-
 public class GPSTracker extends Service implements LocationListener {
     private static LocationManager m_locationManager;
     private Context mContext;
-    private static Context mContext2;
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 1;
     private final int MINTIMEPERCHECK = 5000;
     private StackLP stackLP = new StackLP();
 
-    // flag for GPS status
-    boolean isGPSEnabled = false;
 
-    // flag for network status
-    boolean isNetworkEnabled = false;
-
-    // flag for GPS status
-    boolean canGetLocation = false;
+    //Used in LocationListener to check whether to add a new locationPoint
+    public LocationPoint lastKnownLocation;
+   // public boolean isGPSEnabled = false; //flag for GPS status
+    //public boolean isNetworkEnabled = false; //flag for network status
 
     Location location; // location
     double latitude; // latitude
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
+    private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
-
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
-
-    //Used in LocationListener to check whether to add a new locationPoint
-    LocationPoint lastKnownLocation;
+    private long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
 
-
+    /** Constructor. Sets the location manager, sets listeners for location (both location and time
+     *
+     * @param context
+     */
     public GPSTracker(Context context) {
-
         this.mContext = context;
-        this.mContext2 = context;
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
 
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MINTIMEPERCHECK, DISTANCE, this);
-            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MINTIMEPERCHECK, DISTANCE, this);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
 
         }
 
-
         getLocation();
-        toasting("CREATED GPSTRACKER");
+        ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
+    }
+
+    /** checks if the GPS is enabled. If it is not, returns false
+     *
+     * @return
+     */
+    public boolean isGPSEnabled(){
+        //TODO toast if it is not enabled
+        return m_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public boolean isNetworkEnabled() {
+        //TODO toast if it is not enabled
+        return m_locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     /** Name: getLastKnowLocation
@@ -107,50 +93,8 @@ public class GPSTracker extends Service implements LocationListener {
         return lastKnownLocation;
     }
 
-    /**
-     * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
-     *
-     * This method resolves operating system version differences when requesting
-     * permission for locations.
-     */
-    public LocationPoint getLastKnownLocationIfAllowed() {
-
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-
-            provider = LocationManager.GPS_PROVIDER;
-            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            Location location = m_locationManager.getLastKnownLocation(provider);
-            System.out.println("\nGET LAST KNOWN LOCATION");
-            if (location == null ) {
-                return null;
-            }
-            lastKnownLocation = new LocationPoint (location);
-            return lastKnownLocation;
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * Initializes needed variables, checks if
-     * @return
-     */
-
     public Location getLocation() {
         try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(LOCATION_SERVICE);
-
-            // getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             /** Test */
             if (getLastKnownLocationIfAllowed() == null) {
@@ -162,21 +106,18 @@ public class GPSTracker extends Service implements LocationListener {
             }
 
 
-            if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
-                this.canGetLocation = false;
-            } else {
-                this.canGetLocation = true;
+            if (isGPSEnabled() && isNetworkEnabled()) {
+
                 // First get location from Network Provider
                 try {
-                    if (isNetworkEnabled) {
-                        locationManager.requestLocationUpdates(
+                    if (isNetworkEnabled()) {
+                        m_locationManager.requestLocationUpdates(
                                 LocationManager.NETWORK_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         Log.d("Network", "Network");
-                        if (locationManager != null) {
-                            location = locationManager
+                        if (m_locationManager != null) {
+                            location = m_locationManager
                                     .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
@@ -188,24 +129,20 @@ public class GPSTracker extends Service implements LocationListener {
                     int currentapiVersion = android.os.Build.VERSION.SDK_INT;
                     if (currentapiVersion >= Build.VERSION_CODES.M){
                         //Request Permission at Runtime!
-
-
-
-
                     } else{
                         // do something for phones running an SDK before lollipop
                     }
 
                     // TODO This is the original isGPSEnabled if-statement.
-                    if (isGPSEnabled) {
+                    if (isGPSEnabled()) {
                         if (location == null) {
-                            locationManager.requestLocationUpdates(
+                            m_locationManager.requestLocationUpdates(
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                             Log.d("GPS Enabled", "GPS Enabled");
-                            if (locationManager != null) {
-                                location = locationManager
+                            if (m_locationManager != null) {
+                                location = m_locationManager
                                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
                                     latitude = location.getLatitude();
@@ -214,31 +151,7 @@ public class GPSTracker extends Service implements LocationListener {
                             }
                         }
                     }
-                    /* TODO this code is for higher level APIs...
-                    TODO Included just in case...
-                    // if GPS Enabled get lat/long using GPS Services
-                    if (isGPSEnabled) {
-                        if (location == null) {
-                            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
-                            }
-                            locationManager.requestLocationUpdates(
-                                    LocationManager.GPS_PROVIDER,
-                                    MIN_TIME_BW_UPDATES,
-                                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("GPS Enabled", "GPS Enabled");
-                            if (locationManager != null) {
-                                location = locationManager
-                                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                if (location != null) {
-                                    latitude = location.getLatitude();
-                                    longitude = location.getLongitude();
-                                }
-                            }
-                        }
-                    }
-                    */
                 } catch(SecurityException e) {
                     //error
                 }
@@ -249,20 +162,6 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         return location;
-    }
-
-    /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
-     * */
-    public void stopUsingGPS(){
-        if(locationManager != null){
-            try {
-                locationManager.removeUpdates(GPSTracker.this);
-            } catch (SecurityException e) {
-                //Fix later
-            }
-        }
     }
 
     /**
@@ -290,12 +189,44 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     /**
-     * Function to check GPS/wifi enabled
-     * @return boolean
-     * */
-    public boolean canGetLocation() {
-        return this.canGetLocation;
+     * http://stackoverflow.com/questions/33562951/android-6-0-location-permissions
+     *
+     * This method resolves operating system version differences when requesting
+     * permission for locations.
+     */
+    public LocationPoint getLastKnownLocationIfAllowed() {
+
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            Location location = m_locationManager.getLastKnownLocation(provider);
+            System.out.println("\nGET LAST KNOWN LOCATION");
+            if (location == null ) {
+                return null;
+            }
+            lastKnownLocation = new LocationPoint (location);
+            return lastKnownLocation;
+        }
+
+        return null;
     }
+
+    /**
+     * Stop using GPS listener
+     * Calling this function will stop using GPS in your app
+     * */
+    public void stopUsingGPS(){
+        if(m_locationManager != null){
+            try {
+                m_locationManager.removeUpdates(GPSTracker.this);
+            } catch (SecurityException e) {
+                //Fix later
+            }
+        }
+    }
+
 
     /**
      * Function to show settings alert dialog
@@ -329,62 +260,44 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.show();
     }
 
-    public void toasting(String toToast){
-        CharSequence text = toToast;
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(mContext, text, duration);
-        toast.show();
-    }
-
-    public static void toasting2(String toToast){
-        CharSequence text = toToast;
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(mContext2, text, duration);
-        toast.show();
-    }
-
     @Override
     public void onLocationChanged(Location location) {
         System.out.println("\nOnLocationChanged\n");
         if (location == null) {
-            toasting("onLocationChanged, location is null");
+            ((AmbulanceApp) mContext.getApplicationContext()).toasting("onLocationChanged, location is null");
             return;
         }
         //if we don't have an original location
         LocationPoint newLocation = new LocationPoint(location);
+        newLocation.setStatus(((AmbulanceApp)mContext.getApplicationContext()).getCurrStatus());
         if (lastKnownLocation == null) {
             System.out.println("\nPrevious location was null\n");
-            toasting("previous location was null");
+            ((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
             lastKnownLocation = newLocation;
-            writeLocationsToFile(newLocation);
+            ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
             return;
         }
 
         //check current location with last location
-        if (newLocation.within(lastKnownLocation, DISTANCE)) {
-            toasting ("Returned from the onLocationChanged." );
+        if (newLocation.within(lastKnownLocation, MIN_DISTANCE_CHANGE_FOR_UPDATES)) {
+            ((AmbulanceApp) mContext.getApplicationContext()).toasting ("Returned from the onLocationChanged." );
             return;
         }
-        //toasting("ON LOCATION CHANGED");
         lastKnownLocation = newLocation;
         System.out.println("\n LOCATION IS BEING WRITTEN\n");
-        toasting("LOCATION IS BEING WRITTEN");
-        writeLocationsToFile(newLocation);
+        ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
+        ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
     }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
 
     @Override
-    public void onProviderEnabled(String provider) {
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
+    public void onProviderEnabled(String provider) {}
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -400,151 +313,6 @@ public class GPSTracker extends Service implements LocationListener {
         toasting("Popped successfully");
     }
 
-
-
-/*START OF FILE I/O CODE*************************************************/
-
-
-//check if storage is writerable
-public boolean isExternalStorageWritable() {
-    String state = Environment.getExternalStorageState();
-    ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-    if (Environment.MEDIA_MOUNTED.equals(state)) {
-        return true;
-    }
-
-    isExternalStorageWritable(); // I hope this isn't a badly recursive file.'
-    return false;
-}
-//printerwrite, andorid equivilant
-/* Checks if external storage is available to at least read */
-public boolean isExternalStorageReadable() {
-    String state = Environment.getExternalStorageState();
-    if (Environment.MEDIA_MOUNTED.equals(state) ||
-            Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-        return true;
-    }
-    return false;
-}
-
-//Method to write locatoins points to external stoage
-//parameters: locationPointer point: object, carrying time of location
-public void writeLocationsToFile( LocationPoint point ){
-    //write to file i/o and must figure out whether to add to stack
-    //or have julia add it to mainactivity.buffstack, as well as
-    //gettime() instead of to string once i merge
-
-
-
-    String filename = point.getTime() + ".txt";
-    String string = point.getTime();
-
-    FileOutputStream outputStream;
-
-
-    if(isExternalStorageWritable()) {
-
-        System.err.println( "THE PERMISSION IS ... " + checkPermission());
-
-        try {
-           // openFileOutput where did this come from?
-            //File file = new File( this.getFilesDir(), filename )
-            /*
-            System.err.println("Filename is = " + filename);
-            outputStream = mContext.openFileOutput(filename, mContext.MODE_PRIVATE);
-            outputStream.write(string.getBytes());
-
-            outputStream.close();*/
-
-
-
-//            FileWriter fw = new FileWriter(getLPStorageDir(filename));
-          //  BufferedWriter bw = new BufferedWriter(fw);
-            File file = getLPStorageDir(filename);
-
-            //PrintWriter out = new PrintWriter(file);
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-           // PrintWriter out = new PrintWriter("/storage/emulated/0/Download/" + filename);
-
-            out.write(filename.getBytes());
-            out.close();
-
-            toasting("Wrote: " + filename);
-            System.err.println("exists: " + file.exists());
-            System.err.println("path: " + file.getAbsolutePath());
-            file.createNewFile();
-            System.err.println("path: " + file.getParent());
-
-            // Trying to make the file immediately available for Windows Explorer.
-            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(Uri.fromFile(file));
-            mContext.sendBroadcast(intent);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            toasting("Exception was thrown trying to write to storage.");
-
-        }
-
-
-    }
-    else{
-        toasting("not writable");
-
-    }
-
-}
-/***********************END OF RAMMY CODE*****************************/
-private boolean checkPermission() {
-    int result = ContextCompat.checkSelfPermission((Activity)mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-    if (result == PackageManager.PERMISSION_GRANTED) {
-        return true;
-    } else {
-        return false;
-    }
-}
-/*
-
-KNOWN ISSUE. FILES WILL NOT SHOW UP IN PHONE FOR WINDOWS
-UNTIL PHONE IS RESTARTED
-
-UPDATE: THIS ISSUE IS FIXED.
-(This comment is left for your entertainment)
-
-from search:
-
-Ok workaround for text files:
-For every update i delete the log file and rewrite the whole
-file new with the appended new data. Before rewriting i delete
-the file from index and readd it after writing the updated file.
-And now after unplugging and plug in the usb cable back again
-my text file is updated. Now my application works.
-Thanks Google.. Thanks for nothing!
-
-
- */
-
-    public File getLPStorageDir(String filename) {
-        // Get the directory for the user's public pictures directory.
-        /*File path = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS), "LPs");*/
-        //Files are an abstraction for both the PATH and the FILE
-        File path = new File("/sdcard/", "LPs");
-        File file = new File(path, filename);
-
-
-        if (!path.mkdirs()) {
-            System.err.println("THE DIRECTORY WAS NOT CREATED. ");
-        }
-        try {
-            file.createNewFile();
-        }
-        catch (Exception f) {f.printStackTrace();}
-
-        file.setWritable(true);
-        System.err.println(" Can write? " + file.canWrite());
-        return file;
-    }
 
 
 }

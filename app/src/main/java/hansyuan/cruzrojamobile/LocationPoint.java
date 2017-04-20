@@ -32,10 +32,8 @@ import org.json.JSONObject;
 
 class LocationPoint {
     String name;
-    //GPS
     double lon;
     double lat;
-    //NEED TIME
     String time;
     String status;
 
@@ -64,7 +62,7 @@ class LocationPoint {
         time = simpleDateFormat.format(new Date());
     }
 
-
+    /*----------Setters -----------------*/
     /** Name: setName
      * @param newName
      * Sets the locationPoint's name
@@ -73,20 +71,27 @@ class LocationPoint {
         name = newName;
     }
 
+    public void setStatus(String newStatus) { status = newStatus; }
+    /** Name: setTime
+     * sets 'time' to current time
+     */
+    private void setTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy__hh_mm_ss");
+        time = simpleDateFormat.format(new Date());
+    }
 
+    /*-------------------Getters ------------*/
     /**
      * Returns the string representation for this data type.
      * @return
      */
     @Override
     public String toString(){
-        return "Name: " + name + " Time: " + time + " Longitude: " + lon + " Latitude: " + lat;
+        return "Name: " + name + " Time: " + time + " Longitude: " + lon
+                + " Latitude: " + lat + " Status: " + getStatus();
     }
 
-    public String getTime() {
-            setTime();
-        return time;
-    }
+    public String getTime() { return time; }
 
     public String getName() {
         return name;
@@ -96,15 +101,10 @@ class LocationPoint {
         return "Longitude: " + lon + "Latitude: " + lat;
     }
 
-    /** Name: setTime
-     * sets 'time' to current time
-     */
-    private void setTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy__hh_mm_ss");
-        time = simpleDateFormat.format(new Date());
-    }
+    public String getStatus() { return status; }
 
 
+    /*------------------Communicating with server ----------------*/
     /**
      * This method will return a JSON Object.
      * When we decide if and how to use JSONs to transmit information, we could come
@@ -116,6 +116,7 @@ class LocationPoint {
     }
 
 
+    /*----------------------Location methods ----------------------*/
 
     /** Name: .equals
      * @param otherLocation
@@ -141,7 +142,6 @@ class LocationPoint {
 
         double within = distanceBetweenTwoPlaces(this, otherLocation);
 
-
         if (within <= distance) {
             return true;
         } else {
@@ -150,8 +150,7 @@ class LocationPoint {
     }
 
 
-    float[] results = new float[3]; //used for distanceBetween as arg
-    private final double MIN_DIST = 160; // 160m = 1/10th mile
+
 
     /**
      * Name: distanceBetweenTwoPlaces
@@ -159,12 +158,13 @@ class LocationPoint {
      * @param ourLocation
      * @return double that is the distance between the two locations in meters
      */
+    float[] results = new float[3]; //used for distanceBetween as arg
+    private final double MIN_DIST = 160; // 160m = 1/10th mile
     public double distanceBetweenTwoPlaces(LocationPoint ourLocation, LocationPoint p1) {
         double distance = MIN_DIST + 1;
         distanceBetween(p1.lat, p1.lon, ourLocation.lat, ourLocation.lon, results);
         distance = results[0];
-        System.out.println("\nDISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
-        GPSTracker.toasting2("DISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
+        //System.out.println("\nDISTANCE BETWEEN THE TWO LOCATIONS:" + distance);
         return distance;
     }
 

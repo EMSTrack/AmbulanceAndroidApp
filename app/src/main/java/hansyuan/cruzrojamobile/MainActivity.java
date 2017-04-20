@@ -22,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((AmbulanceApp) this.getApplication()).setContext(this); //allows global variables to work
         buffStack = new StackLP();
         this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
     }
-
 
 
     /**
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // The no-arg activity starter for the GPS activity.
     private void OpenGPS() {
-        Intent i = new Intent(this, GPS.class);
+        Intent i = new Intent(this, GPSActivity.class);
         startActivity(i);
     }
 
