@@ -52,6 +52,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 1;
     private final int MINTIMEPERCHECK = 5000;
+    private StackLP stackLP = new StackLP();
 
     // flag for GPS status
     boolean isGPSEnabled = false;
@@ -389,7 +390,17 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-    
+
+
+    /*START OF STACK CODE*************************************************/
+    public void sendToStackLP(LocationPoint point) {
+        stackLP.insert(point);
+        toasting("Point inserted to stack");
+        stackLP.popIfSent();
+        toasting("Popped successfully");
+    }
+
+
 
 /*START OF FILE I/O CODE*************************************************/
 
@@ -415,8 +426,6 @@ public boolean isExternalStorageReadable() {
     }
     return false;
 }
-
-
 
 //Method to write locatoins points to external stoage
 //parameters: locationPointer point: object, carrying time of location
