@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     // The no-arg activity starter for the GPS activity.
     private void OpenGPS() {
-        Intent i = new Intent(this, GPS.class);
+        Intent i = new Intent(this, GPSActivity.class);
         startActivity(i);
     }
 

@@ -87,7 +87,8 @@ class LocationPoint {
      */
     @Override
     public String toString(){
-        return "Name: " + name + " Time: " + time + " Longitude: " + lon + " Latitude: " + lat;
+        return "Name: " + name + " Time: " + time + " Longitude: " + lon
+                + " Latitude: " + lat + " Status: " + getStatus();
     }
 
     public String getTime() { return time; }

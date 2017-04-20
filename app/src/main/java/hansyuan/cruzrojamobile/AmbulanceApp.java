@@ -23,7 +23,16 @@ import java.io.FileOutputStream;
 public class AmbulanceApp extends Application {
 
     private Context mContext;
+    private String currStatus;
 
+
+    public void setCurrStatus(String newStatus) {
+        currStatus = newStatus;
+    }
+
+    public String getCurrStatus() {
+        return currStatus;
+    }
     /** Takes in a Context. This allows toasting and Fil I/O to work
      *
      * @param context
@@ -71,7 +80,7 @@ public class AmbulanceApp extends Application {
 
 
     //Method to write locatoins points to external stoage
-//parameters: locationPointer point: object, carrying time of location
+   //parameters: locationPointer point: object, carrying time of location
     public void writeLocationsToFile( LocationPoint point ){
         //write to file i/o and must figure out whether to add to stack
         //or have julia add it to mainactivity.buffstack, as well as

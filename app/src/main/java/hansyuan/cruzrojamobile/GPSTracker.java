@@ -1,6 +1,5 @@
 package hansyuan.cruzrojamobile;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
@@ -109,13 +108,13 @@ public class GPSTracker extends Service implements LocationListener {
                 // First get location from Network Provider
                 try {
                     if (isNetworkEnabled()) {
-                        locationManager.requestLocationUpdates(
+                        m_locationManager.requestLocationUpdates(
                                 LocationManager.NETWORK_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         Log.d("Network", "Network");
-                        if (locationManager != null) {
-                            location = locationManager
+                        if (m_locationManager != null) {
+                            location = m_locationManager
                                     .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if (location != null) {
                                 latitude = location.getLatitude();
@@ -134,13 +133,13 @@ public class GPSTracker extends Service implements LocationListener {
                     // TODO This is the original isGPSEnabled if-statement.
                     if (isGPSEnabled()) {
                         if (location == null) {
-                            locationManager.requestLocationUpdates(
+                            m_locationManager.requestLocationUpdates(
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                             Log.d("GPS Enabled", "GPS Enabled");
-                            if (locationManager != null) {
-                                location = locationManager
+                            if (m_locationManager != null) {
+                                location = m_locationManager
                                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if (location != null) {
                                     latitude = location.getLatitude();
@@ -216,9 +215,9 @@ public class GPSTracker extends Service implements LocationListener {
      * Calling this function will stop using GPS in your app
      * */
     public void stopUsingGPS(){
-        if(locationManager != null){
+        if(m_locationManager != null){
             try {
-                locationManager.removeUpdates(GPSTracker.this);
+                m_locationManager.removeUpdates(GPSTracker.this);
             } catch (SecurityException e) {
                 //Fix later
             }
@@ -267,6 +266,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
         //if we don't have an original location
         LocationPoint newLocation = new LocationPoint(location);
+        newLocation.setStatus(((AmbulanceApp)mContext.getApplicationContext()).getCurrStatus());
         if (lastKnownLocation == null) {
             System.out.println("\nPrevious location was null\n");
             ((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
@@ -276,7 +276,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         //check current location with last location
-        if (newLocation.within(lastKnownLocation, DISTANCE)) {
+        if (newLocation.within(lastKnownLocation, MIN_DISTANCE_CHANGE_FOR_UPDATES)) {
             ((AmbulanceApp) mContext.getApplicationContext()).toasting ("Returned from the onLocationChanged." );
             return;
         }

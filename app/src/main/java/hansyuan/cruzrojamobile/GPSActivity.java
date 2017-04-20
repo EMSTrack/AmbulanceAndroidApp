@@ -1,20 +1,13 @@
 package hansyuan.cruzrojamobile;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -48,7 +41,7 @@ import com.android.volley.toolbox.Volley;
  * data to the server might use the LP's method that will
  * return a new JSONObject.
  */
-public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
+public class GPSActivity extends AppCompatActivity  implements CompoundButton.OnCheckedChangeListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
@@ -56,7 +49,7 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
     Handler clockedHandler = new Handler();
     //Switch clockEnable;
-    Spinner spinner;
+    Spinner statusSpinner;
     Spinner mySpinner;
     Switch clockEnable;             // The switch for clock enable.
 
@@ -116,18 +109,18 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         */
         gps = new GPSTracker(this);
 
-        // Dropdown Menu (spinner)
-        spinner = (Spinner) findViewById(R.id.statusupdate);
+        // Dropdown Menu (statusSpinner)
+        statusSpinner = (Spinner) findViewById(R.id.statusupdate);
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
+        // Create an ArrayAdapter using the string array and a default statusSpinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.status_updates, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        // Apply the adapter to the statusSpinner
+        statusSpinner.setAdapter(adapter);
 
         clockEnable = (Switch) findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
@@ -260,19 +253,20 @@ public class GPS extends AppCompatActivity  implements CompoundButton.OnCheckedC
         gps.getLastKnownLocationIfAllowed();
         //GPSTracker gps = new GPSTracker(this); not sure why this exists.
 
-        if(gps.canGetLocation()){
-            this.toasting("Got location.");
+        if(gps.isGPSEnabled() || gps.isNetworkEnabled()){
+            this.toasting("Can get location.");
         }
         else{
             this.toasting("Could not get location.");
             return;
         }
 
+        gps.getLocation();
+
         double lat = gps.getLatitude(); // returns latitude
         double lon = gps.getLongitude(); // returns longitude
 
-        //String s = new String();
-        //s += "Lat: " + lat + ". Lon: " + lon;
+
 
         LocationPoint loc = new LocationPoint(lon, lat);
         this.display(loc.toString());
