@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((AmbulanceApp) this.getApplication()).setContext(this); //allows global variables to work
         buffStack = new StackLP();
         //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
 
@@ -46,47 +47,40 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
+                                               @Override
+                                               public void onTabSelected(TabLayout.Tab tab) {
+                                                   viewPager.setCurrentItem(tab.getPosition());
+                                               }
+                                           }
+    }
+            /**
+             * This is the method for opening a new activity.
+             * Generalizable to any method whose only purpose is to load a new activity.
+             *
+             * @param view
+             */
+            public void OpenGPS(View view) {
+                OpenGPS();
             }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
+            // The no-arg activity starter for the GPS activity.
+            private void OpenGPS() {
+                Intent i = new Intent(getApplication(), GPS.class);
+                startActivity(i);
             }
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+            public void openInfo(View view) {
+                openInfo();
             }
-        });
+
+            private void openInfo() {
+                //Intent z = ;
+                startActivity(new Intent(getApplication(), demo_viewTransmission.class));
+            }
+
+            public void openFileView(View view) {
+                startActivity(new Intent(getApplication(), LPBackupExplorer.class));
+            }
+        }
     }
-
-    /**
-     * This is the method for opening a new activity.
-     * Generalizable to any method whose only purpose is to load a new activity.
-     * @param view
-     */
-    public void OpenGPS(View view) {
-        OpenGPS();
-    }
-
-    // The no-arg activity starter for the GPS activity.
-    private void OpenGPS() {
-        Intent i = new Intent(this, GPS.class);
-        startActivity(i);
-    }
-
-    public void openInfo(View view) {
-        openInfo();
-    }
-
-    private void openInfo(){
-        //Intent z = ;
-        startActivity (new Intent (this, demo_viewTransmission.class));
-    }
-
-
-
-} // end class
+}// end class
