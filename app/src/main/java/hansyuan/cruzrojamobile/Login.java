@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //Check authenticity (id and pw - login team)
         progressDialog.dismiss();
 
-        if(id.equals("king") && password.equals("justin")){
+        if(id.equals("1") && password.equals("1")){
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }

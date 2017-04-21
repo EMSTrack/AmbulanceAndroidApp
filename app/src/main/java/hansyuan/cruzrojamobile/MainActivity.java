@@ -32,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_home);
-        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
         tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
+        tabLayout.addTab(tabLayout.newTab().setText("Messages"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
+        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

@@ -20,7 +20,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                GPS tab1 = new GPS();
+                demo_viewTransmission tab1 = new demo_viewTransmission();
                 return tab1;
             case 1:
                 demo_viewTransmission tab2 = new demo_viewTransmission();
@@ -28,6 +28,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 demo_viewTransmission tab3 = new demo_viewTransmission();
                 return tab3;
+            case 3:
+                GPS tab4 = new GPS();
+                return tab4;
             default:
                 return null;
         }
