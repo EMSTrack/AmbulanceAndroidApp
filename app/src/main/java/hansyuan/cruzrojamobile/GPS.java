@@ -121,7 +121,7 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
         statusSpinner = (Spinner) rootView.findViewById(R.id.statusupdate);
 
         // Create an ArrayAdapter using the string array and a default statusSpinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.status_updates, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
