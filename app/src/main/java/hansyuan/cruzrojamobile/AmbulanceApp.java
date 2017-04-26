@@ -22,34 +22,40 @@ import java.io.FileOutputStream;
  *
  * To use a function:
  * If it is not being used in an activity page:
- * ((AmbulanceApp) mContext.getApplicationContext()).FUNCTIONYOUNEED();
+ * (((AmbulanceApp)AmbulanceApp.getAppContext()).FUNCTIONYOUNEED();
  * If it is being used in an activity page:
- * ((AmbulanceApp) mContext.getApplication()).FUNCTIONYOUNEED()
+ * ((AmbulanceApp) this.getApplication()).FUNCTIONYOUNEED()
  *
  *
  */
 
 public class AmbulanceApp extends Application {
 
-    private Context mContext;
+    private static Context context;
     private String currStatus;
 
+    public void onCreate() {
+        super.onCreate();
+        AmbulanceApp.context = getApplicationContext();
+    }
+
+    /*************************GETTERS **********************/
+    public String getCurrStatus() {
+        return currStatus;
+    }
+
+    public static Context getAppContext() {
+        return AmbulanceApp.context;
+    }
+
+    /******************** SETTERS *******************************/
 
     public void setCurrStatus(String newStatus) {
         currStatus = newStatus;
     }
 
-    public String getCurrStatus() {
-        return currStatus;
-    }
-    /** Takes in a Context. This allows toasting and Fil I/O to work
-     *
-     * @param context
-     */
-    public void setContext(Context context) {
-      mContext = context;
-    }
 
+    /********************* other methods ********************************/
     /** Takes in a string to Toast
      *
      * @param toToast
@@ -57,18 +63,16 @@ public class AmbulanceApp extends Application {
     public void toasting(String toToast){
         CharSequence text = toToast;
         int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(mContext, text, duration);
+        Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
 
     /*START OF FILE I/O CODE*************************************************/
 
-
-
-    //check if storage is writerable
+    //check if storage is writable
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
-        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             return true;
         }
@@ -91,10 +95,6 @@ public class AmbulanceApp extends Application {
     //Method to write locatoins points to external stoage
    //parameters: locationPointer point: object, carrying time of location
     public void writeLocationsToFile( LocationPoint point ){
-        //write to file i/o and must figure out whether to add to stack
-        //or have julia add it to mainactivity.buffstack, as well as
-        //gettime() instead of to string once i merge
-
 
 
         String filename = point.getTime() + ".txt";
@@ -108,15 +108,6 @@ public class AmbulanceApp extends Application {
             System.err.println( "THE PERMISSION IS ... " + checkPermission());
 
             try {
-                // openFileOutput where did this come from?
-                //File file = new File( this.getFilesDir(), filename )
-            /*
-            System.err.println("Filename is = " + filename);
-            outputStream = mContext.openFileOutput(filename, mContext.MODE_PRIVATE);
-            outputStream.write(string.getBytes());
-
-            outputStream.close();*/
-
 
 
 //            FileWriter fw = new FileWriter(getLPStorageDir(filename));
@@ -139,7 +130,7 @@ public class AmbulanceApp extends Application {
                 // Trying to make the file immediately available for Windows Explorer.
                 Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 intent.setData(Uri.fromFile(file));
-                mContext.sendBroadcast(intent);
+                context.sendBroadcast(intent);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -157,7 +148,7 @@ public class AmbulanceApp extends Application {
     }
     /***********************END OF RAMMY CODE*****************************/
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission((Activity)mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission((Activity)context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {

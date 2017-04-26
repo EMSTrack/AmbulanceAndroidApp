@@ -29,7 +29,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 demo_viewTransmission tab3 = new demo_viewTransmission();
                 return tab3;
             case 3:
-                GPS tab4 = new GPS();
+                GPSActivity tab4 = new GPSActivity();
                 return tab4;
             default:
                 return null;
