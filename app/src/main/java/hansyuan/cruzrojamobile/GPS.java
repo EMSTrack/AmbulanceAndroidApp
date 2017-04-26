@@ -100,8 +100,8 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
      * Default method
      * Always called when an activity is created.
      * @param savedInstanceState
-     */
-    @Override
+     */    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
@@ -115,6 +115,7 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
         tryGPS(); //MUST BE CALLED AFTER THE DELAY
         */
         gps = new GPSTracker(rootView.getContext());
+
 
 
         // Dropdown Menu (statusSpinner)
@@ -274,7 +275,6 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
 
         double lat = gps.getLatitude(); // returns latitude
         double lon = gps.getLongitude(); // returns longitude
-
 
 
         LocationPoint loc = new LocationPoint(lon, lat);
