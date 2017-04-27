@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((AmbulanceApp) this.getApplication()).setContext(this); //allows global variables to work
+        ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
-        //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPS activity!
+        //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPSActivity activity!
 
         //set up TabLayout Structure
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
         tabLayout.addTab(tabLayout.newTab().setText("Messages"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
-        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
+        tabLayout.addTab(tabLayout.newTab().setText("GPSActivity"));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         OpenGPS();
     }
 
-    // The no-arg activity starter for the GPS activity.
+    // The no-arg activity starter for the GPSActivity activity.
     private void OpenGPS() {
-        Intent i = new Intent(getApplication(), GPS.class);
+        Intent i = new Intent(getApplication(), GPSActivity.class);
         startActivity(i);
     }
 

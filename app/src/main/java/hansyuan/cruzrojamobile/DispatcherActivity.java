@@ -50,7 +50,7 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             LocationPoint loc = new LocationPoint(lon, lat);
 
 
-            String geoUri = "http://maps.google.com/maps?q=loc:" + lat + "," + lon + " (" + loc + ")";
+            String geoUri = "http://maps.google.com/maps?q=loc:" + 32.879409 + "," + -117.2382162 + " (" + loc + ")";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             getActivity().startActivity(intent);
         }

@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -30,7 +32,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Java Class AND ACTIVITY
- * implements code for the GPS Activity
+ * implements code for the GPSActivity Activity
  * Methods for lists and buttons are here.
  *
  * TODO
@@ -46,7 +48,7 @@ import com.android.volley.toolbox.Volley;
  * data to the server might use the LP's method that will
  * return a new JSONObject.
  */
-public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListener{
+public class GPSActivity extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
@@ -59,44 +61,11 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
     Switch clockEnable;             // The switch for clock enable.
     View rootView;
 
-
-
     Switch listenerEnable;          // The switch for location listener
 
+    Button broadCastCruzRoja;
 
-    // The textview for the Listener source, it should always tell you what
-    // the source of the listener is.
-    TextView debugListenerSource;
-
-
-    //The following is a declaration, instantiation, with a lambda function defined.
-    Runnable clockedHandlerTask = new Runnable()
-        {
-            /** todo Perhaps the method should also refresh the location first otherwise
-             * Repeats whatever is in the run method.
-             *
-             * Also, I think it's currently hooked up to the Google broadcaster. 
-             */
-        @Override
-        public void run () {
-            //TODO Clocked methods are here:
-            tryGPS();           // get an updated location
-            broadcast();        // Do a GET request to Google.
-            mySpinner=(Spinner) rootView.findViewById(R.id.statusupdate);
-            listenerEnable = (Switch) rootView.findViewById(R.id.locationListener);
-
-            toasting(mySpinner.getSelectedItem().toString());
-
-            //a Delay is done:
-            clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
-            if ( !clockEnable.isChecked() ) {
-                stopRepeatingTask();
-            }
-        }
-    };
-
-
-    /**
+    /*
      * Default method
      * Always called when an activity is created.
      * @param savedInstanceState
@@ -104,10 +73,11 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         rootView = inflater.inflate(R.layout.activity_gps, container, false);
 
-        //checkLocationPermission(); //Might be needed, might not.
+        broadCastCruzRoja = (Button) rootView.findViewById(R.id.broadcastCruz);
+        broadCastCruzRoja.setOnClickListener(this);
+                //checkLocationPermission(); //Might be needed, might not.
 
         /* TODO This activity will NO LONGER automatically check a new location upon starting.
 
@@ -131,25 +101,50 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
         // Apply the adapter to the statusSpinner
         statusSpinner.setAdapter(adapter);
 
+
+        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                String newStatus = statusSpinner.getSelectedItem().toString();
+                ((AmbulanceApp)AmbulanceApp.getAppContext()).setCurrStatus(newStatus);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         clockEnable = (Switch) rootView.findViewById(R.id.clockSwitch);
         clockEnable.setOnCheckedChangeListener(this);
-
-        //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-        System.err.println("Permission: " + isStoragePermissionGranted());
-        //requestPermission();
-        ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        /*if (isStoragePermissionGranted()){
-
-        }*/
-
-        //Sets the listener. TODO: check if gps is on, if not, toast
 
         return rootView;
     }
 
-    /** For the following three methods, stop the clock when the activity, in any way, is left. */
 
+    //The following is a declaration, instantiation, with a lambda function defined.
+    Runnable clockedHandlerTask = new Runnable()
+    {
+        /** todo Perhaps the method should also refresh the location first otherwise
+         * Repeats whatever is in the run method.
+         *
+         * Also, I think it's currently hooked up to the Google broadcaster.
+         */
+        @Override
+        public void run () {
+            tryGPS();           // get an updated location
+            broadcast();        // Do a GET request to Google.
+            mySpinner=(Spinner) rootView.findViewById(R.id.statusupdate);
+            listenerEnable = (Switch) rootView.findViewById(R.id.locationListener);
+
+            toasting(mySpinner.getSelectedItem().toString());
+
+            //a Delay is done:
+            clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
+            if ( !clockEnable.isChecked() ) {
+                stopRepeatingTask();
+            }
+        }
+    };
+
+
+    /** For the following three methods, stop the clock when the activity, in any way, is left. */
     public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -251,7 +246,7 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
 
     /**
      * creates a new GPSTracker instance
-     * detects whether it can find GPS first
+     * detects whether it can find GPSActivity first
      * If it can't, then simply stop immediately.
      *
      * For now, this creates a new GPSTracker every single time I run the ability to get an
@@ -326,9 +321,8 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
     /**
      * Thie method will compile together the location point information, append
      * it to the url, and then do a GET request on the URL.
-     * @param view
      */
-    public void broadcastCruzRoja(View view) {
+    public void broadcastCruzRoja() {
         final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
 
         mySpinner = (Spinner) rootView.findViewById(R.id.statusupdate);
@@ -368,6 +362,12 @@ public class GPS extends Fragment implements CompoundButton.OnCheckedChangeListe
         queue.add(stringRequest); // Not sure about this.
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v == broadCastCruzRoja){
+            broadcastCruzRoja();
+        }
+    }
 }
 
 

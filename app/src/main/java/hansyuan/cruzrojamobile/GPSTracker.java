@@ -24,7 +24,7 @@ import android.util.Log;
  * Created by Hans Yuan on 10/19/2016.
  *
  * Java Class Only:
- * Purpose is to get the GPS information from Android.
+ * Purpose is to get the GPSActivity information from Android.
  * Use by creating a new instance of GPSTracker. This is done by the GPSActivity class.
  */
 public class GPSTracker extends Service implements LocationListener {
@@ -39,7 +39,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     //Used in LocationListener to check whether to add a new locationPoint
     public LocationPoint lastKnownLocation;
-   // public boolean isGPSEnabled = false; //flag for GPS status
+   // public boolean isGPSEnabled = false; //flag for GPSActivity status
     //public boolean isNetworkEnabled = false; //flag for network status
 
     Location location; // location
@@ -72,7 +72,7 @@ public class GPSTracker extends Service implements LocationListener {
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
     }
 
-    /** checks if the GPS is enabled. If it is not, returns false
+    /** checks if the GPSActivity is enabled. If it is not, returns false
      *
      * @return
      */
@@ -140,7 +140,7 @@ public class GPSTracker extends Service implements LocationListener {
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("GPS Enabled", "GPS Enabled");
+                            Log.d("GPSActivity Enabled", "GPSActivity Enabled");
                             if (m_locationManager != null) {
                                 location = m_locationManager
                                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -214,8 +214,8 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
+     * Stop using GPSActivity listener
+     * Calling this function will stop using GPSActivity in your app
      * */
     public void stopUsingGPS(){
         if(m_locationManager != null){
@@ -236,10 +236,10 @@ public class GPSTracker extends Service implements LocationListener {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
-        alertDialog.setTitle("GPS is settings");
+        alertDialog.setTitle("GPSActivity is settings");
 
         // Setting Dialog Message
-        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+        alertDialog.setMessage("GPSActivity is not enabled. Do you want to go to settings menu?");
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
