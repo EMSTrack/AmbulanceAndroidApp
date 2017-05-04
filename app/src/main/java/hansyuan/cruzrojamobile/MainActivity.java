@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
         //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPSActivity activity!
@@ -33,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_home);
         tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
-        tabLayout.addTab(tabLayout.newTab().setText("Messages"));
+        //tabLayout.addTab(tabLayout.newTab().setText("Messages"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
-        tabLayout.addTab(tabLayout.newTab().setText("GPSActivity"));
+        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -58,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }

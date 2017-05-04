@@ -14,8 +14,9 @@
         If the permission is missing, SOMETHING IS WRONG
     -->
 
-    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.google.android.gms.location.sample.basiclocationsample"></manifest>
+    <meta-data
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="AIzaSyDKymeBXNeiFWY5jRUejv6zItpmr2MVyQ0" />
 
     <application
         android:name = ".AmbulanceApp"
@@ -37,7 +38,14 @@
         <activity android:name=".GPSActivity" />
         <activity android:name=".CommunicationDatabase" />
         <activity android:name=".demo_viewTransmission" />
-        <activity android:name=".LPBackupExplorer"></activity>
+        <activity android:name=".LPBackupExplorer"/>
+        <activity android:name=".DispatcherActivity"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDlUATasdP1Sat1i_W1p6MXH-OpwLLGxAo"/>
+
+
     </application>
 
 </manifest>
