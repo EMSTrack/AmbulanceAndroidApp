@@ -20,7 +20,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                demo_viewTransmission tab1 = new demo_viewTransmission();
+                DispatcherActivity tab1 = new DispatcherActivity();
                 return tab1;
             case 1:
                 demo_viewTransmission tab2 = new demo_viewTransmission();

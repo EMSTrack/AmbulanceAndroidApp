@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
-        //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPSActivity activity!
 
         //set up TabLayout Structure
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
