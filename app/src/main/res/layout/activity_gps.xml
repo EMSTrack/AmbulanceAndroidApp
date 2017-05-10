@@ -16,12 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-
         android:layout_marginTop="13dp"
         android:text="Longitude:\n\nLatitude:\n\nLast Recorded Time: \n\nLast Transmitted Time:\n\n"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <TextView
         android:text="Current Status:"

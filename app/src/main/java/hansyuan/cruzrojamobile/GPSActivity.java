@@ -101,6 +101,15 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        Button savedLocations = (Button) rootView.findViewById(R.id.savedLocations);
+
+        savedLocations.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                System.out.println("OPENING SAVEDLOCATIONS ACTIVITY");
+                startActivity(new Intent(getContext(), SavedLocations.class));
+            }
+        });
+
 
         //Determine whether to listen by dist changed or time changed
         trackByTime = (Switch) rootView.findViewById(R.id.trackByTimeSwitch);
@@ -111,9 +120,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         return rootView;
     }
 
-    public void openSavedLocations(View v){
-        startActivity(new Intent(this.getActivity(), SavedLocations.class));
-    }
 
     @Override
     public void onPause() {
