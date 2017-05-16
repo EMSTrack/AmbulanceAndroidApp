@@ -91,6 +91,9 @@ public class GPSTracker extends Service implements LocationListener {
 
 
     public void turnOff() {
+        System.out.println("\n Turning off listener");
+        ((AmbulanceApp) mContext.getApplicationContext()).toasting("Turning off GPS");
+        if (m_locationManager != null)
         m_locationManager.removeUpdates(this);
     }
 
@@ -243,20 +246,6 @@ public class GPSTracker extends Service implements LocationListener {
         return null;
     }
 
-    /**
-     * Stop using GPSActivity listener
-     * Calling this function will stop using GPSActivity in your app
-     * */
-    public void stopUsingGPS(){
-        if(m_locationManager != null){
-            try {
-                m_locationManager.removeUpdates(GPSTracker.this);
-            } catch (SecurityException e) {
-                //Fix later
-            }
-        }
-    }
-
 
     /**
      * Function to show settings alert dialog
@@ -309,9 +298,9 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         lastKnownLocation = newLocation;
-        System.out.println("\n LOCATION IS BEING WRITTEN\n");
+        System.out.println("\n LOCATION IS BEING WRITTEN: " + newLocation.toString());
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
-        //((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
+        ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
     }
 
 

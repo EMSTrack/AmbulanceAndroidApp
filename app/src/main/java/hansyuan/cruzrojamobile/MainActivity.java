@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((AmbulanceApp) this.getApplication()).onCreate();
+        ((AmbulanceApp) this.getApplication()).onCreate(this);
         buffStack = new StackLP();
 
         //set up TabLayout Structure

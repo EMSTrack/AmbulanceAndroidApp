@@ -31,21 +31,27 @@ import java.io.FileOutputStream;
 
 public class AmbulanceApp extends Application {
 
-    private static Context context;
+    private static Context appContext;
+    private Context context;
     private String currStatus;
 
     public void onCreate() {
         super.onCreate();
-        AmbulanceApp.context = getApplicationContext();
+        appContext = getApplicationContext();
     }
 
+    public void onCreate (Context context) {
+        super.onCreate();
+        this.context = context;
+        appContext = getApplicationContext();
+    }
     /*************************GETTERS **********************/
     public String getCurrStatus() {
         return currStatus;
     }
 
     public static Context getAppContext() {
-        return AmbulanceApp.context;
+        return AmbulanceApp.appContext;
     }
 
     /******************** SETTERS *******************************/
@@ -63,21 +69,23 @@ public class AmbulanceApp extends Application {
     public void toasting(String toToast){
         CharSequence text = toToast;
         int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
+        Toast toast = Toast.makeText(appContext, text, duration);
         toast.show();
     }
 
     /*START OF FILE I/O CODE*************************************************/
-
+    boolean writableExternalStorage = false;
+    boolean checked = false;
     //check if storage is writable
     public boolean isExternalStorageWritable() {
+        checked = true;
         String state = Environment.getExternalStorageState();
         ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         if (Environment.MEDIA_MOUNTED.equals(state)) {
+            writableExternalStorage = true;
             return true;
         }
-
-        isExternalStorageWritable(); // I hope this isn't a badly recursive file.'
+        writableExternalStorage = false;
         return false;
     }
     //printerwrite, andorid equivilant
@@ -97,19 +105,18 @@ public class AmbulanceApp extends Application {
     public void writeLocationsToFile( LocationPoint point ){
 
 
-        String filename = point.getTime() + ".txt";
+        String filename = point.toString() + ".txt";
         String string = point.getTime();
 
         FileOutputStream outputStream;
 
-
-        if(isExternalStorageWritable()) {
+        if (checked == false )
+            isExternalStorageWritable();
+        if(writableExternalStorage) {
 
             System.err.println( "THE PERMISSION IS ... " + checkPermission());
 
             try {
-
-
 //            FileWriter fw = new FileWriter(getLPStorageDir(filename));
                 //  BufferedWriter bw = new BufferedWriter(fw);
                 File file = getLPStorageDir(filename);
@@ -178,10 +185,10 @@ Thanks Google.. Thanks for nothing!
 
     public File getLPStorageDir(String filename) {
         // Get the directory for the user's public pictures directory.
-        /*File path = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOWNLOADS), "LPs");*/
+        File path = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS), "LPs");
         //Files are an abstraction for both the PATH and the FILE
-        File path = new File("/sdcard/", "LPs");
+        //File path = new File("/sdcard/", "LPs");
         File file = new File(path, filename);
 
 

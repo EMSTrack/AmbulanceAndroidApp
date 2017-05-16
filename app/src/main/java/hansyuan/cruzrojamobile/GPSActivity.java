@@ -123,17 +123,19 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
 
     @Override
     public void onPause() {
+        System.err.println("onPause: GPSActivity");
         super.onPause(); // This is required for some reason.
-        trackByTime.setChecked(false);
     }
     @Override
     public void onStop(){
         super.onStop(); // Same.
+        ((AmbulanceApp) this.getContext()).toasting("OnStop: GPSActivity");
         trackByTime.setChecked(false);
     }
 
     @Override
     public void onDestroy() {
+        ((AmbulanceApp) this.getContext()).toasting("OnDestroy: GPSActivity");
         super.onDestroy(); // Same.
         trackByTime.setChecked(false);
     }
@@ -193,12 +195,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         t.setText(s);
     }
 
-
-
-
-    public void broadcast(View view){
-        broadcast();
-    }
 
 
     /*
