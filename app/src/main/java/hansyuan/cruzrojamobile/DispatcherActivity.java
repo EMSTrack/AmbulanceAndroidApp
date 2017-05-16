@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -32,10 +33,10 @@ import java.util.List;
  * Created by justingil1748 on 4/26/17.
  */
 
-public class DispatcherActivity extends Fragment implements View.OnClickListener, OnMapReadyCallback {
+public class DispatcherActivity extends Fragment implements View.OnClickListener {
     View rootView;
     GPSTracker gps;
-    Button mapButton;
+    ImageButton mapButton;
     GoogleMap mGoogleMap;
     Button addressButton;
     EditText addressSearchText;
@@ -44,8 +45,12 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_dispatcher, container, false);
-        mapButton = (Button) rootView.findViewById(R.id.gmap);
+
+
+        mapButton = (ImageButton) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
+
+        /*
         addressButton = (Button) rootView.findViewById(R.id.addressButton);
         addressButton.setOnClickListener(this);
         addressSearchText = (EditText) rootView.findViewById(R.id.addressSearch);
@@ -55,23 +60,14 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             SupportMapFragment  fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             fragment.getMapAsync(this);
         }
+        */
 
         return rootView;
 
     }
 
-    public boolean googleService(){
-        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int isAvailable = api.isGooglePlayServicesAvailable(getActivity());
 
-        if(isAvailable == ConnectionResult.SUCCESS){
-            return true;
-        }
-        else{
-            return false;
-        }
 
-    }
     @Override
     public void onClick(View v) {
         if(v == mapButton){
@@ -88,12 +84,41 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             startActivity(intent);
         }
+        /*
         else if(v == addressButton){
             geoLocate();
         }
+        */
     }
 
 
+
+
+
+
+
+
+
+
+
+
+    /*
+    public boolean googleService(){
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int isAvailable = api.isGooglePlayServicesAvailable(getActivity());
+
+        if(isAvailable == ConnectionResult.SUCCESS){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+    */
+
+
+/*
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
@@ -153,5 +178,5 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
         else{
             Toast.makeText(getActivity(), "Can't find the address", Toast.LENGTH_SHORT).show();
         }
-    }
+    */
 }

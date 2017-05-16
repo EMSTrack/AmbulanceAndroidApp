@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="app_name">CruzRojaMobile</string>
     <string-array name="status_updates">
         <item>Left_hospital.</item>
@@ -10,6 +13,7 @@
         <item>Saturn</item>
         <item>Uranus</item>
         <item>Neptune</item> </!-->
+
 
     </string-array>
 </resources>
