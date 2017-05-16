@@ -62,9 +62,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/tab_layout_home" />
 
-</RelativeLayout>
-
-
+        </RelativeLayout>
 
         <!-- The navigation drawer that comes from the left -->
     <!-- Note that `android:layout_gravity` needs to be set to 'start' -->

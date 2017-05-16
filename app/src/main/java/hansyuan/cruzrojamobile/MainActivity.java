@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
-        //this.OpenGPS(); //Comment this out if you don't want to auto-start the GPSActivity activity!
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -33,14 +33,10 @@ public class GPSTracker extends Service implements LocationListener {
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 1;
-    private final int MINTIMEPERCHECK = 5000;
     private StackLP stackLP = new StackLP();
-
 
     //Used in LocationListener to check whether to add a new locationPoint
     public LocationPoint lastKnownLocation;
-   // public boolean isGPSEnabled = false; //flag for GPSActivity status
-    //public boolean isNetworkEnabled = false; //flag for network status
 
     Location location; // location
     double latitude; // latitude
@@ -65,12 +61,39 @@ public class GPSTracker extends Service implements LocationListener {
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
             m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
+        }
+
+        getLocation();
+        ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
+    }
+
+    public GPSTracker(Context context, long minTime, long minDist) {
+        if (minTime != -1) {
+            MIN_TIME_BW_UPDATES = minTime;
+        }
+        if (minDist != -1) {
+            MIN_DISTANCE_CHANGE_FOR_UPDATES = minDist;
+        }
+        this.mContext = context;
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+
+            provider = LocationManager.GPS_PROVIDER;
+            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
 
         }
 
         getLocation();
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
     }
+
+
+    public void turnOff() {
+        m_locationManager.removeUpdates(this);
+    }
+
 
     /** checks if the GPSActivity is enabled. If it is not, returns false
      *
@@ -91,6 +114,14 @@ public class GPSTracker extends Service implements LocationListener {
      */
     public LocationPoint getLastKnownLocation() {
         return lastKnownLocation;
+    }
+
+    public long getMinDistanceChangeForUpdates () {
+        return MIN_DISTANCE_CHANGE_FOR_UPDATES;
+    }
+
+    public long getMinTimeBWUpdates () {
+        return MIN_TIME_BW_UPDATES;
     }
 
     public Location getLocation() {
@@ -200,7 +231,6 @@ public class GPSTracker extends Service implements LocationListener {
                 PackageManager.PERMISSION_GRANTED) {
 
             provider = LocationManager.GPS_PROVIDER;
-            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             Location location = m_locationManager.getLastKnownLocation(provider);
             System.out.println("\nGET LAST KNOWN LOCATION");
             if (location == null ) {
@@ -278,15 +308,10 @@ public class GPSTracker extends Service implements LocationListener {
             return;
         }
 
-        //check current location with last location
-        if (newLocation.within(lastKnownLocation, MIN_DISTANCE_CHANGE_FOR_UPDATES)) {
-            ((AmbulanceApp) mContext.getApplicationContext()).toasting ("Returned from the onLocationChanged." );
-            return;
-        }
         lastKnownLocation = newLocation;
         System.out.println("\n LOCATION IS BEING WRITTEN\n");
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
-        ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
+        //((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
     }
 
 

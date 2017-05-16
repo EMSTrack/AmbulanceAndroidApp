@@ -16,10 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/broadcast"
         android:layout_marginTop="13dp"
         android:text="Longitude:\n\nLatitude:\n\nLast Recorded Time: \n\nLast Transmitted Time:\n\n"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
     <TextView
         android:text="Current Status:"
@@ -42,16 +41,15 @@
         android:layout_alignParentStart="true" />
 
     <Switch
-        android:text="Clocking:"
+        android:text="Track by time:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/clockSwitch"
+        android:id="@+id/trackByTimeSwitch"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
         android:checked="false"
         android:layout_marginTop="36dp"
         android:layout_below="@+id/statusupdate"
-        android:layout_alignLeft="@+id/broadcastCruz"
-        android:layout_alignStart="@+id/broadcastCruz" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="send info"
@@ -59,16 +57,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/broadcastCruz"
         android:onClick="broadcastCruzRoja"
-        android:layout_below="@+id/locationListener"
+        android:layout_below="@+id/trackByDistanceSwitch"
         android:layout_centerHorizontal="true" />
 
     <Switch
-        android:text="Listening "
+        android:text="Track by distance "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/locationListener"
-        android:layout_below="@+id/clockSwitch"
-        android:layout_alignRight="@+id/broadcastCruz"
-        android:layout_alignEnd="@+id/broadcastCruz" />
+        android:id="@+id/trackByDistanceSwitch"
+        android:layout_below="@+id/trackByTimeSwitch"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:text="Saved Locations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/savedLocations"
+        android:onClick="openSavedLocations"
+        android:layout_below="@+id/broadcastCruz"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
