@@ -278,5 +278,3 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         }
     }
 }
-
-

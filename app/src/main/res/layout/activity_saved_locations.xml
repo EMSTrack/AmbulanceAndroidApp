@@ -8,7 +8,8 @@
     tools:context="hansyuan.cruzrojamobile.SavedLocations">
 
     <include layout="@layout/content_saved_locations"
-        android:layout_height="549dp" />
+        android:layout_height="549dp"
+        android:layout_width="10dp" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
