@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/addressText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
         android:layout_marginBottom="5dp"
@@ -32,12 +32,13 @@
         android:layout_below="@+id/addressText"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="Bahía Kino 43 Infonavit Lomas del Porvenir, \n22531 Tijuana, B.C., Mexico"
         android:textSize="30dp" />
 
     <TextView
         android:id="@+id/DescriptionText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/description"
         android:layout_alignStart="@+id/description"
@@ -50,9 +51,9 @@
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/address"
-        android:layout_alignStart="@+id/address"
         android:layout_below="@id/DescriptionText"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         android:text="Next to Agua Caliente Fountain"
         android:textSize="30dp" />
 

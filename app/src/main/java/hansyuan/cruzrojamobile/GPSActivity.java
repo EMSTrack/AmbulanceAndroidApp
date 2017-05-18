@@ -131,7 +131,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         super.onStop(); // Same.
         trackByTime.setChecked(false);
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy(); // Same.
