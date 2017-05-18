@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    private Spinner dropdown;
 
     /**
      * @param savedInstanceState
@@ -66,13 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-
-        dropdown = (Spinner) findViewById(R.id.spinner1);
-        String[] items = new String[]{"Idle", "To patient", "To Hospital", "Rest"};
-        ArrayAdapter<String> dropDownAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(dropDownAdapter);
-
+        
 
         //Setup Adapter
         final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
