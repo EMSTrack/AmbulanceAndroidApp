@@ -181,77 +181,24 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     }
 
 
-
-    /**
-     * Will set the textview as the string you pass in.
-     * If you delete textview1 DELETE THIS METHOD TODO
-     * @param s
-     */
-    private void display(String s){
-        TextView t = (TextView) rootView.findViewById(R.id.textView1);
-        t.setText(s);
-    }
-
-
-
-
-    public void broadcast(View view){
-        broadcast();
-    }
-
-
-    /*
-    * This
-    * */
-
-    public void broadcast(){
-        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="http://www.google.com";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-
-
     /**
      * Thie method will compile together the location point information, append
      * it to the url, and then do a GET request on the URL.
      */
     public void broadcastCruzRoja() {
-        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
-
+        final TextView mTextView = (TextView) rootView.findViewById(R.id.textView1);
         mySpinner = (Spinner) rootView.findViewById(R.id.statusupdate);
-
-
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String status = mySpinner.getSelectedItem().toString();
         String lon = "?longitude=1.2345";
         String latt = "?lattitude=5.4321";
 
-        String url = this.url + status + lon + latt; // arbitrary values for lon and lat
         // todo May need to do a method call to locationpoint or something here.
 
         /** TODO Insert Java method here to get the location, turn into string, and
          * concat with URL  */
+        final String url = this.url + status + lon + latt; // arbitrary values for lon and lat
 
 
         // Request a string response from the provided URL.
@@ -260,13 +207,12 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        //  mTextView.setText("Response is: "+ response.substring(0,500));
+                        mTextView.setText("Response is: "+ response.substring(0,500));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-
+                mTextView.setText("That didn't work!");
             }
         });
 
@@ -281,3 +227,58 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         }
     }
 }
+
+
+
+
+
+
+
+
+/*    public void broadcast(View view){
+        broadcast();
+    }*/
+
+
+    /*
+    * This
+    * */
+/*
+
+    public void broadcast(){
+        final TextView mTextView = (TextView) rootView.findViewById(R.id.textView1);
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url ="http://www.google.com";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        display( );
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //mTextView.setText("That didn't work!");
+
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+*/
+
+/*    *//**
+     * Will set the textview as the string you pass in.
+     * If you delete textview1 DELETE THIS METHOD TODO
+     * @param s
+     *//*
+    private void display(String s){
+        TextView t = (TextView) rootView.findViewById(R.id.textView1);
+        t.setText(s);
+    }*/
+
