@@ -128,16 +128,18 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     }
     @Override
     public void onStop(){
-        super.onStop(); // Same.
-        ((AmbulanceApp) this.getContext()).toasting("OnStop: GPSActivity");
+
         trackByTime.setChecked(false);
+        super.onStop(); // Same.
+
     }
 
     @Override
     public void onDestroy() {
-        ((AmbulanceApp) this.getContext()).toasting("OnDestroy: GPSActivity");
-        super.onDestroy(); // Same.
         trackByTime.setChecked(false);
+
+        super.onDestroy(); // Same.
+
     }
 
     /** checks to see if any buttons were switched on or off.
