@@ -51,6 +51,9 @@
             android:name=".SavedLocations"
             android:label="@string/title_activity_saved_locations"
             android:theme="@style/AppTheme"></activity>
+
+        <service android:name="org.eclipse.paho.android.service.MqttService"/>
+
     </application>
 
 </manifest>

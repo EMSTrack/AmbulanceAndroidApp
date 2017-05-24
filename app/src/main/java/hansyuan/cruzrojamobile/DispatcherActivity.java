@@ -36,18 +36,18 @@ import java.util.List;
 public class DispatcherActivity extends Fragment implements View.OnClickListener {
     View rootView;
     GPSTracker gps;
-    ImageButton mapButton;
-    GoogleMap mGoogleMap;
-    Button addressButton;
-    EditText addressSearchText;
-    Marker marker;
+    Button mapButton;
+    //GoogleMap mGoogleMap;
+    //Button addressButton;
+    //EditText addressSearchText;
+    //Marker marker;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_dispatcher, container, false);
 
 
-        mapButton = (ImageButton) rootView.findViewById(R.id.gmap);
+        mapButton = (Button) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
 
         /*
