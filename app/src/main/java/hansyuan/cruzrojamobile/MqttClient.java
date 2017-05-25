@@ -2,6 +2,7 @@ package hansyuan.cruzrojamobile;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Spinner;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
@@ -11,6 +12,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONObject;
 
 /**
  * Created by Fabian Choi on 5/12/2017.
@@ -22,10 +25,11 @@ public class MqttClient {
     private static Context context;
 
     private MqttAndroidClient mqttClient;
-
     private final String serverUri = "ssl://cruzroja.ucsd.edu:8883";
-    private String clientId = "HospitalAppClient-";
+    private String clientId = "AmbulanceClient-";
 
+
+    //call mqtt?
     private MqttClient(Context context) {
         MqttClient.context = context;
         clientId += System.currentTimeMillis();
@@ -133,4 +137,17 @@ public class MqttClient {
         }
         return instance;
     }
+
+    public void publish(JSONObject content){
+
+
+        MqttMessage message = new MqttMessage(content.toString().getBytes());
+
+        try {
+            mqttClient.publish("user/1/location", message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -11,10 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.TabLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * This is the main activity -- the default screen
@@ -27,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
+    private TextView statusText;
+    MqttClient mqttServer;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * @param savedInstanceState
@@ -86,6 +100,63 @@ public class MainActivity extends AppCompatActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+
+        statusText = (TextView) findViewById(R.id.statusText);
+
+
+        mqttServer = MqttClient.getInstance(this);
+        mqttServer.connect("brian", "cruzroja", new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if(reconnect) {
+                    Log.d(TAG, "Reconnected to broker");
+                } else {
+                    Log.d(TAG, "Connected to broker");
+                }
+
+                mqttServer.subscribeToTopic("ambulance/1/status");
+
+
+                try {
+                    JSONObject parent = new JSONObject();
+                    JSONObject location = new JSONObject();
+                    location.put("latitude", "53.245354");
+                    location.put("longigtude", "-127.27435");
+
+                    parent.put("location", location);
+                    parent.put("timestamp", "2098-10-25 14:30:59");
+                    Log.d("output", parent.toString(2));
+
+
+                    mqttServer.publish(parent);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection to broker lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+                Log.d(TAG, "Message received: " + new String(message.getPayload()));
+                statusText.setText(new String(message.getPayload()));
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.d(TAG, "Message sent successfully");
+            }
+        });
+
+
     }
 
     /**
@@ -138,12 +209,6 @@ public class MainActivity extends AppCompatActivity {
         Class activityClass;
         switch(menuItem.getItemId()) {
             case R.id.home:
-                activityClass = MainActivity.class;
-                break;
-            case R.id.profile:
-                activityClass = MainActivity.class;
-                break;
-            case R.id.settings:
                 activityClass = MainActivity.class;
                 break;
             case R.id.logout:
