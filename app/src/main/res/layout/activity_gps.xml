@@ -11,7 +11,7 @@
     tools:context="hansyuan.cruzrojamobile.GPSActivity">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/LatLongText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Longitude:\n\nLatitude:\n\nLast Recorded Time: \n\nLast Transmitted Time:\n\n"
@@ -59,13 +59,3 @@
 </RelativeLayout>
 
 
-
-    <!--
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:id="@+id/statusupdate"
-            android:layout_alignTop="@+id/textView"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />-->

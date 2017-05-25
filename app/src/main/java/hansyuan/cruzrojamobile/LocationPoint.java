@@ -46,7 +46,7 @@ class LocationPoint {
         this.lon = location.getLongitude();
         this.lat = location.getLatitude();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
-        String format = simpleDateFormat.format(new Date());
+        time = simpleDateFormat.format(new Date());
     }
 
     /**

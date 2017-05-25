@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,211 +53,130 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
     public final static int DELAY_START = 2000;
-    GPSTracker gps;
+    GPSTracker gpsTracker;
     String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    Handler clockedHandler = new Handler();
     //Switch clockEnable;
-    Switch clockEnable;             // The switch for clock enable.
+    Spinner statusSpinner;
+    Spinner mySpinner;
+    Switch trackByTime;             // The switch for clock enable.
+    Switch trackByDistance;
     View rootView;
-    Button sendInfoButton;
-    Button savedLocationButton;
-    Switch listenerEnable;          // The switch for location listener
+
+
+    Button broadCastCruzRoja;
 
     /*
      * Default method
      * Always called when an activity is created.
      * @param savedInstanceState
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+     */    @Override
 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.activity_gps, container, false);
 
-        sendInfoButton = (Button) rootView.findViewById(R.id.broadcastCruz);
-        savedLocationButton = (Button) rootView.findViewById(R.id.savedLocations);
-        sendInfoButton.setOnClickListener(this);
-        savedLocationButton.setOnClickListener(this);
-
-
+        broadCastCruzRoja = (Button) rootView.findViewById(R.id.broadcastCruz);
+        broadCastCruzRoja.setOnClickListener(this);
         //checkLocationPermission(); //Might be needed, might not.
-
-        /* TODO This activity will NO LONGER automatically check a new location upon starting.
-
-        timeDelay(DELAY_START);
-        tryGPS(); //MUST BE CALLED AFTER THE DELAY
-        */
-        gps = new GPSTracker(rootView.getContext());
+        gpsTracker = new GPSTracker(rootView.getContext());
+        gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
 
 
-        clockEnable = (Switch) rootView.findViewById(R.id.trackByTimeSwitch);
-        clockEnable.setOnCheckedChangeListener(this);
 
+        Button savedLocations = (Button) rootView.findViewById(R.id.savedLocations);
+
+        savedLocations.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                System.out.println("OPENING SAVEDLOCATIONS ACTIVITY");
+                startActivity(new Intent(getContext(), SavedLocations.class));
+            }
+        });
+
+
+        //Determine whether to listen by dist changed or time changed
+        trackByTime = (Switch) rootView.findViewById(R.id.trackByTimeSwitch);
+        trackByTime.setOnCheckedChangeListener(this);
+
+        trackByDistance = (Switch) rootView.findViewById(R.id.trackByDistanceSwitch);
+        trackByDistance.setOnCheckedChangeListener(this);
         return rootView;
     }
 
-
-    //The following is a declaration, instantiation, with a lambda function defined.
-    Runnable clockedHandlerTask = new Runnable()
-    {
-        /** todo Perhaps the method should also refresh the location first otherwise
-         * Repeats whatever is in the run method.
-         *
-         * Also, I think it's currently hooked up to the Google broadcaster.
-         */
-        @Override
-        public void run () {
-            tryGPS();           // get an updated location
-            broadcast();        // Do a GET request to Google.
-            listenerEnable = (Switch) rootView.findViewById(R.id.trackByTimeSwitch);
-
-            //a Delay is done:
-            clockedHandler.postDelayed(clockedHandlerTask,INTERVAL);
-            if ( !clockEnable.isChecked() ) {
-                stopRepeatingTask();
-            }
-        }
-    };
-
-
-    /** For the following three methods, stop the clock when the activity, in any way, is left. */
-    public  boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-
-                return true;
-            } else {
-
-
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-
-            return true;
-        }
-    }
-    private void requestPermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(getActivity(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-    }
 
     @Override
     public void onPause() {
         System.err.println("onPause: GPSActivity");
         super.onPause(); // This is required for some reason.
-
     }
-
     @Override
     public void onStop(){
+        trackByTime.setChecked(false);
         super.onStop(); // Same.
-        clockEnable.setChecked(false);
-
     }
 
     @Override
     public void onDestroy() {
-
+        trackByTime.setChecked(false);
         super.onDestroy(); // Same.
-        clockEnable.setChecked(false);
-
     }
 
-    /**
-     * Anytime we want to do a time delay, use this method.
-     * This method can be copy and pasted as ubiquitiously as the toast method.
+    /** checks to see if any buttons were switched on or off.
+     * If DistanceSwitch or TimeSwitch is turned off or on, update the listener
+     * @param buttonView
+     * @param isChecked
      */
-    private void timeDelay(int milliseconds) {
-        // Execute some code after 2 seconds have passed
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run(){}}, //Run nothing
-                milliseconds); //Delay Set
-    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked){
-            startRepeatingTask();
+        if (isChecked) {
+            //determine what was turned on
+            switch (buttonView.getId()) {
+                case R.id.trackByTimeSwitch: //turn on tracking by time
+                    gpsTracker.turnOff();
+                    long currDistanceTracking = gpsTracker.getMinDistanceChangeForUpdates();
+                    gpsTracker = new GPSTracker(rootView.getContext(), currDistanceTracking, -1);
+                    gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
+                    break;
+                case R.id.trackByDistanceSwitch: //turn on tracking by distance
+                    gpsTracker.turnOff();
+                    long currTimeTracking = gpsTracker.getMinTimeBWUpdates();
+                    gpsTracker = new GPSTracker(rootView.getContext(), -1, currTimeTracking);
+                    gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
+                    break;
+                default:
+
+            }
+        } else { // something was turned off
+            switch (buttonView.getId()) {
+                case R.id.trackByTimeSwitch: //turn off tracking by time
+                    gpsTracker.turnOff();
+                    long currDistanceTracking = gpsTracker.getMinDistanceChangeForUpdates();
+                    //continue tracking by distance
+                    gpsTracker = new GPSTracker(rootView.getContext(), 0, currDistanceTracking);
+                    break;
+                case R.id.trackByDistanceSwitch: //turn off tracking by distance
+                    gpsTracker.turnOff();
+                    long currTimeTracking = gpsTracker.getMinTimeBWUpdates();
+                    //continue tracking by time
+                    gpsTracker = new GPSTracker(rootView.getContext(), currTimeTracking, 0);
+                    break;
+                default:
+            }
         }
-        else{
-            stopRepeatingTask();
-        }
     }
 
-    void startRepeatingTask(){
-        clockedHandlerTask.run();
-    }
-    void stopRepeatingTask()
-    {
-        clockedHandler.removeCallbacks(clockedHandlerTask);
-    }
 
-    /**
-     * Automatically initiate a toast based on the string parameter
-     * Can consider this to be Android's println for the sake of debugging.
-     * @param toToast the string you display in a toast
-     */
-    public void toasting(String toToast){
-        Context context = getContext();
-        CharSequence text = toToast;
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
 
     /**
      * Will set the textview as the string you pass in.
-     * If you delete textview1 DELETE THIS METHOD TODO
+     * If you delete LatLongText DELETE THIS METHOD TODO
      * @param s
      */
-    private void display(String s){
-        TextView t = (TextView) rootView.findViewById(R.id.textView1);
+    public void display(String s){
+        TextView t = (TextView) rootView.findViewById(R.id.LatLongText);
         t.setText(s);
     }
 
-    /**
-     * creates a new GPSTracker instance
-     * detects whether it can find GPSActivity first
-     * If it can't, then simply stop immediately.
-     *
-     * For now, this creates a new GPSTracker every single time I run the ability to get an
-     * updated location. This might not be efficient but for now it's okay and we should focus
-     * on improving the connection with the server.
-     */
-    private void tryGPS(){
-        //gps = new GPSTracker( this );
-        gps.getLastKnownLocationIfAllowed();
-        //GPSTracker gps = new GPSTracker(this); not sure why this exists.
-
-        if(gps.isGPSEnabled() || gps.isNetworkEnabled()){
-            this.toasting("Can get location.");
-        }
-        else{
-            this.toasting("Could not get location.");
-            return;
-        }
-
-
-        gps.getLocation();
-
-        double lat = gps.getLatitude(); // returns latitude
-        double lon = gps.getLongitude(); // returns longitude
-
-
-
-        LocationPoint loc = new LocationPoint(lon, lat);
-        this.display(loc.toString());
-    }
 
 
     /*
@@ -275,15 +195,13 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: "+ response.substring(0,500));
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //mTextView.setText("That didn't work!");
-                toasting("That didn't work!!!!");
+
             }
         });
         // Add the request to the RequestQueue.
@@ -291,16 +209,18 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     }
 
 
+
     /**
      * Thie method will compile together the location point information, append
      * it to the url, and then do a GET request on the URL.
-     * @param view
      */
-    public void broadcastCruzRoja(View view) {
+    public void broadcastCruzRoja() {
         final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
+
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(getActivity());
+
         String lon = "?longitude=1.2345";
         String latt = "?lattitude=5.4321";
 
@@ -318,13 +238,12 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         //  mTextView.setText("Response is: "+ response.substring(0,500));
-                        toasting("Response is: " + response.substring(0, response.length()));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //mTextView.setText("That didn't work!");
-                toasting("That didn't work!!!!");
+
             }
         });
 
@@ -334,11 +253,8 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
 
     @Override
     public void onClick(View v) {
-        if(v == sendInfoButton){
-            broadcastCruzRoja(v);
-        }
-        else if(v == savedLocationButton){
-            startActivity(new Intent(this.getActivity(), SavedLocations.class));
+        if(v == broadCastCruzRoja){
+            broadcastCruzRoja();
         }
     }
 }
