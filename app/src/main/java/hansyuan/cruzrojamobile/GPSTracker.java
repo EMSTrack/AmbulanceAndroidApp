@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TextView;
 
 /**
  *
@@ -34,6 +35,7 @@ public class GPSTracker extends Service implements LocationListener {
     private static final int REQUEST_FINE_LOCATION = 998;
     private final int DISTANCE = 1;
     private StackLP stackLP = new StackLP();
+    TextView LatLongTextView;
 
     //Used in LocationListener to check whether to add a new locationPoint
     public LocationPoint lastKnownLocation;
@@ -90,7 +92,14 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
+    public void setLatLongTextView(TextView t) {
+        LatLongTextView = t;
+    }
+
     public void turnOff() {
+        System.out.println("\n Turning off listener");
+        ((AmbulanceApp) mContext.getApplicationContext()).toasting("Turning off GPS");
+        if (m_locationManager != null)
         m_locationManager.removeUpdates(this);
     }
 
@@ -237,24 +246,16 @@ public class GPSTracker extends Service implements LocationListener {
                 return null;
             }
             lastKnownLocation = new LocationPoint (location);
+
             return lastKnownLocation;
         }
 
         return null;
     }
 
-    /**
-     * Stop using GPSActivity listener
-     * Calling this function will stop using GPSActivity in your app
-     * */
-    public void stopUsingGPS(){
-        if(m_locationManager != null){
-            try {
-                m_locationManager.removeUpdates(GPSTracker.this);
-            } catch (SecurityException e) {
-                //Fix later
-            }
-        }
+    public void display(LocationPoint point) {
+
+        LatLongTextView.setText(point.toString());
     }
 
 
@@ -305,13 +306,19 @@ public class GPSTracker extends Service implements LocationListener {
             ((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
             lastKnownLocation = newLocation;
             ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
+            display(lastKnownLocation);
+            sendToStackLP(lastKnownLocation);
+
             return;
         }
 
         lastKnownLocation = newLocation;
-        System.out.println("\n LOCATION IS BEING WRITTEN\n");
+        System.out.println("\n LOCATION IS BEING WRITTEN: " + newLocation.toString());
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
-        //((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
+        ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
+        display(lastKnownLocation);
+        sendToStackLP(lastKnownLocation);
+
     }
 
 
@@ -333,9 +340,9 @@ public class GPSTracker extends Service implements LocationListener {
     /*START OF STACK CODE*************************************************/
     public void sendToStackLP(LocationPoint point) {
         stackLP.insert(point);
-        //toasting("Point inserted to stack");
+        System.err.println("Point inserted to stack");
         stackLP.popIfSent();
-        //toasting("Popped successfully");
+        System.err.println("Popped successfully");
     }
 
 

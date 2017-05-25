@@ -49,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((AmbulanceApp) this.getApplication()).onCreate(this);
 
-
-        ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
 
         // Set a Toolbar to replace the ActionBar.
