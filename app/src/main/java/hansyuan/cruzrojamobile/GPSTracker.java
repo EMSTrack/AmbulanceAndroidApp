@@ -33,7 +33,6 @@ public class GPSTracker extends Service implements LocationListener {
     private Context mContext;
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
-    private final int DISTANCE = 1;
     private StackLP stackLP = new StackLP();
     TextView LatLongTextView;
 
@@ -45,9 +44,9 @@ public class GPSTracker extends Service implements LocationListener {
     public double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
     // The minimum time between updates in milliseconds
-    private long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private long MIN_TIME_BW_UPDATES = 1000 * 1 * 1; // 10 sec minute
 
 
     /** Constructor. Sets the location manager, sets listeners for location (both location and time
@@ -61,8 +60,8 @@ public class GPSTracker extends Service implements LocationListener {
 
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
-            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, DISTANCE, this);
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
         }
 
         getLocation();
@@ -254,7 +253,8 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public void display(LocationPoint point) {
-
+       if (point == null || LatLongTextView == null)
+           return;
         LatLongTextView.setText(point.toString());
     }
 
