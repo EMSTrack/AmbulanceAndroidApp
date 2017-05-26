@@ -139,8 +139,6 @@ public class MqttClient {
     }
 
     public void publish(JSONObject content){
-
-
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
         try {

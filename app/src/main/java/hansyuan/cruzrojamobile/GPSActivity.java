@@ -243,7 +243,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
             @Override
             public void onErrorResponse(VolleyError error) {
                 //mTextView.setText("That didn't work!");
-
             }
         });
 

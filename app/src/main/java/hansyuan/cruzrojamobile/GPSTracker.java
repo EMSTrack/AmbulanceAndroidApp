@@ -41,8 +41,8 @@ public class GPSTracker extends Service implements LocationListener {
     public LocationPoint lastKnownLocation;
 
     Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
+    public double latitude; // latitude
+    public double longitude; // longitude
 
     // The minimum distance to change Updates in meters
     private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
@@ -344,7 +344,4 @@ public class GPSTracker extends Service implements LocationListener {
         stackLP.popIfSent();
         System.err.println("Popped successfully");
     }
-
-
-
 }

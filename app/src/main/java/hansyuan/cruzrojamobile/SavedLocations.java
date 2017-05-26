@@ -15,6 +15,5 @@ public class SavedLocations extends AppCompatActivity {
         setContentView(R.layout.activity_saved_locations);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
     }
 }

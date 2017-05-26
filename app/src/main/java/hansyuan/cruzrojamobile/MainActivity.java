@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ((AmbulanceApp) this.getApplication()).onCreate(this);
 
+        statusText = (TextView) findViewById(R.id.statusText);
+
         buffStack = new StackLP();
 
         // Set a Toolbar to replace the ActionBar.
@@ -60,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         drawerToggle = setupDrawerToggle();
-
         mDrawer.addDrawerListener(drawerToggle);
 
         // Find our drawer view
@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
         tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
+        //pager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        
 
-        //Setup Adapter
+        //Setup Adapter for tabLayout
         final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
@@ -100,97 +99,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        statusText = (TextView) findViewById(R.id.statusText);
-
-
-        mqttServer = MqttClient.getInstance(this);
-        mqttServer.connect("brian", "cruzroja", new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                if(reconnect) {
-                    Log.d(TAG, "Reconnected to broker");
-                } else {
-                    Log.d(TAG, "Connected to broker");
-                }
-
-                mqttServer.subscribeToTopic("ambulance/1/status");
-
-
-                try {
-                    JSONObject parent = new JSONObject();
-                    JSONObject location = new JSONObject();
-                    location.put("latitude", "53.245354");
-                    location.put("longigtude", "-127.27435");
-
-                    parent.put("location", location);
-                    parent.put("timestamp", "2098-10-25 14:30:59");
-                    Log.d("output", parent.toString(2));
-
-
-                    mqttServer.publish(parent);
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-                Log.d(TAG, "Connection to broker lost");
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                Log.d(TAG, "Message received: " + new String(message.getPayload()));
-                statusText.setText(new String(message.getPayload()));
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.d(TAG, "Message sent successfully");
-            }
-        });
-
-
+        mqttMaster();
     }
 
-    /**
-     * This is the method for opening a new activity.
-     * Generalizable to any method whose only purpose is to load a new activity.
-     *
-     * @param view
-     */
-    public void OpenGPS(View view) {
-        OpenGPS();
-    }
 
-    // The no-arg activity starter for the GPSActivity activity.
-    private void OpenGPS() {
-        Intent i = new Intent(getApplication(), GPSActivity.class);
-        startActivity(i);
-    }
-
-    public void openInfo(View view) {
-        openInfo();
-    }
-
-    private void openInfo() {
-        //Intent z = ;
-        startActivity(new Intent(getApplication(), demo_viewTransmission.class));
-    }
-
-    public void openFileView(View view) {
-        startActivity(new Intent(getApplication(), LPBackupExplorer.class));
-    }
-
+    //Hamburger Menu setup
     private ActionBarDrawerToggle setupDrawerToggle(){
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
+    //Hamburger Menu Listener
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -202,9 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    //Start selected activity in Hamburger
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-        Activity activity= null;
         Class activityClass;
         switch(menuItem.getItemId()) {
             case R.id.home:
@@ -215,12 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 activityClass = MainActivity.class;
-        }
-
-        try {
-            activity = (Activity) activityClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         Intent i = new Intent(this, activityClass);
@@ -234,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -246,5 +158,57 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //MQTT
+    private void mqttMaster() {
+        mqttServer = MqttClient.getInstance(this);
+        mqttServer.connect("brian", "cruzroja", new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if(reconnect) {
+                    Log.d(TAG, "Reconnected to broker");
+                } else {
+                    Log.d(TAG, "Connected to broker");
+                }
+
+                //subscribe here
+                mqttServer.subscribeToTopic("ambulance/1/status");
+
+                //formatting to JSON object
+                try {
+                    JSONObject parent = new JSONObject();
+                    JSONObject location = new JSONObject();
+
+                    location.put("latitude", "53.245354");
+                    location.put("longigtude", "-127.27435");
+
+                    parent.put("location", location);
+                    parent.put("timestamp", "2098-10-25 14:30:59");
+                    Log.d("output", parent.toString(2));
+
+                    mqttServer.publish(parent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection to broker lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                Log.d(TAG, "Message received: " + new String(message.getPayload()));
+                statusText.setText(new String(message.getPayload()));
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.d(TAG, "Message sent successfully");
+            }
+        });
     }
 }

@@ -56,7 +56,8 @@ public class StackLP {
     public void popIfSent() {
 
         //if (isInternetWorking() && (!s.empty()) ) {
-        //    s.pop();
+        // temp=    s.pop();
+        // publish(temp)
             //return true; //return true if pop happened
         //}
         //return false;

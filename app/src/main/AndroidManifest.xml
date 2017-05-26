@@ -42,9 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
-        <activity android:name=".GPSActivity" />
         <activity android:name=".CommunicationDatabase" />
-        <activity android:name=".demo_viewTransmission" />
         <activity android:name=".LPBackupExplorer" />
 
         <activity
