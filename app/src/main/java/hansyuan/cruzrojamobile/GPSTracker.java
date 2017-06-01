@@ -308,7 +308,7 @@ public class GPSTracker extends Service implements LocationListener {
             ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
             display(lastKnownLocation);
             sendToStackLP(lastKnownLocation);
-
+            ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
             return;
         }
 
@@ -318,6 +318,7 @@ public class GPSTracker extends Service implements LocationListener {
         ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
         display(lastKnownLocation);
         sendToStackLP(lastKnownLocation);
+        ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
 
     }
 

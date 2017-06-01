@@ -103,7 +103,12 @@ class LocationPoint {
 
     public String getStatus() { return status; }
 
-
+    public double getLatitude() {
+        return lat;
+    }
+    public double getLongitude() {
+        return lon;
+    }
     /*------------------Communicating with server ----------------*/
     /**
      * This method will return a JSON Object.
@@ -148,8 +153,6 @@ class LocationPoint {
             return false;
         }
     }
-
-
 
 
     /**
