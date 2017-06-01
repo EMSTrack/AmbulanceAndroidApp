@@ -11,10 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.TabLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * This is the main activity -- the default screen
@@ -27,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    private Spinner dropdown;
+    private TextView statusText;
+    MqttClient mqttServer;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * @param savedInstanceState
@@ -36,9 +49,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ((AmbulanceApp) this.getApplication()).onCreate(this);
 
+        statusText = (TextView) findViewById(R.id.statusText);
 
-        ((AmbulanceApp) this.getApplication()).onCreate();
         buffStack = new StackLP();
 
         // Set a Toolbar to replace the ActionBar.
@@ -48,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         drawerToggle = setupDrawerToggle();
-
         mDrawer.addDrawerListener(drawerToggle);
 
         // Find our drawer view
@@ -64,17 +76,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
         tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
+        //pager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-
-        dropdown = (Spinner) findViewById(R.id.spinner1);
-        String[] items = new String[]{"Idle", "To patient", "To Hospital", "Rest"};
-        ArrayAdapter<String> dropDownAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(dropDownAdapter);
-
-
-        //Setup Adapter
+        //Setup Adapter for tabLayout
         final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -86,48 +92,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        mqttMaster();
     }
 
-    /**
-     * This is the method for opening a new activity.
-     * Generalizable to any method whose only purpose is to load a new activity.
-     *
-     * @param view
-     */
-    public void OpenGPS(View view) {
-        OpenGPS();
-    }
 
-    // The no-arg activity starter for the GPSActivity activity.
-    private void OpenGPS() {
-        Intent i = new Intent(getApplication(), GPSActivity.class);
-        startActivity(i);
-    }
-
-    public void openInfo(View view) {
-        openInfo();
-    }
-
-    private void openInfo() {
-        //Intent z = ;
-        startActivity(new Intent(getApplication(), demo_viewTransmission.class));
-    }
-
-    public void openFileView(View view) {
-        startActivity(new Intent(getApplication(), LPBackupExplorer.class));
-    }
-
+    //Hamburger Menu setup
     private ActionBarDrawerToggle setupDrawerToggle(){
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
+    //Hamburger Menu Listener
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -139,18 +120,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    //Start selected activity in Hamburger
     public void selectDrawerItem(MenuItem menuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-        Activity activity= null;
         Class activityClass;
         switch(menuItem.getItemId()) {
             case R.id.home:
-                activityClass = MainActivity.class;
-                break;
-            case R.id.profile:
-                activityClass = MainActivity.class;
-                break;
-            case R.id.settings:
                 activityClass = MainActivity.class;
                 break;
             case R.id.logout:
@@ -158,12 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 activityClass = MainActivity.class;
-        }
-
-        try {
-            activity = (Activity) activityClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         Intent i = new Intent(this, activityClass);
@@ -177,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -189,5 +158,57 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //MQTT
+    private void mqttMaster() {
+        mqttServer = MqttClient.getInstance(this);
+        mqttServer.connect("brian", "cruzroja", new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if(reconnect) {
+                    Log.d(TAG, "Reconnected to broker");
+                } else {
+                    Log.d(TAG, "Connected to broker");
+                }
+
+                //subscribe here
+                mqttServer.subscribeToTopic("ambulance/1/status");
+
+                //formatting to JSON object
+                try {
+                    JSONObject parent = new JSONObject();
+                    JSONObject location = new JSONObject();
+
+                    location.put("latitude", "53.245354");
+                    location.put("longigtude", "-127.27435");
+
+                    parent.put("location", location);
+                    parent.put("timestamp", "2098-10-25 14:30:59");
+                    Log.d("output", parent.toString(2));
+
+                    mqttServer.publish(parent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection to broker lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                Log.d(TAG, "Message received: " + new String(message.getPayload()));
+                statusText.setText(new String(message.getPayload()));
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.d(TAG, "Message sent successfully");
+            }
+        });
     }
 }

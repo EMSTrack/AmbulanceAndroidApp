@@ -11,34 +11,15 @@
     tools:context="hansyuan.cruzrojamobile.GPSActivity">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/LatLongText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp"
         android:text="Longitude:\n\nLatitude:\n\nLast Recorded Time: \n\nLast Transmitted Time:\n\n"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-    <TextView
-        android:text="Current Status:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:layout_below="@+id/textView1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="38dp" />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:id="@+id/statusupdate"
-        android:layout_alignTop="@+id/textView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
 
     <Switch
         android:text="Track by time:"
@@ -47,8 +28,7 @@
         android:id="@+id/trackByTimeSwitch"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
         android:checked="false"
-        android:layout_marginTop="36dp"
-        android:layout_below="@+id/statusupdate"
+        android:layout_above="@+id/trackByDistanceSwitch"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -56,8 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/broadcastCruz"
-        android:onClick="broadcastCruzRoja"
-        android:layout_below="@+id/trackByDistanceSwitch"
+        android:layout_above="@+id/savedLocations"
         android:layout_centerHorizontal="true" />
 
     <Switch
@@ -65,15 +44,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/trackByDistanceSwitch"
-        android:layout_below="@+id/trackByTimeSwitch"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/broadcastCruz"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="54dp" />
     <Button
         android:text="Saved Locations"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/savedLocations"
-        android:onClick="openSavedLocations"
-        android:layout_below="@+id/broadcastCruz"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="54dp" />
 
 </RelativeLayout>
+
+
