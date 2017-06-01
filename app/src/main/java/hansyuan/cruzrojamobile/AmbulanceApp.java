@@ -43,22 +43,44 @@ public class AmbulanceApp extends Application {
     private String userPw;
     MqttClient mqttServer;
     Boolean authenticated;
-    
+    JSONObject GPSCoordinate;
+    private LocationPoint lastKnownLocation;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+
+    public void updateLastKnownLocation(LocationPoint location) {
+        lastKnownLocation = location;
+        GPSCoordinate = new JSONObject();
+        JSONObject newlocation = new JSONObject();
+        System.err.println("updating JSON last known location");
+
+        try {
+            newlocation.put("latitude", ("" + location.getLatitude()));
+            newlocation.put("longitude", ("" + location.getLongitude()));
+
+            GPSCoordinate.put("location", newlocation);
+            GPSCoordinate.put("timestamp", ("" + location.getTime()));
+            Log.d("output", GPSCoordinate.toString(2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void onCreate() {
         super.onCreate();
         authenticated = true;
         appContext = getApplicationContext();
+
     }
 
-    public void onCreate (Context context) {
+    public AmbulanceApp onCreate (Context context) {
         super.onCreate();
         this.context = context;
         authenticated = true;
         appContext = getApplicationContext();
+        return this;
     }
 
     /*************************GETTERS **********************/
@@ -112,24 +134,8 @@ public class AmbulanceApp extends Application {
 
                 //subscribe here
                 mqttServer.subscribeToTopic("ambulance/1/status");
+                mqttServer.publish(GPSCoordinate);
 
-                //formatting to JSON object
-                try {
-                    JSONObject parent = new JSONObject();
-                    JSONObject location = new JSONObject();
-
-                    location.put("latitude", "53.245354");
-                    location.put("longigtude", "-127.27435");
-
-                    parent.put("location", location);
-                    parent.put("timestamp", "2098-10-25 14:30:59");
-                    Log.d("output", parent.toString(2));
-
-                    mqttServer.publish(parent);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override
