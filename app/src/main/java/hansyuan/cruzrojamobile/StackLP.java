@@ -55,13 +55,12 @@ public class StackLP {
     //method that pops a locationPoint from the stack if the server had received the location
     public void popIfSent() {
 
-        if (isInternetWorking() && (!s.empty()) ) {
+        while (isInternetWorking() && (!s.empty()) ) {
             s.pop();
             //return true; //return true if pop happened
         }
         //return false;
     }
-
 
     /*
      * returns a boolean indicating whether the Internet is working or not
