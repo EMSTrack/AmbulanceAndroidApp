@@ -1,6 +1,8 @@
 package hansyuan.cruzrojamobile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.design.widget.NavigationView;
@@ -15,12 +17,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.util.Strings;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     private TextView statusText;
-    MqttClient mqttServer;
-
+    private ImageButton panicButton;
+    AmbulanceApp ambulance;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
@@ -54,6 +58,14 @@ public class MainActivity extends AppCompatActivity {
         statusText = (TextView) findViewById(R.id.statusText);
 
         buffStack = new StackLP();
+
+        panicButton = (ImageButton) findViewById(R.id.panicButton);
+        panicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                panicPopUp();
+            }
+        });
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -99,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mqttMaster();
+        ambulance.mqttMaster();
+        String status = ambulance.getCurrStatus();
+        statusText.setText(status);
     }
 
 
@@ -160,55 +174,28 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    //MQTT
-    private void mqttMaster() {
-        mqttServer = MqttClient.getInstance(this);
-        mqttServer.connect("brian", "cruzroja", new MqttCallbackExtended() {
+
+
+    public void panicPopUp(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle("PANIC!");
+        builder.setMessage("Message");
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                if(reconnect) {
-                    Log.d(TAG, "Reconnected to broker");
-                } else {
-                    Log.d(TAG, "Connected to broker");
-                }
-
-                //subscribe here
-                mqttServer.subscribeToTopic("ambulance/1/status");
-
-                //formatting to JSON object
-                try {
-                    JSONObject parent = new JSONObject();
-                    JSONObject location = new JSONObject();
-
-                    location.put("latitude", "53.245354");
-                    location.put("longigtude", "-127.27435");
-
-                    parent.put("location", location);
-                    parent.put("timestamp", "2098-10-25 14:30:59");
-                    Log.d("output", parent.toString(2));
-
-                    mqttServer.publish(parent);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-                Log.d(TAG, "Connection to broker lost");
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.d(TAG, "Message received: " + new String(message.getPayload()));
-                statusText.setText(new String(message.getPayload()));
-            }
-
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                Log.d(TAG, "Message sent successfully");
+            public void onClick(DialogInterface dialog, int which) {
             }
         });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

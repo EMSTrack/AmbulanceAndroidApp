@@ -10,7 +10,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
+
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -34,22 +41,33 @@ public class AmbulanceApp extends Application {
     private static Context appContext;
     private Context context;
     private String currStatus;
+    private String userId;
+    private String userPw;
+    MqttClient mqttServer;
+    Boolean authenticated;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
 
     public void onCreate() {
         super.onCreate();
+        authenticated = false;
         appContext = getApplicationContext();
     }
 
     public void onCreate (Context context) {
         super.onCreate();
         this.context = context;
+        authenticated = false;
         appContext = getApplicationContext();
     }
+
     /*************************GETTERS **********************/
     public String getCurrStatus() {
         return currStatus;
     }
-
+    public String getUserId(){return userId;}
+    public String getUserPw() {return userPw;}
     public static Context getAppContext() {
         return AmbulanceApp.appContext;
     }
@@ -59,7 +77,8 @@ public class AmbulanceApp extends Application {
     public void setCurrStatus(String newStatus) {
         currStatus = newStatus;
     }
-
+    public void setUserId (String newId){userId = newId;}
+    public void setUserPw(String newPw) {userPw = newPw;}
 
     /********************* other methods ********************************/
     /** Takes in a string to Toast
@@ -72,6 +91,73 @@ public class AmbulanceApp extends Application {
         Toast toast = Toast.makeText(appContext, text, duration);
         toast.show();
     }
+
+
+    /************************MQTT********************************/
+
+    //MQTT
+    public void mqttMaster() {
+        mqttServer = MqttClient.getInstance(this);
+        userId = "brian";
+        userPw = "cruzroja";
+
+        mqttServer.connect(userId, userPw, new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if(reconnect) {
+                    Log.d(TAG, "Reconnected to broker");
+                } else {
+                    Log.d(TAG, "Connected to broker");
+                }
+                //Connection is successful
+                authenticated = true;
+
+                //subscribe here
+                mqttServer.subscribeToTopic("ambulance/1/status");
+
+                //formatting to JSON object
+                try {
+                    JSONObject parent = new JSONObject();
+                    JSONObject location = new JSONObject();
+
+                    location.put("latitude", "53.245354");
+                    location.put("longigtude", "-127.27435");
+
+                    parent.put("location", location);
+                    parent.put("timestamp", "2098-10-25 14:30:59");
+                    Log.d("output", parent.toString(2));
+
+                    mqttServer.publish(parent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection to broker lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                Log.d(TAG, "Message received: " + new String(message.getPayload()));
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.d(TAG, "Message sent successfully");
+            }
+        });
+    }
+
+
+
+
+
+
+
+
 
     /*START OF FILE I/O CODE*************************************************/
     boolean writableExternalStorage = false;

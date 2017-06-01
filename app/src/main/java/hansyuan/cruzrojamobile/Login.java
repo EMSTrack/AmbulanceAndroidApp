@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText editUserName;
-    private EditText editPassword;
+    public EditText editUserName;
+    public EditText editPassword;
     private Button buttonSignin;
 
     private ProgressDialog progressDialog;
@@ -28,6 +28,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ((AmbulanceApp) this.getApplication()).onCreate(this);
 
         boolean loggedIn = false;
         //if user is logged in
@@ -58,6 +60,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String id = editUserName.getText().toString();
         String password = editPassword.getText().toString();
 
+        AmbulanceApp ambulance = (AmbulanceApp)getApplicationContext();
+        ambulance.setUserId(id);
+        ambulance.setUserPw(password);
+        ambulance.mqttMaster();
+
         //checking if email and passwords are empty
         if(TextUtils.isEmpty(id)){
             Toast.makeText(this,"Please enter username",Toast.LENGTH_LONG).show();
@@ -74,10 +81,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         progressDialog.setMessage("Signing in Please Wait...");
         progressDialog.show();
 
+
         //Check authenticity (id and pw - login team)
         progressDialog.dismiss();
-
-        if(id.equals("1") && password.equals("1")){
+        if(ambulance.authenticated){
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
@@ -86,5 +93,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     Toast.LENGTH_LONG).show();
             return;
         }
+/*
+        if(id.equals("1") && password.equals("1")){
+            finish();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
+        else{
+            Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }*/
     }
 }

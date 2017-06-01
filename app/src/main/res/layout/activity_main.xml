@@ -28,6 +28,7 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
                 <ImageButton
+                    android:id="@+id/panicButton"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_gravity="right"
