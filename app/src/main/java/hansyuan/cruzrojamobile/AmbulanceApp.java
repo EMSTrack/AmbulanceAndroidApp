@@ -43,7 +43,6 @@ public class AmbulanceApp extends Application {
     private String userPw;
     MqttClient mqttServer;
     Boolean authenticated;
-    
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
