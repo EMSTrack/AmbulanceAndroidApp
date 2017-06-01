@@ -26,13 +26,11 @@ import java.io.FileOutputStream;
 /**
  * Created by jkapi on 4/19/2017.
  *
- *
  * To use a function:
  * If it is not being used in an activity page:
  * (((AmbulanceApp)AmbulanceApp.getAppContext()).FUNCTIONYOUNEED();
  * If it is being used in an activity page:
  * ((AmbulanceApp) this.getApplication()).FUNCTIONYOUNEED()
- *
  *
  */
 
@@ -45,6 +43,7 @@ public class AmbulanceApp extends Application {
     private String userPw;
     MqttClient mqttServer;
     Boolean authenticated;
+    
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -91,7 +90,6 @@ public class AmbulanceApp extends Application {
         Toast toast = Toast.makeText(appContext, text, duration);
         toast.show();
     }
-
 
     /************************MQTT********************************/
 

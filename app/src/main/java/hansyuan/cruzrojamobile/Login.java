@@ -45,7 +45,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
-
         progressDialog = new ProgressDialog(this);
 
         buttonSignin.setOnClickListener(this);
@@ -93,15 +92,5 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     Toast.LENGTH_LONG).show();
             return;
         }
-/*
-        if(id.equals("1") && password.equals("1")){
-            finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
-        else{
-            Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }*/
     }
 }
