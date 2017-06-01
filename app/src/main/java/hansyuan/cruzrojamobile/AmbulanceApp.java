@@ -50,14 +50,14 @@ public class AmbulanceApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-        authenticated = false;
+        authenticated = true;
         appContext = getApplicationContext();
     }
 
     public void onCreate (Context context) {
         super.onCreate();
         this.context = context;
-        authenticated = false;
+        authenticated = true;
         appContext = getApplicationContext();
     }
 
