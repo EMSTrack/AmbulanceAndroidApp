@@ -31,8 +31,6 @@ import org.w3c.dom.Text;
  */
 public class MainActivity extends AppCompatActivity {
 
-    //global StackLP variable
-    static StackLP buffStack;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -52,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
         ((AmbulanceApp) this.getApplication()).onCreate(this);
 
         statusText = (TextView) findViewById(R.id.statusText);
-
-        buffStack = new StackLP();
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -33,7 +33,6 @@ public class GPSTracker extends Service implements LocationListener {
     private Context mContext;
     private static String provider;
     private static final int REQUEST_FINE_LOCATION = 998;
-    private StackLP stackLP = new StackLP();
     TextView LatLongTextView;
 
     //Used in LocationListener to check whether to add a new locationPoint
@@ -307,7 +306,6 @@ public class GPSTracker extends Service implements LocationListener {
             lastKnownLocation = newLocation;
             ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
             display(lastKnownLocation);
-            sendToStackLP(lastKnownLocation);
 
             return;
         }
@@ -317,7 +315,6 @@ public class GPSTracker extends Service implements LocationListener {
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
         ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
         display(lastKnownLocation);
-        sendToStackLP(lastKnownLocation);
 
     }
 
@@ -338,10 +335,8 @@ public class GPSTracker extends Service implements LocationListener {
 
 
     /*START OF STACK CODE*************************************************/
-    public void sendToStackLP(LocationPoint point) {
-        stackLP.insert(point);
+    public void publishToMQTT(LocationPoint point) {
         System.err.println("Point inserted to stack");
-        stackLP.popIfSent();
         System.err.println("Popped successfully");
     }
 }
