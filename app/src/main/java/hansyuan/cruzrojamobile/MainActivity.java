@@ -35,8 +35,6 @@ import org.w3c.dom.Text;
  */
 public class MainActivity extends AppCompatActivity {
 
-    //global StackLP variable
-    static StackLP buffStack;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -57,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         statusText = (TextView) findViewById(R.id.statusText);
 
-        buffStack = new StackLP();
 
         panicButton = (ImageButton) findViewById(R.id.panicButton);
         panicButton.setOnClickListener(new View.OnClickListener() {
