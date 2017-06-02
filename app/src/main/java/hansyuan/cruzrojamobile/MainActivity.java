@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((AmbulanceApp) this.getApplication()).onCreate(this);
+        ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
         statusText = (TextView) findViewById(R.id.statusText);
 

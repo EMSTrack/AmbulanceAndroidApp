@@ -307,7 +307,8 @@ public class GPSTracker extends Service implements LocationListener {
             ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
             display(lastKnownLocation);
 
-            return;
+            ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
+
         }
 
         lastKnownLocation = newLocation;
@@ -315,6 +316,8 @@ public class GPSTracker extends Service implements LocationListener {
         ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
         ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
         display(lastKnownLocation);
+
+        ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
 
     }
 
@@ -334,9 +337,4 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
-    /*START OF STACK CODE*************************************************/
-    public void publishToMQTT(LocationPoint point) {
-        System.err.println("Point inserted to stack");
-        System.err.println("Popped successfully");
-    }
 }
