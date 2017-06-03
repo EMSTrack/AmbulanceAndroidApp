@@ -1,6 +1,7 @@
 package hansyuan.cruzrojamobile;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Spinner;
 
@@ -23,13 +24,18 @@ public class MqttClient {
     private static final String TAG = MqttClient.class.getSimpleName();
     private static MqttClient instance;
     private static Context context;
+    private Context mContext;
+
 
     private MqttAndroidClient mqttClient;
-    private final String serverUri = "ssl://cruzroja.ucsd.edu:8884";
+    private final String serverUri = "ssl://cruzroja.ucsd.edu:8883";
     private String clientId = "AmbulanceClient-";
 
     //call mqtt?
     private MqttClient(Context context) {
+
+        mContext = context;
+
         MqttClient.context = context;
         clientId += System.currentTimeMillis();
 
@@ -66,6 +72,7 @@ public class MqttClient {
                     disconnectedBufferOptions.setPersistBuffer(false);
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttClient.setBufferOpts(disconnectedBufferOptions);
+
                 }
 
                 @Override
@@ -147,4 +154,19 @@ public class MqttClient {
         }
     }
 
+    public boolean userLogin(String id, String pw) {
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setUserName(id);
+        options.setPassword(pw.toCharArray());
+
+        boolean retVal = false;
+        try {
+            mqttClient.connect(options);
+            retVal =  mqttClient.isConnected();
+
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+        return retVal;
+    }
 }
