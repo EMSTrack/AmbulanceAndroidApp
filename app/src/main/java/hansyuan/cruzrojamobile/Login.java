@@ -3,6 +3,7 @@ package hansyuan.cruzrojamobile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -21,15 +22,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public EditText editUserName;
     public EditText editPassword;
     private Button buttonSignin;
-
-    private ProgressDialog progressDialog;
+    public AmbulanceApp ambulance;
+    public static ProgressDialog dialog;
+    private boolean log;
+    MqttClient mqttServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ((AmbulanceApp) this.getApplication()).onCreate(this);
+        ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
+        ambulance.mqttMaster();
 
         boolean loggedIn = false;
         //if user is logged in
@@ -45,7 +49,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
-        progressDialog = new ProgressDialog(this);
 
         buttonSignin.setOnClickListener(this);
     }
@@ -56,13 +59,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void userLogin() {
-        String id = editUserName.getText().toString();
-        String password = editPassword.getText().toString();
-
-        AmbulanceApp ambulance = (AmbulanceApp)getApplicationContext();
+        final String id = editUserName.getText().toString();
+        final String password = editPassword.getText().toString();
         ambulance.setUserId(id);
         ambulance.setUserPw(password);
-        ambulance.mqttMaster();
 
         //checking if email and passwords are empty
         if(TextUtils.isEmpty(id)){
@@ -76,14 +76,31 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
-        //progress dialog screen
-        progressDialog.setMessage("Signing in Please Wait...");
-        progressDialog.show();
+        mqttServer = MqttClient.getInstance(this);
 
 
-        //Check authenticity (id and pw - login team)
-        progressDialog.dismiss();
-        if(ambulance.authenticated){
+        dialog = new ProgressDialog(this); // this = YourActivity
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("Signing in. Please wait...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        log = mqttServer.userLogin(id, password);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                log = mqttServer.userLogin(id, password);
+                checking();
+                dialog.dismiss();
+            }
+        }, 5000);
+    }
+
+    private void checking(){
+
+        if(log){
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }

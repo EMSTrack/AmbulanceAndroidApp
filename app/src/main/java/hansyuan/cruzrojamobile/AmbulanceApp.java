@@ -39,8 +39,8 @@ public class AmbulanceApp extends Application {
     private static Context appContext;
     private Context context;
     private String currStatus;
-    private String userId;
-    private String userPw;
+    private String userId = "-1";
+    private String userPw = "-1";
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
@@ -70,7 +70,7 @@ public class AmbulanceApp extends Application {
 
     public void onCreate() {
         super.onCreate();
-        authenticated = true;
+        authenticated = false;
         appContext = getApplicationContext();
 
     }
@@ -78,8 +78,10 @@ public class AmbulanceApp extends Application {
     public AmbulanceApp onCreate (Context context) {
         super.onCreate();
         this.context = context;
-        authenticated = true;
+        authenticated = false;
         appContext = getApplicationContext();
+        userId = "-1";
+        userPw = "-1";
         return this;
     }
 
@@ -92,6 +94,7 @@ public class AmbulanceApp extends Application {
     public static Context getAppContext() {
         return AmbulanceApp.appContext;
     }
+    public boolean getAuthenticated() {return authenticated;}
 
     /******************** SETTERS *******************************/
 
@@ -118,8 +121,6 @@ public class AmbulanceApp extends Application {
     //MQTT
     public void mqttMaster() {
         mqttServer = MqttClient.getInstance(this);
-        userId = "brian";
-        userPw = "cruzroja";
 
         mqttServer.connect(userId, userPw, new MqttCallbackExtended() {
             @Override
@@ -134,8 +135,10 @@ public class AmbulanceApp extends Application {
 
                 //subscribe here
                 mqttServer.subscribeToTopic("ambulance/1/status");
-                mqttServer.publish(GPSCoordinate);
 
+                if(GPSCoordinate != null) {
+                    mqttServer.publish(GPSCoordinate);
+                }
             }
 
             @Override
@@ -154,13 +157,6 @@ public class AmbulanceApp extends Application {
             }
         });
     }
-
-
-
-
-
-
-
 
 
     /*START OF FILE I/O CODE*************************************************/
@@ -280,7 +276,6 @@ Thanks Google.. Thanks for nothing!
         //Files are an abstraction for both the PATH and the FILE
         //File path = new File("/sdcard/", "LPs");
         File file = new File(path, filename);
-
 
         if (!path.mkdirs()) {
             System.err.println("THE DIRECTORY WAS NOT CREATED. ");
