@@ -28,7 +28,7 @@ public class MqttClient {
 
 
     private MqttAndroidClient mqttClient;
-    private final String serverUri = "ssl://cruzroja.ucsd.edu:8884";
+    private final String serverUri = "ssl://cruzroja.ucsd.edu:8883";
     private String clientId = "AmbulanceClient-";
 
     //call mqtt?
