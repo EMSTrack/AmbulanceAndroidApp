@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/trackByTimeSwitch"
         android:switchTextAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
-        android:checked="false"
+        android:checked="true"
         android:layout_above="@+id/trackByDistanceSwitch"
         android:layout_centerHorizontal="true" />
 
@@ -46,7 +46,9 @@
         android:id="@+id/trackByDistanceSwitch"
         android:layout_above="@+id/broadcastCruz"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="54dp" />
+        android:layout_marginBottom="54dp"
+        android:checked = "true"
+        />
     <Button
         android:text="Saved Locations"
         android:layout_width="wrap_content"
