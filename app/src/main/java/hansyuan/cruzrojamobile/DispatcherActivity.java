@@ -1,5 +1,7 @@
 package hansyuan.cruzrojamobile;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -7,12 +9,14 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,6 +33,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by justingil1748 on 4/26/17.
  */
@@ -37,6 +43,8 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     View rootView;
     GPSTracker gps;
     Button mapButton;
+    static TextView addressText;
+
     //GoogleMap mGoogleMap;
     //Button addressButton;
     //EditText addressSearchText;
@@ -46,10 +54,11 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_dispatcher, container, false);
 
-
         mapButton = (Button) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
 
+        addressText = ((TextView) rootView.findViewById(R.id.address));
+        addressText.setText(AmbulanceApp.globalAddress);
         /*
         addressButton = (Button) rootView.findViewById(R.id.addressButton);
         addressButton.setOnClickListener(this);
@@ -66,6 +75,13 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
 
     }
 
+
+    public static void updateAddress(String mesg) {
+        Log.d(TAG, "updateAddress: message re1");
+        addressText.setText(AmbulanceApp.globalAddress);
+        Log.d(TAG, "updateAddress: message re2");
+
+    }
 
 
     @Override

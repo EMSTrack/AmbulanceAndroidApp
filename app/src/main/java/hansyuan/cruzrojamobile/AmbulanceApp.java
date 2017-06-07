@@ -11,7 +11,10 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.nearby.connection.Connections;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -22,6 +25,9 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.Connection;
+
+import static hansyuan.cruzrojamobile.DispatcherActivity.updateAddress;
 
 /**
  * Created by jkapi on 4/19/2017.
@@ -41,6 +47,7 @@ public class AmbulanceApp extends Application {
     private String currStatus;
     private String userId = "-1";
     private String userPw = "-1";
+    static String globalAddress;
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
@@ -72,7 +79,6 @@ public class AmbulanceApp extends Application {
         super.onCreate();
         authenticated = false;
         appContext = getApplicationContext();
-
     }
 
     public AmbulanceApp onCreate (Context context) {
@@ -80,8 +86,9 @@ public class AmbulanceApp extends Application {
         this.context = context;
         authenticated = false;
         appContext = getApplicationContext();
-        userId = "-1";
-        userPw = "-1";
+        userId = "brian";
+        userPw = "cruzroja";
+        //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         return this;
     }
 
@@ -135,6 +142,9 @@ public class AmbulanceApp extends Application {
 
                 //subscribe here
                 mqttServer.subscribeToTopic("ambulance/1/status");
+                //Log.d(TAG, "Message received: ");
+                mqttServer.subscribeToTopic("ambulance/4/call");
+
 
                 if(GPSCoordinate != null) {
                     mqttServer.publish(GPSCoordinate);
@@ -148,7 +158,18 @@ public class AmbulanceApp extends Application {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                Log.d(TAG, "Message received: " + new String(message.getPayload()));
+
+                String mesg = new String(message.getPayload());
+                if(topic.contains("call")){
+                    JSONObject c = new JSONObject(mesg);
+                    DispatcherCall dCall = new DispatcherCall(c);
+                    globalAddress = dCall.getAddress();
+                    updateAddress(globalAddress);
+                    Log.d(TAG, "Call message received: " + mesg);
+                }
+                if(topic.contains("status")){
+                    Log.d(TAG, "Status message received: " + mesg);
+                }
             }
 
             @Override
