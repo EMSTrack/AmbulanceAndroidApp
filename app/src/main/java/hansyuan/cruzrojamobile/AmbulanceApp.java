@@ -38,7 +38,7 @@ public class AmbulanceApp extends Application {
 
     private static Context appContext;
     private Context context;
-    private String currStatus;
+    private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
     MqttClient mqttServer;
@@ -149,6 +149,7 @@ public class AmbulanceApp extends Application {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 Log.d(TAG, "Message received: " + new String(message.getPayload()));
+                //statusText.setText(new String(message.getPayload()));
             }
 
             @Override

@@ -54,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
         statusText = (TextView) findViewById(R.id.statusText);
-
-
+        statusText.setText(ambulance.getCurrStatus());
         panicButton = (ImageButton) findViewById(R.id.panicButton);
         panicButton.setOnClickListener(new View.OnClickListener() {
             @Override
