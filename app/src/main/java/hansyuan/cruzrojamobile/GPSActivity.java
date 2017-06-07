@@ -50,20 +50,12 @@ import com.android.volley.toolbox.Volley;
  * return a new JSONObject.
  */
 public class GPSActivity extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
-    //public final static int INTERVAL = 1000 * 3 ;  // ( ____ sec * (1000 ms / 1 sec))
-    public final static int INTERVAL = 1000 * 10 ;  // ( ____ sec * (1000 ms / 1 sec))
-    public final static int DELAY_START = 2000;
     GPSTracker gpsTracker;
-    String url = "http://cruzroja.ucsd.edu/ambulances/update/123456?status=";
-    //Switch clockEnable;
-    Spinner statusSpinner;
-    Spinner mySpinner;
     Switch trackByTime;             // The switch for clock enable.
     Switch trackByDistance;
     View rootView;
 
 
-    Button broadCastCruzRoja;
 
     /*
      * Default method
@@ -75,22 +67,9 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
 
         rootView = inflater.inflate(R.layout.activity_gps, container, false);
 
-        broadCastCruzRoja = (Button) rootView.findViewById(R.id.broadcastCruz);
-        broadCastCruzRoja.setOnClickListener(this);
         //checkLocationPermission(); //Might be needed, might not.
         gpsTracker = new GPSTracker(rootView.getContext());
         gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
-
-
-
-        Button savedLocations = (Button) rootView.findViewById(R.id.savedLocations);
-
-        savedLocations.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                System.out.println("OPENING SAVEDLOCATIONS ACTIVITY");
-                startActivity(new Intent(getContext(), SavedLocations.class));
-            }
-        });
 
 
         //Determine whether to listen by dist changed or time changed
@@ -110,12 +89,14 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     }
     @Override
     public void onStop(){
+        System.err.println("onStop: GPSActivity");
         trackByTime.setChecked(false);
         super.onStop(); // Same.
     }
 
     @Override
     public void onDestroy() {
+        System.err.print("onDestroy: GPSActivity");
         trackByTime.setChecked(false);
         super.onDestroy(); // Same.
     }
@@ -178,83 +159,9 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     }
 
 
-
-    /*
-    * This
-    * */
-
-    public void broadcast(){
-        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="http://www.google.com";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-
-
-    /**
-     * Thie method will compile together the location point information, append
-     * it to the url, and then do a GET request on the URL.
-     */
-    public void broadcastCruzRoja() {
-        final TextView mTextView = (TextView) rootView.findViewById(R.id.text);
-
-
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-
-        String lon = "?longitude=1.2345";
-        String latt = "?lattitude=5.4321";
-
-        String url = this.url + lon + latt; // arbitrary values for lon and lat
-        // todo May need to do a method call to locationpoint or something here.
-
-        /** TODO Insert Java method here to get the location, turn into string, and
-         * concat with URL  */
-
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //  mTextView.setText("Response is: "+ response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //mTextView.setText("That didn't work!");
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest); // Not sure about this.
-    }
-
     @Override
     public void onClick(View v) {
-        if(v == broadCastCruzRoja){
-            broadcastCruzRoja();
-        }
+
     }
 }
 
