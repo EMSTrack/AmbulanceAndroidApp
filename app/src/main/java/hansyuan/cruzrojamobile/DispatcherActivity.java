@@ -95,7 +95,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             double lon = gps.getLongitude(); // returns longitude
             LocationPoint loc = new LocationPoint(lon, lat);
 
-
             String geoUri = "http://maps.google.com/maps?q=loc:" + 32.879409 + "," + -117.2382162 + " (" + loc + ")";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             startActivity(intent);
@@ -106,16 +105,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
         }
         */
     }
-
-
-
-
-
-
-
-
-
-
 
 
     /*

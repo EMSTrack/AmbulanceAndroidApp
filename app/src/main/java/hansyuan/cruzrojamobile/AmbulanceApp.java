@@ -44,7 +44,7 @@ public class AmbulanceApp extends Application {
 
     private static Context appContext;
     private Context context;
-    private String currStatus;
+    private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
     static String globalAddress;
@@ -170,6 +170,7 @@ public class AmbulanceApp extends Application {
                 if(topic.contains("status")){
                     Log.d(TAG, "Status message received: " + mesg);
                 }
+
             }
 
             @Override

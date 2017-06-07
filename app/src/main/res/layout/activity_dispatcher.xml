@@ -9,21 +9,22 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:text="Request"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/addressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:text="Address"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/address"
@@ -34,7 +35,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:text="Bahía Kino 43 Infonavit Lomas del Porvenir, \n22531 Tijuana, B.C., Mexico"
-        android:textSize="30dp" />
+        android:textSize="20dp" />
 
     <TextView
         android:id="@+id/DescriptionText"
@@ -45,7 +46,7 @@
         android:layout_below="@+id/address"
         android:layout_marginBottom="5dp"
         android:text="Description"
-        android:textSize="20dp" />
+        android:textSize="15dp" />
 
     <TextView
         android:id="@+id/description"
@@ -55,14 +56,13 @@
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
         android:text="Next to Agua Caliente Fountain"
-        android:textSize="30dp" />
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/gmap"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
         android:adjustViewBounds="true"
         android:background="@color/colorPrimaryDark"
         android:drawableLeft="@drawable/nav_img"
@@ -71,9 +71,9 @@
         android:paddingRight="16dp"
         android:paddingTop="15dp"
         android:scaleType="fitCenter"
-        android:text="Go to Natigate"
+        android:text="Go to Navigate"
         android:textColor="#e8e9e9"
-        android:textSize="28dp" />
+        android:textSize="25dp" />
 
 
 </RelativeLayout>
