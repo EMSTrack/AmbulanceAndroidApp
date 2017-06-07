@@ -45,8 +45,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_dispatcher, container, false);
-
-
         mapButton = (Button) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
 
@@ -79,7 +77,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             double lon = gps.getLongitude(); // returns longitude
             LocationPoint loc = new LocationPoint(lon, lat);
 
-
             String geoUri = "http://maps.google.com/maps?q=loc:" + 32.879409 + "," + -117.2382162 + " (" + loc + ")";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             startActivity(intent);
@@ -90,16 +87,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
         }
         */
     }
-
-
-
-
-
-
-
-
-
-
 
 
     /*
