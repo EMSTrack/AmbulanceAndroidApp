@@ -1,2 +1,1 @@
-# Mobile Subteam Repository
-# Test
+# Mobile Hospital Android Application
