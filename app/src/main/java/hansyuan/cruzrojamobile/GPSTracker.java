@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -318,7 +319,7 @@ public class GPSTracker extends Service implements LocationListener {
         display(lastKnownLocation);
 
         ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
-
+        Log.e("ISLOCATIONCHANGED?", "onLocationChanged is called");
     }
 
 

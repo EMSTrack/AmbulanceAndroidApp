@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
         ambulance.mqttMaster();
 
-        boolean loggedIn = false;
+        boolean loggedIn = true;
         //if user is logged in
         if (loggedIn) {
             //that means user is already logged in, so close this activity
@@ -99,7 +99,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void checking(){
-
         if(log){
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));

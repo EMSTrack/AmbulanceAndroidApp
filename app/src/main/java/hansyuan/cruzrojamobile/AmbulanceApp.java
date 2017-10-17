@@ -73,6 +73,7 @@ public class AmbulanceApp extends Application {
             e.printStackTrace();
         }
 
+
     }
 
     public void onCreate() {
@@ -146,7 +147,14 @@ public class AmbulanceApp extends Application {
                 mqttServer.subscribeToTopic("ambulance/4/call");
 
 
+                //TESTING GPS COORDINATE!
+                if(GPSCoordinate == null){
+                    Log.e(TAG, "GPS IS NULL");
+                }
+
+
                 if(GPSCoordinate != null) {
+                    Log.e(TAG, "GPS IS NOT NULL");
                     mqttServer.publish(GPSCoordinate);
                 }
             }

@@ -14,6 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.logging.Logger;
 import org.json.JSONObject;
 
 /**
@@ -145,6 +146,7 @@ public class MqttClient {
     }
 
     public void publish(JSONObject content){
+        Log.d(this.getClass().getName(), content.toString());
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
         try {
