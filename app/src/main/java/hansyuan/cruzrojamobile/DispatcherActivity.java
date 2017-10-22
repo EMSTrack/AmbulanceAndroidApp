@@ -51,12 +51,14 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     //Marker marker;
 
 
+    //Dispatcher page
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_dispatcher, container, false);
 
         mapButton = (Button) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
 
+        //
         addressText = ((TextView) rootView.findViewById(R.id.address));
         addressText.setText(AmbulanceApp.globalAddress);
         /*
@@ -84,6 +86,9 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     }
 
 
+    /*
+    Functionality of google map button
+     */
     @Override
     public void onClick(View v) {
         if(v == mapButton){

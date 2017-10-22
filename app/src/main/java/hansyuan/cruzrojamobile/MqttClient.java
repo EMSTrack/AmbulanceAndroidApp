@@ -34,7 +34,6 @@ public class MqttClient {
 
     //call mqtt?
     private MqttClient(Context context) {
-
         mContext = context;
 
         MqttClient.context = context;
@@ -151,6 +150,7 @@ public class MqttClient {
 
         try {
             mqttClient.publish("user/1/location", message);
+            Log.d("Publush_location", "Success");
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -171,4 +171,14 @@ public class MqttClient {
         }
         return retVal;
     }
+
+    public void disconnect() {
+        try {
+            Log.d(TAG, "MqttClient disconnected");
+            mqttClient.disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

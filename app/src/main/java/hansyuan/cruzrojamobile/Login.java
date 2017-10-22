@@ -33,11 +33,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_login);
 
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
-        ambulance.mqttMaster();
 
-        boolean loggedIn = true;
         //if user is logged in
-        if (loggedIn) {
+
+        if (ambulance.getUserLoggedIn()) {
             //that means user is already logged in, so close this activity
             finish();
             //opens main activity
@@ -78,7 +77,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         mqttServer = MqttClient.getInstance(this);
 
-
         dialog = new ProgressDialog(this); // this = YourActivity
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage("Signing in. Please wait...");
@@ -100,6 +98,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void checking(){
         if(log){
+            ambulance.setUserLoggedIn(true);
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }

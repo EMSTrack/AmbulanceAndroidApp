@@ -138,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
                 activityClass = MainActivity.class;
                 break;
             case R.id.logout:
+                ambulance.setUserLoggedIn(false);
+                ambulance.logout();
                 activityClass = Login.class;
                 break;
             default:
@@ -145,8 +147,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent i = new Intent(this, activityClass);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        //i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        if(menuItem.getItemId() == R.id.logout){
+            finish();
+            startActivity(i);
+        }
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
@@ -170,10 +176,7 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
-
     public void panicPopUp(){
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
         builder.setTitle("PANIC!");
@@ -193,5 +196,10 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

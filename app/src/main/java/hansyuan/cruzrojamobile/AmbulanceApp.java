@@ -47,6 +47,7 @@ public class AmbulanceApp extends Application {
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
+    private boolean userLoggedIn = false;
     static String globalAddress;
     MqttClient mqttServer;
     Boolean authenticated;
@@ -54,7 +55,6 @@ public class AmbulanceApp extends Application {
     private LocationPoint lastKnownLocation;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
 
     public void updateLastKnownLocation(LocationPoint location) {
         lastKnownLocation = location;
@@ -99,6 +99,7 @@ public class AmbulanceApp extends Application {
     }
     public String getUserId(){return userId;}
     public String getUserPw() {return userPw;}
+    public boolean getUserLoggedIn(){return userLoggedIn;}
     public static Context getAppContext() {
         return AmbulanceApp.appContext;
     }
@@ -111,6 +112,7 @@ public class AmbulanceApp extends Application {
     }
     public void setUserId (String newId){userId = newId;}
     public void setUserPw(String newPw) {userPw = newPw;}
+    public  void setUserLoggedIn(boolean newStatus){userLoggedIn = newStatus;}
 
     /********************* other methods ********************************/
     /** Takes in a string to Toast
@@ -143,8 +145,9 @@ public class AmbulanceApp extends Application {
 
                 //subscribe here
                 mqttServer.subscribeToTopic("ambulance/1/status");
-                //Log.d(TAG, "Message received: ");
+                Log.e(TAG, "Message received: ");
                 mqttServer.subscribeToTopic("ambulance/4/call");
+                Log.e(TAG, "Message received: ");
 
 
                 //TESTING GPS COORDINATE!
@@ -318,6 +321,15 @@ Thanks Google.. Thanks for nothing!
         file.setWritable(true);
         System.err.println(" Can write? " + file.canWrite());
         return file;
+    }
+
+
+    /*
+    Logout(Justin)
+     */
+    public void logout(){
+        userLoggedIn = false;
+        mqttServer.disconnect();
     }
 
 }
