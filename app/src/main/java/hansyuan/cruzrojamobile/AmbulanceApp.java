@@ -189,6 +189,37 @@ public class AmbulanceApp extends Application {
                 Log.d(TAG, "Message sent successfully");
             }
         });
+
+        mqttServer.setCallback(new MqttCallbackExtended() {
+            @Override
+            public void connectComplete(boolean reconnect, String serverURI) {
+                if(reconnect)
+                    Log.d(TAG, "Reconnected to broker");
+                else
+                    Log.d(TAG, "Connected to broker");
+            }
+
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.d(TAG, "Connection to broker lost");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String text = new String(message.getPayload());
+                Log.d(TAG, "Received data " + text + " at topic " + topic);
+                // Message from receiving status
+                if (topic.contains("status")) {
+                    Log.d(TAG, "Message arrived: " + text);
+                    // Parse to hospital object
+                    currStatus = text;
+                }
+            }
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                    Log.d(TAG, "Message sent successfully");
+            }
+        });
     }
 
 

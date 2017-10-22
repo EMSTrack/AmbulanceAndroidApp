@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
             return;
         }
-
+        ambulance.mqttMaster();
         mqttServer = MqttClient.getInstance(this);
 
         dialog = new ProgressDialog(this); // this = YourActivity
