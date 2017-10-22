@@ -138,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
                 activityClass = MainActivity.class;
         }
 
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+
         Intent i = new Intent(this, activityClass);
         //i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -146,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
 
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
+        menuItem.setChecked(false);
 
         // Close the navigation drawer
         mDrawer.closeDrawers();

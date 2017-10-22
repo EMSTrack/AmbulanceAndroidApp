@@ -1,35 +1,14 @@
 package hansyuan.cruzrojamobile;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 /**
  * Java Class AND ACTIVITY
@@ -49,13 +28,11 @@ import com.android.volley.toolbox.Volley;
  * data to the server might use the LP's method that will
  * return a new JSONObject.
  */
-public class GPSActivity extends Fragment implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
+public class GPSActivity extends Fragment implements CompoundButton.OnCheckedChangeListener{
     GPSTracker gpsTracker;
     Switch trackByTime;             // The switch for clock enable.
     Switch trackByDistance;
     View rootView;
-
-
 
     /*
      * Default method
@@ -70,7 +47,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         //checkLocationPermission(); //Might be needed, might not.
         gpsTracker = new GPSTracker(rootView.getContext());
         gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
-
 
         //Determine whether to listen by dist changed or time changed
         trackByTime = (Switch) rootView.findViewById(R.id.trackByTimeSwitch);
@@ -113,13 +89,13 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
             //determine what was turned on
             switch (buttonView.getId()) {
                 case R.id.trackByTimeSwitch: //turn on tracking by time
-                    gpsTracker.turnOff();
+                    //gpsTracker.turnOff();
                     long currDistanceTracking = gpsTracker.getMinDistanceChangeForUpdates();
                     gpsTracker = new GPSTracker(rootView.getContext(), currDistanceTracking, -1);
                     gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
                     break;
                 case R.id.trackByDistanceSwitch: //turn on tracking by distance
-                    gpsTracker.turnOff();
+                    //gpsTracker.turnOff();
                     long currTimeTracking = gpsTracker.getMinTimeBWUpdates();
                     gpsTracker = new GPSTracker(rootView.getContext(), -1, currTimeTracking);
                     gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
@@ -144,24 +120,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
                 default:
             }
         }
-    }
-
-
-
-    /**
-     * Will set the textview as the string you pass in.
-     * If you delete LatLongText DELETE THIS METHOD TODO
-     * @param s
-     */
-    public void display(String s){
-        TextView t = (TextView) rootView.findViewById(R.id.LatLongText);
-        t.setText(s);
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
     }
 }
 

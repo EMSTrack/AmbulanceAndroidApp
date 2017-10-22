@@ -42,16 +42,20 @@ import static hansyuan.cruzrojamobile.DispatcherActivity.updateAddress;
 
 public class AmbulanceApp extends Application {
 
+    //to skip login page_debug
+    private boolean userLoggedIn = true;
+
+
     private static Context appContext;
     private Context context;
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-    private boolean userLoggedIn = false;
     static String globalAddress;
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
+    GPSTracker gpsTracker;
     private LocationPoint lastKnownLocation;
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -90,6 +94,10 @@ public class AmbulanceApp extends Application {
         userId = "brian";
         userPw = "cruzroja";
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
+        gpsTracker = new GPSTracker(appContext, 1, -1);
+        lastKnownLocation = gpsTracker.getLastKnownLocation();
+        updateLastKnownLocation(lastKnownLocation);
+
         return this;
     }
 
@@ -136,30 +144,30 @@ public class AmbulanceApp extends Application {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
                 if(reconnect) {
-                    Log.d(TAG, "Reconnected to broker");
+                    Log.e(TAG, "Reconnected to broker");
                 } else {
-                    Log.d(TAG, "Connected to broker");
+                    Log.e(TAG, "Connected to broker");
                 }
                 //Connection is successful
                 authenticated = true;
 
-                //subscribe here
+                //subscribe to topics
                 mqttServer.subscribeToTopic("ambulance/1/status");
                 Log.e(TAG, "Message received: ");
                 mqttServer.subscribeToTopic("ambulance/4/call");
                 Log.e(TAG, "Message received: ");
 
-
-                //TESTING GPS COORDINATE!
-                if(GPSCoordinate == null){
-                    Log.e(TAG, "GPS IS NULL");
-                }
+                lastKnownLocation = gpsTracker.getLastKnownLocation();
+                updateLastKnownLocation(lastKnownLocation);
 
 
                 if(GPSCoordinate != null) {
                     Log.e(TAG, "GPS IS NOT NULL");
                     mqttServer.publish(GPSCoordinate);
                 }
+                else{
+                    Log.e(TAG, "GPS IS NULL");
+                }
             }
 
             @Override
@@ -167,57 +175,27 @@ public class AmbulanceApp extends Application {
                 Log.d(TAG, "Connection to broker lost");
             }
 
+            //receiving subscribed data
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
 
-                String mesg = new String(message.getPayload());
+                String subsData = new String(message.getPayload());
                 if(topic.contains("call")){
-                    JSONObject c = new JSONObject(mesg);
+                    JSONObject c = new JSONObject(subsData);
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
-                    Log.d(TAG, "Call message received: " + mesg);
+                    Log.d(TAG, "Call message received: " + subsData);
                 }
                 if(topic.contains("status")){
-                    Log.d(TAG, "Status message received: " + mesg);
+                    Log.d(TAG, "Status message received: " + subsData);
+                    currStatus = subsData;
                 }
-
             }
 
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
                 Log.d(TAG, "Message sent successfully");
-            }
-        });
-
-        mqttServer.setCallback(new MqttCallbackExtended() {
-            @Override
-            public void connectComplete(boolean reconnect, String serverURI) {
-                if(reconnect)
-                    Log.d(TAG, "Reconnected to broker");
-                else
-                    Log.d(TAG, "Connected to broker");
-            }
-
-            @Override
-            public void connectionLost(Throwable cause) {
-                Log.d(TAG, "Connection to broker lost");
-            }
-
-            @Override
-            public void messageArrived(String topic, MqttMessage message) throws Exception {
-                String text = new String(message.getPayload());
-                Log.d(TAG, "Received data " + text + " at topic " + topic);
-                // Message from receiving status
-                if (topic.contains("status")) {
-                    Log.d(TAG, "Message arrived: " + text);
-                    // Parse to hospital object
-                    currStatus = text;
-                }
-            }
-            @Override
-            public void deliveryComplete(IMqttDeliveryToken token) {
-                    Log.d(TAG, "Message sent successfully");
             }
         });
     }
