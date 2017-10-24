@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity;
+import hansyuan.cruzrojamobile.tab.fragments.GPSActivity;
+import hansyuan.cruzrojamobile.tab.fragments.demo_viewTransmission;
+
 /**
  * Created by justingil1748 on 4/17/17.
  */

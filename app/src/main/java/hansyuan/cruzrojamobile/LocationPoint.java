@@ -30,7 +30,7 @@ import org.json.JSONObject;
  *
  */
 
-class LocationPoint {
+public class LocationPoint {
     String name;
     double lon;
     double lat;
