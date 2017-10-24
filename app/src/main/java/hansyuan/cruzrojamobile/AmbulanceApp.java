@@ -11,10 +11,7 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.nearby.connection.Connections;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -25,9 +22,8 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.Connection;
 
-import static hansyuan.cruzrojamobile.DispatcherActivity.updateAddress;
+import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
 
 /**
  * Created by jkapi on 4/19/2017.
@@ -47,7 +43,7 @@ public class AmbulanceApp extends Application {
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-    static String globalAddress;
+    public static String globalAddress;
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;

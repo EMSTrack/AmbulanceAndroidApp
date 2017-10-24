@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.tab.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -17,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import hansyuan.cruzrojamobile.R;
 
 /**
  * This class is purely meant to demonstrate that the information is able to send

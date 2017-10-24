@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.tab.fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,6 +32,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
+
+import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.GPSTracker;
+import hansyuan.cruzrojamobile.LocationPoint;
+import hansyuan.cruzrojamobile.R;
 
 import static android.content.ContentValues.TAG;
 

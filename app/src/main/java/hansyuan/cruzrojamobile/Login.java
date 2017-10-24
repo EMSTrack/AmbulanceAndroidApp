@@ -21,7 +21,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     public EditText editUserName;
     public EditText editPassword;
-    private Button buttonSignin;
+    private Button buttonLogin;
     public AmbulanceApp ambulance;
     public static ProgressDialog dialog;
     private boolean log;
@@ -48,9 +48,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //initializing views and buttons and fields by ID
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
-        buttonSignin = (Button) findViewById(R.id.buttonSignin);
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
 
-        buttonSignin.setOnClickListener(this);
+        buttonLogin.setOnClickListener(this);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         ambulance.setUserPw(password);
 
         //checking if email and passwords are empty
-        if(TextUtils.isEmpty(id)){
+        if (TextUtils.isEmpty(id)) {
             Toast.makeText(this,"Please enter username",Toast.LENGTH_LONG).show();
             return;
         }
 
         //check that password is not empty
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
             return;
         }
@@ -98,13 +98,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }, 5000);
     }
 
-    private void checking(){
+    private void checking() {
 
-        if(log){
+        if (log) {
             finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
-        else{
+            String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
+            for (int i = 0; i < arr.length; i++) {
+                Ambulance ambulance = new Ambulance(i, arr[i]);
+                AmbulanceListActivity.ambulanceList.add(ambulance);
+            }
+            startActivity(new Intent(getApplicationContext(), AmbulanceListActivity.class));
+        } else {
             Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
                     Toast.LENGTH_LONG).show();
             return;
