@@ -43,12 +43,8 @@ public class AmbulanceApp extends Application {
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-<<<<<<< HEAD
     private boolean userLoggedIn = false;
-    static String globalAddress;
-=======
     public static String globalAddress;
->>>>>>> master
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;

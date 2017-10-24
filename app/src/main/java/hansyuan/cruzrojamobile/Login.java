@@ -96,15 +96,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }, 5000);
     }
 
-<<<<<<< HEAD
-    private void checking(){
-        if(log){
-            ambulance.setUserLoggedIn(true);
-=======
     private void checking() {
 
         if (log) {
->>>>>>> master
             finish();
             String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
             for (int i = 0; i < arr.length; i++) {
