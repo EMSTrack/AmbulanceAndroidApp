@@ -49,6 +49,7 @@ public class AmbulanceApp extends Application {
     Boolean authenticated;
     JSONObject GPSCoordinate;
     private LocationPoint lastKnownLocation;
+    GPSTracker gpsTracker;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -85,6 +86,7 @@ public class AmbulanceApp extends Application {
         appContext = getApplicationContext();
         userId = "brian";
         userPw = "cruzroja";
+        gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         return this;
     }

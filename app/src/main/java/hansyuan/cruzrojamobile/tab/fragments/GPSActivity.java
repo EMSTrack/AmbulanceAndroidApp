@@ -58,8 +58,6 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
     Switch trackByDistance;
     View rootView;
 
-
-
     /*
      * Default method
      * Always called when an activity is created.
