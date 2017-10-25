@@ -87,7 +87,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         getLocation();
-        //((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
+        //git ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
     }
 
 
@@ -247,6 +247,11 @@ public class GPSTracker extends Service implements LocationListener {
             lastKnownLocation = new LocationPoint (location);
 
             return lastKnownLocation;
+        }else {
+            ActivityCompat.requestPermissions(
+                    (Activity) mContext,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_FINE_LOCATION);
         }
 
         return null;

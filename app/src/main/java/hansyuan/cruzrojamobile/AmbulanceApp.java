@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -76,8 +77,6 @@ public class AmbulanceApp extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void onCreate() {
@@ -94,9 +93,10 @@ public class AmbulanceApp extends Application {
         userId = "brian";
         userPw = "cruzroja";
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
-        gpsTracker = new GPSTracker(appContext, 1, -1);
-        lastKnownLocation = gpsTracker.getLastKnownLocation();
-        updateLastKnownLocation(lastKnownLocation);
+        gpsTracker = new GPSTracker(context, 500, -1);
+
+        LocationPoint loc = new LocationPoint(-192, 123);
+        updateLastKnownLocation(loc);
 
         return this;
     }
@@ -159,7 +159,6 @@ public class AmbulanceApp extends Application {
 
                 lastKnownLocation = gpsTracker.getLastKnownLocation();
                 updateLastKnownLocation(lastKnownLocation);
-
 
                 if(GPSCoordinate != null) {
                     Log.e(TAG, "GPS IS NOT NULL");
