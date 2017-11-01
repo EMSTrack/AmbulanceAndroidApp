@@ -30,6 +30,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     MqttClient mqttServer;
 
 
+    private boolean testLogin = true;
+
+
     /*
     * Admin Account Login:
     * admin
@@ -68,10 +71,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void userLogin() {
-        final String id = editUserName.getText().toString();
-        final String password = editPassword.getText().toString();
+
+        // TODO remove after done testing, autologin
+        String tempId; // = editUserName.getText().toString();
+        String tempPassword; // = editPassword.getText().toString();
+        if (testLogin) {
+            tempId = "admin";
+            tempPassword = "cruzrojaadmin";
+        } else {
+            tempId = editUserName.getText().toString();
+            tempPassword = editPassword.getText().toString();
+        }
+
+        final String id = tempId;
+        final String password = tempPassword;
+
         ambulance.setUserId(id);
         ambulance.setUserPw(password);
+
 
         //checking if email and passwords are empty
         if (TextUtils.isEmpty(id)) {
@@ -110,8 +127,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if (log) {
             finish();
-            // TODO remove the test values and pull from MQTT here
+            
 
+            // TODO remove the test values and pull from MQTT here
             String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
             ArrayList<Ambulance> ambulanceList = new ArrayList<>();
             for (int i = 0; i < arr.length; i++) {

@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView statusText;
     private ImageButton panicButton;
-    AmbulanceApp ambulance;
+    private String titleText;
+    AmbulanceApp ambulanceApp;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
@@ -51,16 +52,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
+        ambulanceApp = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
 
         // Test that Ambulance class made it through
-        Ambulance passedAmbulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
-        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + passedAmbulance.getLicensePlate() + " ID: " + passedAmbulance.getId());
+        Ambulance ambulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
+        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + ambulance.getLicensePlate() + " ID: " + ambulance.getId());
 
+        titleText = ambulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+        Log.d("MAIN_TITLE", titleText);
 
         statusText = (TextView) findViewById(R.id.statusText);
-        statusText.setText(ambulance.getCurrStatus());
+        statusText.setText(titleText);
         panicButton = (ImageButton) findViewById(R.id.panicButton);
         panicButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,9 +116,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ambulance.mqttMaster();
-        String status = ambulance.getCurrStatus();
-        statusText.setText(status);
+        ambulanceApp.mqttMaster();
+        titleText = ambulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+        statusText.setText(titleText);
     }
 
 
@@ -144,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
                 activityClass = MainActivity.class;
                 break;
             case R.id.logout:
-                ambulance.setUserLoggedIn(false);
-                ambulance.logout();
+                ambulanceApp.setUserLoggedIn(false);
+                ambulanceApp.logout();
                 activityClass = Login.class;
                 break;
             default:
