@@ -1,0 +1,20 @@
+{
+  "hospitals": [
+    {
+      "title": "Hospital 1",
+      "description": "2 Beds Available"
+    },
+    {
+      "title": "Hospital 2",
+      "description": "0 Beds Available"
+    },
+    {
+      "title": "Hospital 3",
+      "description": "1 Beds Available"
+    },
+    {
+      "title": "Hospital 4",
+      "description": "0 Beds Available"
+    }
+  ]
+}

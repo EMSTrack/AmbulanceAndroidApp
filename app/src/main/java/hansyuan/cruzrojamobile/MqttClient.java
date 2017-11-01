@@ -149,8 +149,8 @@ public class MqttClient {
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
         try {
-            mqttClient.publish("user/1/location", message);
-            Log.e("Publush_location", "Success");
+            mqttClient.publish("user/brian/location", message);
+            Log.e("Publish_location", "Success");
         } catch (MqttException e) {
             e.printStackTrace();
         }

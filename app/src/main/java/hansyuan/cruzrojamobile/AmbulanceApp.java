@@ -12,10 +12,7 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.nearby.connection.Connections;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -26,10 +23,9 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.sql.Connection;
 
-import static hansyuan.cruzrojamobile.DispatcherActivity.updateAddress;
-
+import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
+import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
 /**
  * Created by jkapi on 4/19/2017.
  *
@@ -44,7 +40,7 @@ import static hansyuan.cruzrojamobile.DispatcherActivity.updateAddress;
 public class AmbulanceApp extends Application {
 
     //to skip login page_debug
-    private boolean userLoggedIn = true;
+    private boolean userLoggedIn = false;
 
 
     private static Context appContext;
@@ -52,12 +48,12 @@ public class AmbulanceApp extends Application {
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-    static String globalAddress;
+    public static String globalAddress;
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
-    GPSTracker gpsTracker;
     private LocationPoint lastKnownLocation;
+    GPSTracker gpsTracker;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -92,6 +88,7 @@ public class AmbulanceApp extends Application {
         appContext = getApplicationContext();
         userId = "brian";
         userPw = "cruzroja";
+        gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         gpsTracker = new GPSTracker(context, 500, -1);
 
@@ -189,6 +186,7 @@ public class AmbulanceApp extends Application {
                 if(topic.contains("status")){
                     Log.d(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
+                    updateStatus(currStatus);
                 }
             }
 

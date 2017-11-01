@@ -25,6 +25,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="20dp"
+            android:inputType="text"
             android:hint="Enter username" />
 
         <EditText
@@ -39,11 +40,12 @@
             android:fontFamily="sans-serif" />
 
         <Button
-            android:id="@+id/buttonSignin"
+            android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"            android:text="Signin" />
+            android:layout_marginRight="30dp"
+            android:text="Login" />
     </LinearLayout>
 
 </RelativeLayout>

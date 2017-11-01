@@ -87,7 +87,6 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         getLocation();
-        //git ((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
     }
 
 

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    private TextView statusText;
+    static TextView statusText;
     private ImageButton panicButton;
     AmbulanceApp ambulance;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_home);
         tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
-        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
+//        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
         //pager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -192,6 +192,9 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    static void updateStatus(String newStatus){
+        statusText.setText(newStatus);
+    }
     @Override
     public void onBackPressed() {
         finish();
