@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
+
+        // Test that Ambulance class made it through
+        Ambulance passedAmbulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
+        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + passedAmbulance.getLicensePlate() + " ID: " + passedAmbulance.getId());
+
+
         statusText = (TextView) findViewById(R.id.statusText);
         statusText.setText(ambulance.getCurrStatus());
         panicButton = (ImageButton) findViewById(R.id.panicButton);

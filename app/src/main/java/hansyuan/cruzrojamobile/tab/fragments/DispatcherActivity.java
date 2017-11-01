@@ -82,8 +82,8 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
 
     }
 
-
-    public static void updateAddress(String mesg) {
+    // TODO should this function be using the param msg
+    public static void updateAddress(String msg) {
         Log.d(TAG, "updateAddress: message re1");
         addressText.setText(AmbulanceApp.globalAddress);
         Log.d(TAG, "updateAddress: message re2");

@@ -12,27 +12,39 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by dchickey on 10/24/2017.
  */
 
-public class AmbulanceListActivity extends AppCompatActivity {
+public class AmbulanceListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static ArrayList<Ambulance> ambulanceList = new ArrayList<>();
+    private ArrayList<Ambulance> ambulanceList;
+    private Spinner ambulanceSpinner;
+    private Button submitAmbulanceButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ambulance_list);
 
+        // Get the Ambulance List from the Extras
+        ambulanceList = (ArrayList<Ambulance>) getIntent().getSerializableExtra("AmbulanceList");
+
+        // Initialize the UI elements
+        submitAmbulanceButton = (Button) findViewById(R.id.submitAmbulanceButton);
+        ambulanceSpinner = (Spinner) findViewById(R.id.ambulanceSpinner);
 
         // No hospitals associated with this account
         if (ambulanceList.size() < 1) {
-            Toast toast = new Toast(this);
-            toast.setText("This account has no ambulances associated with it!");
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.show();
+            // Create a toast for the user
+            Toast.makeText(getBaseContext(), "This account has no ambulances associated with it!",
+                    Toast.LENGTH_LONG).show();
+
+            // If there are no Ambulance options, make the submit button unclickable
+            submitAmbulanceButton.setClickable(false);
+
             return;
         }
 
@@ -43,7 +55,6 @@ public class AmbulanceListActivity extends AppCompatActivity {
         }
 
         // Create the Spinner connection
-        final Spinner ambulanceSpinner = (Spinner) findViewById(R.id.ambulanceSpinner);
         ambulanceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -57,7 +68,7 @@ public class AmbulanceListActivity extends AppCompatActivity {
         });
 
         // Create the basic adapter
-        ArrayAdapter<String> hospitalListAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> hospitalListAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, listObjects);
         hospitalListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -65,21 +76,35 @@ public class AmbulanceListActivity extends AppCompatActivity {
         ambulanceSpinner.setAdapter(hospitalListAdapter);
 
         // Create the hospital button
-        Button submitHospitalButton = (Button) findViewById(R.id.submitAmbulanceButton);
-        submitHospitalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        submitAmbulanceButton.setOnClickListener(this);
+
+    }  // END onCreate
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.submitAmbulanceButton:
                 System.out.println("Ambulance Submit Button Clicked");
 
-                //Intent dashboard = new Intent(HospitalListActivity.this, DashboardActivity.class);
                 int position = ambulanceSpinner.getSelectedItemPosition();
-                Log.d("AMBULANCE_LIST", "Position Selected: " + position);
-                Ambulance selectedHospital = ambulanceList.get(position);
-                Log.d("AMBULANCE_LIST", "Selected Ambulance: " + selectedHospital.getLicensePlate());
+                Ambulance selectedAmbulance = ambulanceList.get(position);
+                Log.d("AMBULANCE_LIST", "Selected Ambulance: " + selectedAmbulance.getLicensePlate() + " ID: " + selectedAmbulance.getId());
 
-            }
-        });
+                // Create the dashboard intent
+                Intent dashboardIntent = new Intent(getApplicationContext(), MainActivity.class);
 
+                // Add Serialized Ambulance Class
+                dashboardIntent.putExtra("AmbulanceClass", selectedAmbulance);
+                startActivity(dashboardIntent);
+
+                break;
+
+            default:
+                Log.d("AMBULANCE_LIST", "onClick Default");
+
+        }
     }
 
 }

@@ -45,7 +45,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AmbulanceListActivity" />
+        <activity android:name=".AmbulanceListActivity">
+
+
+        </activity>
 
         <activity android:name=".LPBackupExplorer" />
 

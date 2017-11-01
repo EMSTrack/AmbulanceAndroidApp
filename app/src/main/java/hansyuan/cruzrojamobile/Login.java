@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by justingil1748 on 4/14/17.
  */
@@ -26,6 +28,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public static ProgressDialog dialog;
     private boolean log;
     MqttClient mqttServer;
+
+
+    /*
+    * Admin Account Login:
+    * admin
+    * cruzrojaadmin
+    * */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +110,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if (log) {
             finish();
+            // TODO remove the test values and pull from MQTT here
+
             String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
+            ArrayList<Ambulance> ambulanceList = new ArrayList<>();
             for (int i = 0; i < arr.length; i++) {
                 Ambulance ambulance = new Ambulance(i, arr[i]);
-                AmbulanceListActivity.ambulanceList.add(ambulance);
+                ambulanceList.add(ambulance);
             }
-            startActivity(new Intent(getApplicationContext(), AmbulanceListActivity.class));
+
+
+            // Create Intent and add AmbulanceList as a serialized extra
+            Intent ambulanceListIntent = new Intent(getApplicationContext(), AmbulanceListActivity.class);
+            ambulanceListIntent.putExtra("AmbulanceList", ambulanceList);
+
+            // Start the AmbulanceListActivity
+            startActivity(ambulanceListIntent);
+
         } else {
             Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
                     Toast.LENGTH_LONG).show();
