@@ -21,14 +21,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.util.Strings;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 /**
  * This is the main activity -- the default screen
@@ -39,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
-    private TextView statusText;
+    static TextView statusText;
     private ImageButton panicButton;
     private String titleText;
     AmbulanceApp ambulanceApp;
@@ -91,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_home);
         tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
-        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
+//        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
         //pager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -155,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
                 activityClass = MainActivity.class;
         }
 
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+
         Intent i = new Intent(this, activityClass);
         //i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -163,8 +158,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         }
 
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
+        menuItem.setChecked(false);
 
         // Close the navigation drawer
         mDrawer.closeDrawers();
@@ -207,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    static void updateStatus(String newStatus){
+        statusText.setText(newStatus);
+    }
     @Override
     public void onBackPressed() {
         finish();

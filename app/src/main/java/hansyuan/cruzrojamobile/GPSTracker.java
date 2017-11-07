@@ -46,7 +46,7 @@ public class GPSTracker extends Service implements LocationListener {
     // The minimum distance to change Updates in meters
     private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
     // The minimum time between updates in milliseconds
-    private long MIN_TIME_BW_UPDATES = 1000 * 1 * 1; // 10 sec minute
+    private long MIN_TIME_BW_UPDATES = 500 * 1 * 1; // 10 sec minute
 
 
     /** Constructor. Sets the location manager, sets listeners for location (both location and time
@@ -87,7 +87,6 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         getLocation();
-        //((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
     }
 
 
@@ -97,7 +96,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public void turnOff() {
         System.out.println("\n Turning off listener");
-        ((AmbulanceApp) mContext.getApplicationContext()).toasting("Turning off GPS");
+        //((AmbulanceApp) mContext.getApplicationContext()).toasting("Turning off GPS");
         if (m_locationManager != null)
         m_locationManager.removeUpdates(this);
     }
@@ -247,6 +246,11 @@ public class GPSTracker extends Service implements LocationListener {
             lastKnownLocation = new LocationPoint (location);
 
             return lastKnownLocation;
+        }else {
+            ActivityCompat.requestPermissions(
+                    (Activity) mContext,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_FINE_LOCATION);
         }
 
         return null;
@@ -295,7 +299,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         System.out.println("\nOnLocationChanged\n");
         if (location == null) {
-            ((AmbulanceApp) mContext.getApplicationContext()).toasting("onLocationChanged, location is null");
+            //((AmbulanceApp) mContext.getApplicationContext()).toasting("onLocationChanged, location is null");
             return;
         }
         //if we don't have an original location
@@ -303,7 +307,7 @@ public class GPSTracker extends Service implements LocationListener {
         newLocation.setStatus(((AmbulanceApp)mContext.getApplicationContext()).getCurrStatus());
         if (lastKnownLocation == null) {
             System.out.println("\nPrevious location was null\n");
-            ((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
+            //((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
             lastKnownLocation = newLocation;
             ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
             display(lastKnownLocation);
@@ -314,7 +318,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         lastKnownLocation = newLocation;
         System.out.println("\n LOCATION IS BEING WRITTEN: " + newLocation.toString());
-        ((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
+        //((AmbulanceApp) mContext.getApplicationContext()).toasting("LOCATION IS BEING WRITTEN");
         ((AmbulanceApp) mContext.getApplicationContext()).writeLocationsToFile(newLocation);
         display(lastKnownLocation);
 

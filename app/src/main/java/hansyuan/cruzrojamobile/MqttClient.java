@@ -66,7 +66,7 @@ public class MqttClient {
             mqttClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "Connection to broker successful as clientId = " + clientId);
+                    Log.e(TAG, "Connection to broker successful as clientId = " + clientId);
                     DisconnectedBufferOptions disconnectedBufferOptions = new DisconnectedBufferOptions();
                     disconnectedBufferOptions.setBufferEnabled(true);
                     disconnectedBufferOptions.setBufferSize(100);
@@ -105,12 +105,12 @@ public class MqttClient {
             mqttClient.subscribe(topic, 0, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "Subscribed to " + topic + " successfully");
+                    Log.e(TAG, "Subscribed to " + topic + " successfully");
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.d(TAG, "Failed to subscribe to " + topic);
+                    Log.e(TAG, "Failed to subscribe to " + topic);
                 }
             });
         } catch (MqttException ex){
@@ -145,15 +145,25 @@ public class MqttClient {
         return instance;
     }
 
-    public void publish(JSONObject content){
-        Log.d(this.getClass().getName(), content.toString());
+    public void publish(JSONObject content, String username){
+        Log.e(this.getClass().getName(), content.toString());
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
-        try {
-            mqttClient.publish("user/1/location", message);
-            Log.d("Publush_location", "Success");
-        } catch (MqttException e) {
-            e.printStackTrace();
+        if(content.has("id")){
+            try {
+                mqttClient.publish("user/" + username +"/ambulance", message);
+                Log.e("Publish_location", "Success");
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                mqttClient.publish("user/" + username + "/location", message);
+                Log.e("Publish_location", "Success");
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -175,7 +185,7 @@ public class MqttClient {
 
     public void disconnect() {
         try {
-            Log.d(TAG, "MqttClient disconnected");
+            Log.e(TAG, "MqttClient disconnected");
             mqttClient.disconnect();
         } catch (MqttException e) {
             e.printStackTrace();

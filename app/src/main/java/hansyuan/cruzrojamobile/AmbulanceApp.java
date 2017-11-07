@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
-
+import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
 /**
  * Created by jkapi on 4/19/2017.
  *
@@ -38,18 +39,24 @@ import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAdd
 
 public class AmbulanceApp extends Application {
 
+    //to skip login page_debug
+    private boolean userLoggedIn = false;
+
+
     private static Context appContext;
     private Context context;
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-    private boolean userLoggedIn = false;
     public static String globalAddress;
+    private int id_Number = -1;
+    private String license_Plate = "default_Plate";
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
     private LocationPoint lastKnownLocation;
     GPSTracker gpsTracker;
+    JSONObject id_Object;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -69,8 +76,6 @@ public class AmbulanceApp extends Application {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void onCreate() {
@@ -89,6 +94,11 @@ public class AmbulanceApp extends Application {
         userPw = "cruzroja";
         gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
+        //gpsTracker = new GPSTracker(context, 500, -1);
+
+        LocationPoint loc = new LocationPoint(-192, 123);
+        updateLastKnownLocation(loc);
+
         return this;
     }
 
@@ -135,29 +145,41 @@ public class AmbulanceApp extends Application {
             @Override
             public void connectComplete(boolean reconnect, String serverURI) {
                 if(reconnect) {
-                    Log.d(TAG, "Reconnected to broker");
+                    Log.e(TAG, "Reconnected to broker");
                 } else {
-                    Log.d(TAG, "Connected to broker");
+                    Log.e(TAG, "Connected to broker");
                 }
                 //Connection is successful
                 authenticated = true;
 
-                //subscribe here
-                mqttServer.subscribeToTopic("ambulance/1/status");
-                Log.e(TAG, "Message received: ");
-                mqttServer.subscribeToTopic("ambulance/4/call");
-                Log.e(TAG, "Message received: ");
+                //subscribe to topics
+                mqttServer.subscribeToTopic("user/" + userId + "/ambulances");
+                //Log.e(TAG, "Ambulance ID Message received: ");
+                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/status");
+                //Log.e(TAG, "Status Message received: ");
+                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/call");
+                //Log.e(TAG, "Dispatch Message received: ");
 
+                lastKnownLocation = gpsTracker.getLastKnownLocation();
+                updateLastKnownLocation(lastKnownLocation);
 
-                //TESTING GPS COORDINATE!
-                if(GPSCoordinate == null){
-                    Log.e(TAG, "GPS IS NULL");
+                if(id_Number != -1) {
+                    id_Object = new JSONObject();
+                    try {
+                        id_Object.put("id", id_Number);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    mqttServer.publish(id_Object, userId);
                 }
-
 
                 if(GPSCoordinate != null) {
                     Log.e(TAG, "GPS IS NOT NULL");
-                    mqttServer.publish(GPSCoordinate);
+                    mqttServer.publish(GPSCoordinate, userId);
+                }
+                else{
+                    Log.e(TAG, "GPS IS NULL");
                 }
             }
 
@@ -166,21 +188,29 @@ public class AmbulanceApp extends Application {
                 Log.d(TAG, "Connection to broker lost");
             }
 
+            //receiving subscribed data
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
 
-                String mesg = new String(message.getPayload());
+                String subsData = new String(message.getPayload());
                 if(topic.contains("call")){
-                    JSONObject c = new JSONObject(mesg);
+                    JSONObject c = new JSONObject(subsData);
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
-                    Log.d(TAG, "Call message received: " + mesg);
+                    Log.e(TAG, "Call message received: " + subsData);
                 }
                 if(topic.contains("status")){
-                    Log.d(TAG, "Status message received: " + mesg);
+                    Log.e(TAG, "Status message received: " + subsData);
+                    currStatus = subsData;
+                    updateStatus(currStatus);
                 }
-
+                if(topic.contains("user")){
+                    Log.e(TAG, "User message received: " + subsData);
+                    JSONObject c = new JSONObject(subsData);
+                    id_Number = c.getInt("id");
+                    license_Plate = c.getString("license_plate");
+                }
             }
 
             @Override
@@ -327,6 +357,14 @@ Thanks Google.. Thanks for nothing!
     Logout(Justin)
      */
     public void logout(){
+        //Publish -1 (integer) to user/@username/ambulance
+        try {
+            id_Object.put("id", -1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mqttServer.publish(id_Object, userId);
+
         userLoggedIn = false;
         mqttServer.disconnect();
     }
