@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -47,6 +45,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //initializing views and buttons and fields by ID
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
+        editUserName.setText("admin");
+        editPassword.setText("cruzrojaadmin");
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
 
         buttonLogin.setOnClickListener(this);
@@ -105,7 +105,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Ambulance ambulance = new Ambulance(i, arr[i]);
                 AmbulanceListActivity.ambulanceList.add(ambulance);
             }
-            startActivity(new Intent(getApplicationContext(), AmbulanceListActivity.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         } else {
             Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
                     Toast.LENGTH_LONG).show();

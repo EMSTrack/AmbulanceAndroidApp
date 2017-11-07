@@ -49,11 +49,14 @@ public class AmbulanceApp extends Application {
     private String userId = "-1";
     private String userPw = "-1";
     public static String globalAddress;
+    private int id_Number = -1;
+    private String license_Plate = "default_Plate";
     MqttClient mqttServer;
     Boolean authenticated;
     JSONObject GPSCoordinate;
     private LocationPoint lastKnownLocation;
     GPSTracker gpsTracker;
+    JSONObject id_Object;
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -90,7 +93,7 @@ public class AmbulanceApp extends Application {
         userPw = "cruzroja";
         gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
-        gpsTracker = new GPSTracker(context, 500, -1);
+        //gpsTracker = new GPSTracker(context, 500, -1);
 
         LocationPoint loc = new LocationPoint(-192, 123);
         updateLastKnownLocation(loc);
@@ -149,17 +152,30 @@ public class AmbulanceApp extends Application {
                 authenticated = true;
 
                 //subscribe to topics
-                mqttServer.subscribeToTopic("ambulance/1/status");
-                Log.e(TAG, "Message received: ");
-                mqttServer.subscribeToTopic("ambulance/4/call");
-                Log.e(TAG, "Message received: ");
+                mqttServer.subscribeToTopic("user/" + userId + "/ambulances");
+                //Log.e(TAG, "Ambulance ID Message received: ");
+                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/status");
+                //Log.e(TAG, "Status Message received: ");
+                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/call");
+                //Log.e(TAG, "Dispatch Message received: ");
 
                 lastKnownLocation = gpsTracker.getLastKnownLocation();
                 updateLastKnownLocation(lastKnownLocation);
 
+                if(id_Number != -1) {
+                    id_Object = new JSONObject();
+                    try {
+                        id_Object.put("id", id_Number);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    mqttServer.publish(id_Object, userId);
+                }
+
                 if(GPSCoordinate != null) {
                     Log.e(TAG, "GPS IS NOT NULL");
-                    mqttServer.publish(GPSCoordinate);
+                    mqttServer.publish(GPSCoordinate, userId);
                 }
                 else{
                     Log.e(TAG, "GPS IS NULL");
@@ -181,12 +197,18 @@ public class AmbulanceApp extends Application {
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
-                    Log.d(TAG, "Call message received: " + subsData);
+                    Log.e(TAG, "Call message received: " + subsData);
                 }
                 if(topic.contains("status")){
-                    Log.d(TAG, "Status message received: " + subsData);
+                    Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
+                }
+                if(topic.contains("user")){
+                    Log.e(TAG, "User message received: " + subsData);
+                    JSONObject c = new JSONObject(subsData);
+                    id_Number = c.getInt("id");
+                    license_Plate = c.getString("license_plate");
                 }
             }
 
@@ -334,6 +356,14 @@ Thanks Google.. Thanks for nothing!
     Logout(Justin)
      */
     public void logout(){
+        //Publish -1 (integer) to user/@username/ambulance
+        try {
+            id_Object.put("id", -1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        mqttServer.publish(id_Object, userId);
+
         userLoggedIn = false;
         mqttServer.disconnect();
     }

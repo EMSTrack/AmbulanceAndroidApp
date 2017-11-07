@@ -144,15 +144,25 @@ public class MqttClient {
         return instance;
     }
 
-    public void publish(JSONObject content){
+    public void publish(JSONObject content, String username){
         Log.e(this.getClass().getName(), content.toString());
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
-        try {
-            mqttClient.publish("user/brian/location", message);
-            Log.e("Publish_location", "Success");
-        } catch (MqttException e) {
-            e.printStackTrace();
+        if(content.has("id")){
+            try {
+                mqttClient.publish("user/" + username +"/ambulance", message);
+                Log.e("Publish_location", "Success");
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                mqttClient.publish("user/" + username + "/location", message);
+                Log.e("Publish_location", "Success");
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
         }
     }
 
