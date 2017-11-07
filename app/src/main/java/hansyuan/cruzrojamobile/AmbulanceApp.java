@@ -17,12 +17,14 @@ import android.widget.Toast;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
 import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
@@ -42,6 +44,8 @@ public class AmbulanceApp extends Application {
     //to skip login page_debug
     private boolean userLoggedIn = false;
 
+    // Available List of Ambulances
+    public ArrayList<Ambulance> ambulanceList;
 
     private static Context appContext;
     private Context context;
@@ -92,6 +96,7 @@ public class AmbulanceApp extends Application {
         // TODO Will probably have to pass credentials?
         userId = "brian";
         userPw = "cruzroja";
+
         gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         //gpsTracker = new GPSTracker(context, 500, -1);
@@ -206,10 +211,17 @@ public class AmbulanceApp extends Application {
                     updateStatus(currStatus);
                 }
                 if(topic.contains("user")){
-                    Log.e(TAG, "User message received: " + subsData);
-                    JSONObject c = new JSONObject(subsData);
-                    id_Number = c.getInt("id");
-                    license_Plate = c.getString("license_plate");
+                    Log.d(TAG, "User message received: " + subsData);
+                    JSONObject jsonObject = new JSONObject(subsData);
+                    JSONArray ambulanceJSON = jsonObject.getJSONArray("ambulances");
+
+                    ambulanceList = new ArrayList<>();
+                    for (int i = 0; i < ambulanceJSON.length(); i++) {
+                        JSONObject tempObject = ambulanceJSON.getJSONObject(i);
+                        Ambulance ambulance = new Ambulance(Integer.toString(tempObject.getInt("id")), tempObject.getString("license_plate"));
+                        ambulanceList.add(ambulance);
+                    }
+
                 }
             }
 
@@ -358,6 +370,8 @@ Thanks Google.. Thanks for nothing!
      */
     public void logout(){
         //Publish -1 (integer) to user/@username/ambulance
+        // TODO create new JSONObject?
+        id_Object = new JSONObject();
         try {
             id_Object.put("id", -1);
         } catch (JSONException e) {
@@ -367,6 +381,24 @@ Thanks Google.. Thanks for nothing!
 
         userLoggedIn = false;
         mqttServer.disconnect();
+    }
+
+
+    /*
+        function to publish the selected ambulance id to
+        // TODO publish the RETAIN Flag
+    */
+    public void publishAmbulanceID(int ambulanceID) {
+
+        id_Object = new JSONObject();
+        try {
+            id_Object.put("id", ambulanceID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        mqttServer.publish(id_Object, userId);
+
     }
 
 }
