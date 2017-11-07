@@ -50,7 +50,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/toolbar"
                 android:background="@color/white"
-                android:elevation="12dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:tabGravity="fill"
@@ -75,9 +74,8 @@
                 android:layout_above="@+id/tab_layout_home"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="11dp"
-                android:text="Status (Idle)"
                 android:textColor="@android:color/white"
-                android:textSize="25dp" />
+                android:textSize="25sp" />
 
         </RelativeLayout>
 

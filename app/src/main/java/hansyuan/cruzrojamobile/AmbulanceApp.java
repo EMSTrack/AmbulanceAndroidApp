@@ -83,6 +83,7 @@ public class AmbulanceApp extends Application {
         this.context = context;
         authenticated = false;
         appContext = getApplicationContext();
+        // TODO Will probably have to pass credentials?
         userId = "brian";
         userPw = "cruzroja";
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);

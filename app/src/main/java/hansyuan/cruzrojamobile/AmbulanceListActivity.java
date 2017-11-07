@@ -3,6 +3,7 @@ package hansyuan.cruzrojamobile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,11 +24,15 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
     private ArrayList<Ambulance> ambulanceList;
     private Spinner ambulanceSpinner;
     private Button submitAmbulanceButton;
+    private Toolbar toolbar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ambulance_list);
+
+        // TODO Set the toolbar
+
 
         // Get the Ambulance List from the Extras
         ambulanceList = (ArrayList<Ambulance>) getIntent().getSerializableExtra("AmbulanceList");
@@ -35,6 +40,7 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
         // Initialize the UI elements
         submitAmbulanceButton = (Button) findViewById(R.id.submitAmbulanceButton);
         ambulanceSpinner = (Spinner) findViewById(R.id.ambulanceSpinner);
+
 
         // No hospitals associated with this account
         if (ambulanceList.size() < 1) {

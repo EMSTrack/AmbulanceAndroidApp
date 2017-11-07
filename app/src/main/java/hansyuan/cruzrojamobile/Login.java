@@ -45,10 +45,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
-        //if user is logged in
-
+        // TODO should this jump to the MainActivity or AmbulanceList?
         if (ambulance.getUserLoggedIn()) {
             //that means user is already logged in, so close this activity
             finish();
@@ -127,7 +127,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if (log) {
             finish();
-            
 
             // TODO remove the test values and pull from MQTT here
             String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
