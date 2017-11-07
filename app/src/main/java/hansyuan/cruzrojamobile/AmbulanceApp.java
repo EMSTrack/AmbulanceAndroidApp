@@ -84,6 +84,7 @@ public class AmbulanceApp extends Application {
         this.context = context;
         authenticated = false;
         appContext = getApplicationContext();
+        // TODO Will probably have to pass credentials?
         userId = "brian";
         userPw = "cruzroja";
         gpsTracker = new GPSTracker(appContext, 500, -1);

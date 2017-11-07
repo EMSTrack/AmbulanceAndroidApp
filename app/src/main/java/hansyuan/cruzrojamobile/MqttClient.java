@@ -23,6 +23,7 @@ import org.json.JSONObject;
  */
 public class MqttClient {
     private static final String TAG = MqttClient.class.getSimpleName();
+    // TODO Leak in static context
     private static MqttClient instance;
     private static Context context;
     private Context mContext;

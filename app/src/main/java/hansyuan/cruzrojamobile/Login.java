@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by justingil1748 on 4/14/17.
  */
@@ -27,15 +29,26 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private boolean log;
     MqttClient mqttServer;
 
+
+    private boolean testLogin = true;
+
+
+    /*
+    * Admin Account Login:
+    * admin
+    * cruzrojaadmin
+    * */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
-        //if user is logged in
-
+        // TODO should this jump to the MainActivity or AmbulanceList?
         if (ambulance.getUserLoggedIn()) {
             //that means user is already logged in, so close this activity
             finish();
@@ -58,10 +71,24 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void userLogin() {
-        final String id = editUserName.getText().toString();
-        final String password = editPassword.getText().toString();
+
+        // TODO remove after done testing, autologin
+        String tempId; // = editUserName.getText().toString();
+        String tempPassword; // = editPassword.getText().toString();
+        if (testLogin) {
+            tempId = "admin";
+            tempPassword = "cruzrojaadmin";
+        } else {
+            tempId = editUserName.getText().toString();
+            tempPassword = editPassword.getText().toString();
+        }
+
+        final String id = tempId;
+        final String password = tempPassword;
+
         ambulance.setUserId(id);
         ambulance.setUserPw(password);
+
 
         //checking if email and passwords are empty
         if (TextUtils.isEmpty(id)) {
@@ -100,12 +127,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if (log) {
             finish();
+
+            // TODO remove the test values and pull from MQTT here
             String[] arr = { "3ABC123", "5FGH789", "0PLM980" };
+            ArrayList<Ambulance> ambulanceList = new ArrayList<>();
             for (int i = 0; i < arr.length; i++) {
                 Ambulance ambulance = new Ambulance(i, arr[i]);
-                AmbulanceListActivity.ambulanceList.add(ambulance);
+                ambulanceList.add(ambulance);
             }
-            startActivity(new Intent(getApplicationContext(), AmbulanceListActivity.class));
+
+
+            // Create Intent and add AmbulanceList as a serialized extra
+            Intent ambulanceListIntent = new Intent(getApplicationContext(), AmbulanceListActivity.class);
+            ambulanceListIntent.putExtra("AmbulanceList", ambulanceList);
+
+            // Start the AmbulanceListActivity
+            startActivity(ambulanceListIntent);
+
         } else {
             Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
                     Toast.LENGTH_LONG).show();

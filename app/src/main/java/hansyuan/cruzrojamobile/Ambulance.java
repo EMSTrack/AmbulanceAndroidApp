@@ -1,5 +1,6 @@
 package hansyuan.cruzrojamobile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * Represents an ambulance pulled from the database
  */
 
-public class Ambulance {
+public class Ambulance implements Serializable {
     private Integer id;
     private String licensePlate;
 
