@@ -326,7 +326,6 @@ public class GPSTracker extends Service implements LocationListener {
         Log.e("ISLOCATIONCHANGED?", "onLocationChanged is called");
     }
 
-
     @Override
     public void onProviderDisabled(String provider) {}
 

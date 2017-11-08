@@ -36,7 +36,7 @@ public class LocationPoint {
     double lat;
     String time;
     String status;
-
+    String timeStampFormat = "yyyy-MM-dd hh:mm:ss";
     /**
      * Constructor for LocationPoint
      * @param location
@@ -45,7 +45,7 @@ public class LocationPoint {
         name = "";
         this.lon = location.getLongitude();
         this.lat = location.getLatitude();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(timeStampFormat);
         time = simpleDateFormat.format(new Date());
     }
 
@@ -58,7 +58,7 @@ public class LocationPoint {
         name = "";
         this.lon = lon;
         this.lat = lat;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(timeStampFormat);
         time = simpleDateFormat.format(new Date());
     }
 
@@ -76,7 +76,7 @@ public class LocationPoint {
      * sets 'time' to current time
      */
     private void setTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy__hh_mm_ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(timeStampFormat);
         time = simpleDateFormat.format(new Date());
     }
 

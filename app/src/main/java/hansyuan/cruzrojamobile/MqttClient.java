@@ -152,7 +152,7 @@ public class MqttClient {
         if(content.has("id")){
             try {
                 mqttClient.publish("user/" + username +"/ambulance", message);
-                Log.e("Publish_location", "Success");
+                Log.e("Publish_id", "Success");
             } catch (MqttException e) {
                 e.printStackTrace();
             }

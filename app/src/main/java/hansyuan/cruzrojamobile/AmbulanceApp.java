@@ -49,7 +49,7 @@ public class AmbulanceApp extends Application {
     private String userId = "-1";
     private String userPw = "-1";
     public static String globalAddress;
-    private int id_Number = -1;
+    private int id_Number = 14;
     private String license_Plate = "default_Plate";
     MqttClient mqttServer;
     Boolean authenticated;
@@ -89,16 +89,14 @@ public class AmbulanceApp extends Application {
         this.context = context;
         authenticated = false;
         appContext = getApplicationContext();
-        // TODO Will probably have to pass credentials?
-        userId = "brian";
-        userPw = "cruzroja";
+        //TODO Will probably have to pass credentials?
+        userId = "admin";
+        userPw = "cruzrojaadmin";
         gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         //gpsTracker = new GPSTracker(context, 500, -1);
-
         LocationPoint loc = new LocationPoint(-192, 123);
         updateLastKnownLocation(loc);
-
         return this;
     }
 
@@ -155,9 +153,9 @@ public class AmbulanceApp extends Application {
                 //subscribe to topics
                 mqttServer.subscribeToTopic("user/" + userId + "/ambulances");
                 //Log.e(TAG, "Ambulance ID Message received: ");
-                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/status");
+                mqttServer.subscribeToTopic("ambulance/" + id_Number + "/status");
                 //Log.e(TAG, "Status Message received: ");
-                //mqttServer.subscribeToTopic("ambulance/" + id_Number + "/call");
+                mqttServer.subscribeToTopic("ambulance/" + id_Number + "/call");
                 //Log.e(TAG, "Dispatch Message received: ");
 
                 lastKnownLocation = gpsTracker.getLastKnownLocation();
@@ -276,7 +274,7 @@ public class AmbulanceApp extends Application {
                 out.write(filename.getBytes());
                 out.close();
 
-                toasting("Wrote: " + filename);
+                //toasting("Wrote: " + filename);
                 System.err.println("exists: " + file.exists());
                 System.err.println("path: " + file.getAbsolutePath());
                 file.createNewFile();
