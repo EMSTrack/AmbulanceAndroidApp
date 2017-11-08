@@ -27,6 +27,7 @@ public class MqttClient {
     private static MqttClient instance;
     private static Context context;
     private Context mContext;
+    public AmbulanceApp ambulance;
 
 
     private MqttAndroidClient mqttClient;
@@ -42,6 +43,7 @@ public class MqttClient {
 
         // Initialize the client
         mqttClient = new MqttAndroidClient(context, serverUri, clientId);
+        ambulance = ((AmbulanceApp) mContext);
     }
 
     /**
@@ -74,6 +76,15 @@ public class MqttClient {
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttClient.setBufferOpts(disconnectedBufferOptions);
 
+                    //subscribe to topics
+                    subscribeToTopic("user/" + ambulance.getUserId() + "/ambulances");
+                    //Log.e(TAG, "Ambulance ID Message received: ");
+                    subscribeToTopic("ambulance/" + ambulance.getUserIdNum() + "/status");
+                    //Log.e(TAG, "Status Message received: ");
+                    subscribeToTopic("ambulance/" + ambulance.getUserIdNum() + "/call");
+                    //Log.e(TAG, "Dispatch Message received: ");
+
+                    publish(ambulance.getGPSCoordinate(), ambulance.getUserId());
                 }
 
                 @Override
@@ -146,7 +157,7 @@ public class MqttClient {
     }
 
     public void publish(JSONObject content, String username){
-        Log.e(this.getClass().getName(), content.toString());
+        Log.e("Published data", content.toString());
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
         if(content.has("id")){

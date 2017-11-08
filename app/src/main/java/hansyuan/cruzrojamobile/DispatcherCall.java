@@ -1,6 +1,7 @@
 package hansyuan.cruzrojamobile;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
@@ -17,12 +18,12 @@ import static android.content.ContentValues.TAG;
  * a lot of information, so having it in its own separate class can save time.
  */
 
-public class DispatcherCall {
+public class DispatcherCall  {
 
     String callString;
     String address1;
-    String latitude;
-    String longitude;
+    static String latitude = "32.879409";
+    static String longitude = "-117.2382162";
 
     DispatcherCall(JSONObject c) {
 
@@ -63,11 +64,12 @@ public class DispatcherCall {
         return address1;
     }
 
-    String getLong() {
+    public static String getLong() {
         return longitude;
     }
 
-    String getLatitude() {
+    public static String getLatitude() {
         return latitude;
     }
+
 }

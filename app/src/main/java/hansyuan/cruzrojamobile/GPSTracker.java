@@ -65,7 +65,8 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         getLocation();
-        //((AmbulanceApp) mContext.getApplicationContext()).toasting("CREATED GPSTRACKER");
+        Log.e("Location", "Getlocation called");
+        //((AmbulanceApp) mContext.getApplicationContext()).toasting("GETLOCATION Invoked");
     }
 
     public GPSTracker(Context context, long minTime, long minDist) {
@@ -87,6 +88,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
 
         getLocation();
+        Log.e("Location", "Getlocation called");
     }
 
 
@@ -199,6 +201,7 @@ public class GPSTracker extends Service implements LocationListener {
             e.printStackTrace();
         }
 
+        Log.e("LOCATION", "Location is updated");
         return location;
     }
 
@@ -324,6 +327,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         ((AmbulanceApp) mContext.getApplicationContext()).updateLastKnownLocation(newLocation);
         Log.e("ISLOCATIONCHANGED?", "onLocationChanged is called");
+        ((AmbulanceApp) mContext.getApplicationContext()).mqttMaster();
     }
 
     @Override

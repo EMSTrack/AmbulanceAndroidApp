@@ -9,11 +9,11 @@ import java.util.ArrayList;
  */
 
 public class Ambulance implements Serializable {
-    private Integer id;
+    private String id;
     private String licensePlate;
 
 
-    public Ambulance(Integer id, String licensePlate) {
+    public Ambulance(String id, String licensePlate) {
         this.id = id;
         this.licensePlate = licensePlate;
     }
@@ -26,7 +26,7 @@ public class Ambulance implements Serializable {
 
     //public void setLicensePlate(String license) { this.licensePlate = license; }
 
-    public int getId() { return id; }
+    public String getId() { return id; }
 
     //public void setId(int id) { this.id = id; }
 }

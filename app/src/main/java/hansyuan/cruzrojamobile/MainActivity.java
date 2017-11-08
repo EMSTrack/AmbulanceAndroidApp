@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ambulanceApp = ((AmbulanceApp) this.getApplication()).onCreate(this);
+        ambulanceApp = ((AmbulanceApp) this.getApplication());
 
 
         // Test that Ambulance class made it through
@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-
 
         AlertDialog dialog = builder.create();
         dialog.show();

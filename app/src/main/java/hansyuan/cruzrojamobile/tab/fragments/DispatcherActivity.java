@@ -1,11 +1,6 @@
 package hansyuan.cruzrojamobile.tab.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,31 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.util.List;
-
 import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.DispatcherCall;
 import hansyuan.cruzrojamobile.GPSTracker;
 import hansyuan.cruzrojamobile.LocationPoint;
 import hansyuan.cruzrojamobile.R;
 
 import static android.content.ContentValues.TAG;
+import static hansyuan.cruzrojamobile.DispatcherCall.getLong;
+import static hansyuan.cruzrojamobile.DispatcherCall.getLatitude;
 
 /**
  * Created by justingil1748 on 4/26/17.
@@ -49,7 +29,7 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     GPSTracker gps;
     Button mapButton;
     static TextView addressText;
-
+    DispatcherCall dCall;
     //GoogleMap mGoogleMap;
     //Button addressButton;
     //EditText addressSearchText;
@@ -91,6 +71,7 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     }
 
 
+
     /*
     Functionality of google map button
      */
@@ -101,11 +82,15 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
             gps.getLastKnownLocationIfAllowed();
             gps.getLocation();
 
+            String dispatchLong = getLong();
+            String dispatchLat = getLatitude();
+
             double lat = gps.getLatitude(); // returns latitude
             double lon = gps.getLongitude(); // returns longitude
+
             LocationPoint loc = new LocationPoint(lon, lat);
 
-            String geoUri = "http://maps.google.com/maps?q=loc:" + 32.879409 + "," + -117.2382162 + " (" + loc + ")";
+            String geoUri = "http://maps.google.com/maps?q=loc:" + dispatchLat + "," + dispatchLong + " (" + loc + ")";
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
             startActivity(intent);
         }

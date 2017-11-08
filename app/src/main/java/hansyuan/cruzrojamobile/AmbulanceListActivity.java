@@ -26,6 +26,8 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
     private Button submitAmbulanceButton;
     private Toolbar toolbar;
 
+    AmbulanceApp ambulanceApp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
 
         // TODO Set the toolbar
 
+
+        ambulanceApp = ((AmbulanceApp) this.getApplication());
 
         // Get the Ambulance List from the Extras
         ambulanceList = (ArrayList<Ambulance>) getIntent().getSerializableExtra("AmbulanceList");
@@ -97,6 +101,10 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
                 int position = ambulanceSpinner.getSelectedItemPosition();
                 Ambulance selectedAmbulance = ambulanceList.get(position);
                 Log.d("AMBULANCE_LIST", "Selected Ambulance: " + selectedAmbulance.getLicensePlate() + " ID: " + selectedAmbulance.getId());
+
+                // TODO  Set the AmbulanceApp ID?
+                // TODO push the selected id to user/@username/ambulance
+                ambulanceApp.publishAmbulanceID(Integer.parseInt(selectedAmbulance.getId()));
 
                 // Create the dashboard intent
                 Intent dashboardIntent = new Intent(getApplicationContext(), MainActivity.class);

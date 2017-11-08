@@ -55,7 +55,7 @@
         android:layout_below="@id/DescriptionText"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:text="Next to Agua Caliente Fountain"
+        android:text="Location Description"
         android:textSize="20dp" />
 
     <Button
