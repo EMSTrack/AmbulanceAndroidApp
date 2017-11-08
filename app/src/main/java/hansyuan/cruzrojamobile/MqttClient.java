@@ -76,8 +76,6 @@ public class MqttClient {
                     disconnectedBufferOptions.setDeleteOldestMessages(false);
                     mqttClient.setBufferOpts(disconnectedBufferOptions);
 
-                    //subscribe to topics
-                    subscribeToTopic("user/" + ambulance.getUserId() + "/ambulances");
                     //Log.e(TAG, "Ambulance ID Message received: ");
                     subscribeToTopic("ambulance/" + ambulance.getUserIdNum() + "/status");
                     //Log.e(TAG, "Status Message received: ");

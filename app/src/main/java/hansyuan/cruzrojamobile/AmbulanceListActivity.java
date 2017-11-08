@@ -104,7 +104,7 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
 
                 // TODO  Set the AmbulanceApp ID?
                 // TODO push the selected id to user/@username/ambulance
-                ambulanceApp.publishAmbulanceID(Integer.parseInt(selectedAmbulance.getId()));
+                ambulanceApp.publishAmbulanceID(selectedAmbulance.getId());
 
                 // Create the dashboard intent
                 Intent dashboardIntent = new Intent(getApplicationContext(), MainActivity.class);

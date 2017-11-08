@@ -159,6 +159,10 @@ public class AmbulanceApp extends Application {
                 //Connection is successful
                 authenticated = true;
 
+
+                //subscribe to topics
+                mqttServer.subscribeToTopic("user/" + getUserId() + "/ambulances");
+
                 /*
                 //subscribe to topics
                 mqttServer.subscribeToTopic("user/" + userId + "/ambulances");
@@ -204,19 +208,20 @@ public class AmbulanceApp extends Application {
                 String subsData = new String(message.getPayload());
                 Log.e("MSGGGGGGG", subsData);
 
-                if(topic.contains("call")){
+                if (topic.contains("call")){
                     JSONObject c = new JSONObject(subsData);
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
                     //Log.e(TAG, "Call message received: " + subsData);
                 }
-                if(topic.contains("status")){
+                if (topic.contains("status")){
                     //Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
                 }
-                if(topic.contains("user")){
+
+                if (topic.contains("user")){
                     //Log.d(TAG, "User message received: " + subsData);
                     JSONObject jsonObject = new JSONObject(subsData);
                     JSONArray ambulanceJSON = jsonObject.getJSONArray("ambulances");
@@ -224,7 +229,7 @@ public class AmbulanceApp extends Application {
                     ambulanceList = new ArrayList<>();
                     for (int i = 0; i < ambulanceJSON.length(); i++) {
                         JSONObject tempObject = ambulanceJSON.getJSONObject(i);
-                        Ambulance ambulance = new Ambulance(Integer.toString(tempObject.getInt("id")), tempObject.getString("license_plate"));
+                        Ambulance ambulance = new Ambulance(tempObject.getInt("id"), tempObject.getString("license_plate"));
                         ambulanceList.add(ambulance);
                     }
 
@@ -396,9 +401,12 @@ Thanks Google.. Thanks for nothing!
     */
     public void publishAmbulanceID(int ambulanceID) {
 
+        id_Number = ambulanceID;
+
         id_Object = new JSONObject();
         try {
-            id_Object.put("id", ambulanceID);
+            id_Object.put("id", id_Number);
+            Log.e(TAG, "Publish: " + id_Object.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
