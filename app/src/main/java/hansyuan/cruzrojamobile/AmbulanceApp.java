@@ -24,7 +24,9 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
 import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
@@ -46,7 +48,8 @@ public class AmbulanceApp extends Application {
 
     // Available List of Ambulances
     public ArrayList<Ambulance> ambulanceList;
-
+    public static HashMap<Integer, String> hospitalMap;
+    public static HashMap<Integer, String> equipmentMap;
     private static Context appContext;
     private Context context;
     private String currStatus = "Idle";
@@ -164,6 +167,7 @@ public class AmbulanceApp extends Application {
 
                 //subscribe to topics
                 mqttServer.subscribeToTopic("user/" + getUserId() + "/ambulances");
+                mqttServer.subscribeToTopic("user/" + getUserId() + "/hospitals");
 
                 /*
                 //subscribe to topics
@@ -232,6 +236,32 @@ public class AmbulanceApp extends Application {
                         ambulanceList.add(ambulance);
                     }
 
+                }
+                if (topic.contains("hospitals")) {
+                    //Log.e(TAG, "User message received: " + subsData);
+                    JSONObject jsonObject = new JSONObject(subsData);
+                    JSONArray hospitalJSON = jsonObject.getJSONArray("hospitals");
+
+                    hospitalMap = new HashMap<Integer, String>();
+                    equipmentMap = new HashMap<Integer, String>();
+                    for (int i = 0; i < hospitalJSON.length(); i++) {
+                        JSONObject tempObject = hospitalJSON.getJSONObject(i);
+                        int id = tempObject.getInt("id");
+                        hospitalMap.put(id, tempObject.getString("name"));
+                        mqttServer.subscribeToTopic("hospital/" + id + "/metadata");
+                    }
+
+                }
+                if (topic.contains("metadata")){
+                    JSONObject jsonObject = new JSONObject(subsData);
+                    JSONArray equipmentJSON = jsonObject.getJSONArray("equipment");
+                    String delims = "[/]";
+                    String[] tokens = topic.split(delims);
+                    int idIdx = 1;
+                    int id = Integer.parseInt(tokens[idIdx]);
+
+                    equipmentMap.put(id,equipmentJSON.toString());
+                    Log.e(TAG, "Added equipment of Hospital: " + id);
                 }
             }
 

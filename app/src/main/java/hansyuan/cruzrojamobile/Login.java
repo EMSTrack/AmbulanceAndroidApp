@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import hansyuan.cruzrojamobile.tab.fragments.demo_viewTransmission;
+
 /**
  * Created by justingil1748 on 4/14/17.
  */
@@ -120,6 +122,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             // Create Intent and add AmbulanceList as a serialized extra
             Intent ambulanceListIntent = new Intent(getApplicationContext(), AmbulanceListActivity.class);
             ambulanceListIntent.putExtra("AmbulanceList", ambulance.ambulanceList);
+
 
             // Start the AmbulanceListActivity
             startActivity(ambulanceListIntent);
