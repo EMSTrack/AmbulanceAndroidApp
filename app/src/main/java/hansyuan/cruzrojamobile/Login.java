@@ -29,9 +29,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     MqttClient mqttServer;
 
 
-    private boolean testLogin = true;
-
-
     /*
     * Admin Account Login:
     * admin
@@ -43,7 +40,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
@@ -59,11 +55,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //initializing views and buttons and fields by ID
         editUserName = (EditText) findViewById(R.id.editUserName);
         editPassword = (EditText) findViewById(R.id.editPassword);
+
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        buttonLogin.setOnClickListener(this);
+
+        // TODO remove, for testing only
         editUserName.setText("admin");
         editPassword.setText("cruzrojaadmin");
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
 
-        buttonLogin.setOnClickListener(this);
     }
 
     @Override
@@ -73,23 +72,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private void userLogin() {
 
-        // TODO remove after done testing, autologin
-        String tempId; // = editUserName.getText().toString();
-        String tempPassword; // = editPassword.getText().toString();
-        if (testLogin) {
-            tempId = "admin";
-            tempPassword = "cruzrojaadmin";
-        } else {
-            tempId = editUserName.getText().toString();
-            tempPassword = editPassword.getText().toString();
-        }
-
-        final String id = tempId;
-        final String password = tempPassword;
-
-        ambulance.setUserId(id);
-        ambulance.setUserPw(password);
-
+        final String id = editUserName.getText().toString();
+        final String password = editPassword.getText().toString();
 
         //checking if email and passwords are empty
         if (TextUtils.isEmpty(id)) {
@@ -102,6 +86,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this,"Please enter password",Toast.LENGTH_LONG).show();
             return;
         }
+
+        ambulance.setUserId(id);
+        ambulance.setUserPw(password);
+
         ambulance.mqttMaster();
         mqttServer = MqttClient.getInstance(this);
 
@@ -139,7 +127,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         } else {
             Toast.makeText(getBaseContext(), "Can't find your account. \nPlease check your email or password",
                     Toast.LENGTH_LONG).show();
-            return;
         }
     }
 }

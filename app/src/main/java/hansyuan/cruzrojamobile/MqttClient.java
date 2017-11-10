@@ -154,11 +154,24 @@ public class MqttClient {
         return instance;
     }
 
+    public void publish(int id, String username){
+        Log.e("Published data", String.valueOf(id));
+        MqttMessage message = new MqttMessage(String.valueOf(id).getBytes());
+
+        try {
+            mqttClient.publish("user/" + username +"/ambulance", message);
+            Log.e("Publish_id", "Success");
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void publish(JSONObject content, String username){
         Log.e("Published data", content.toString());
         MqttMessage message = new MqttMessage(content.toString().getBytes());
 
-        if(content.has("id")){
+        if (content.has("id")) {
             try {
                 mqttClient.publish("user/" + username +"/ambulance", message);
                 Log.e("Publish_id", "Success");

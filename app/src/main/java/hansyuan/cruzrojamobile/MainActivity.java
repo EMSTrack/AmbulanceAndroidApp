@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView statusText;
     private ImageButton panicButton;
     private String titleText;
+    private static Ambulance currAmbulance;
     AmbulanceApp ambulanceApp;
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -48,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Test that Ambulance class made it through
-        Ambulance ambulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
-        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + ambulance.getLicensePlate() + " ID: " + ambulance.getId());
+        currAmbulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
+        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + currAmbulance.getLicensePlate() + " ID: " + currAmbulance.getId());
 
-        titleText = ambulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
         Log.d("MAIN_TITLE", titleText);
 
         statusText = (TextView) findViewById(R.id.statusText);
@@ -109,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ambulanceApp.mqttMaster();
-        titleText = ambulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
-        statusText.setText(titleText);
+//        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+//        statusText.setText(titleText);
     }
 
 
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static void updateStatus(String newStatus){
-        statusText.setText(newStatus);
+        statusText.setText(currAmbulance.getLicensePlate() + " - " + newStatus);
     }
     @Override
     public void onBackPressed() {

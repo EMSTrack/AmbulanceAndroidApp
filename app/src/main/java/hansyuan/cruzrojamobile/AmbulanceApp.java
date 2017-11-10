@@ -93,9 +93,11 @@ public class AmbulanceApp extends Application {
         this.context = context;
         authenticated = false;
         appContext = getApplicationContext();
+
         //TODO Will probably have to pass credentials?
-        userId = "admin";
-        userPw = "cruzrojaadmin";
+//        userId = "admin";
+//        userPw = "cruzrojaadmin";
+
         //gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
         gpsTracker = new GPSTracker(appContext, 3000, -1);
@@ -208,20 +210,17 @@ public class AmbulanceApp extends Application {
                 String subsData = new String(message.getPayload());
                 Log.e("MSGGGGGGG", subsData);
 
-                if (topic.contains("call")){
+                if (topic.contains("call")) {
                     JSONObject c = new JSONObject(subsData);
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
                     //Log.e(TAG, "Call message received: " + subsData);
-                }
-                if (topic.contains("status")){
+                } else if (topic.contains("status")) {
                     //Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
-                }
-
-                if (topic.contains("user")){
+                } else if (topic.contains("ambulances")) {
                     //Log.d(TAG, "User message received: " + subsData);
                     JSONObject jsonObject = new JSONObject(subsData);
                     JSONArray ambulanceJSON = jsonObject.getJSONArray("ambulances");
@@ -382,13 +381,14 @@ Thanks Google.. Thanks for nothing!
     public void logout(){
         //Publish -1 (integer) to user/@username/ambulance
         // TODO create new JSONObject?
-        id_Object = new JSONObject();
-        try {
-            id_Object.put("id", -1);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        mqttServer.publish(id_Object, userId);
+//        id_Object = new JSONObject();
+//        try {
+//            id_Object.put("id", -1);
+            Log.e(TAG, "Publish: " + -1 + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        mqttServer.publish(-1, userId);
 
         userLoggedIn = false;
         mqttServer.disconnect();
@@ -403,15 +403,15 @@ Thanks Google.. Thanks for nothing!
 
         id_Number = ambulanceID;
 
-        id_Object = new JSONObject();
-        try {
-            id_Object.put("id", id_Number);
-            Log.e(TAG, "Publish: " + id_Object.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        id_Object = new JSONObject();
+//        try {
+//            id_Object.put("id", id_Number);
+            Log.e(TAG, "Publish: " + id_Number + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        mqttServer.publish(id_Object, userId);
+        mqttServer.publish(id_Number, userId);
 
     }
 
