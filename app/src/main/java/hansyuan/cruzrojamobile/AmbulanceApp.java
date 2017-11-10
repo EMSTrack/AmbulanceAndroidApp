@@ -49,7 +49,7 @@ public class AmbulanceApp extends Application {
     // Available List of Ambulances
     public ArrayList<Ambulance> ambulanceList;
     public static HashMap<Integer, String> hospitalMap;
-    public static HashMap<Integer, String> equipmentMap;
+    public static HashMap<Integer, ArrayList<String>> equipmentMap;
     private static Context appContext;
     private Context context;
     private String currStatus = "Idle";
@@ -243,7 +243,7 @@ public class AmbulanceApp extends Application {
                     JSONArray hospitalJSON = jsonObject.getJSONArray("hospitals");
 
                     hospitalMap = new HashMap<Integer, String>();
-                    equipmentMap = new HashMap<Integer, String>();
+                    equipmentMap = new HashMap<Integer, ArrayList<String>>();
                     for (int i = 0; i < hospitalJSON.length(); i++) {
                         JSONObject tempObject = hospitalJSON.getJSONObject(i);
                         int id = tempObject.getInt("id");
@@ -260,9 +260,32 @@ public class AmbulanceApp extends Application {
                     int idIdx = 1;
                     int id = Integer.parseInt(tokens[idIdx]);
 
-                    equipmentMap.put(id,equipmentJSON.toString());
-                    Log.e(TAG, "Added equipment of Hospital: " + id);
+                    ArrayList<String> equipList = new ArrayList<>();
+                    for (int i = 0; i < equipmentJSON.length(); i++) {
+                        JSONObject tempObject = equipmentJSON.getJSONObject(i);
+                        String name = tempObject.getString("name");
+                        mqttServer.subscribeToTopic("hospital/" + id + "/equipment/" + name);
+
+                        equipList.add(name);
+                    }
+
+                    equipmentMap.put(id,equipList);
                 }
+
+                if (topic.contains("equipment")){
+                    String delims = "[/]";
+                    String[] tokens = topic.split(delims);
+                    int idIdx = 1;
+                    int enIdx = 3;
+                    int id = Integer.parseInt(tokens[idIdx]);
+                    String equip = tokens[enIdx];
+                    int count = Integer.parseInt(subsData);
+
+                    ArrayList<String> e = equipmentMap.get(id);
+                    e.set(e.indexOf(equip), equip + "/" + count);
+                    equipmentMap.put(id, e);
+                }
+                //hospital/hosp_id/equipment/equipment_name
             }
 
             @Override
