@@ -57,11 +57,9 @@ public class HospitalAdapter extends BaseAdapter {
                 (TextView) rowView.findViewById(hansyuan.cruzrojamobile.R.id.hospital_list_subtitle);
 
 
-
         Hospital hospital = (Hospital) getItem(position);
 
-
-        titleTextView.setText(hospital.title);
+        titleTextView.setText(hospital.name);
         subtitleTextView.setText(hospital.description);
 
 

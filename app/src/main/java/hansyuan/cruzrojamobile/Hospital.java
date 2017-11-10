@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import android.content.Intent;
 
 import android.util.Log;
 /**
@@ -15,55 +17,56 @@ import android.util.Log;
  */
 
 public class Hospital {
-
-    public String title;
+    private int id;
+    public ArrayList<String> equipment;
+    public String name;
     public String description;
 
+    public Hospital(int id, String name, String desc) {
+        this.id = id;
+        this.name = name;
+        this.description = desc;
+    }
 
-    public static ArrayList<Hospital> getHospitalsFromFile(String filename, Context context){
+    public int getId() {
+        return id;
+    }
+
+    public static ArrayList<Hospital> getHospitals() {
         final ArrayList<Hospital> hospitalList = new ArrayList<>();
 
+        // Get the Ambulance List from the Extras
+        HashMap<Integer, String> hosp = AmbulanceApp.hospitalMap;
+        HashMap<Integer, String> equip = AmbulanceApp.equipmentMap;
+
         try {
-            // Load data
-            String jsonString = loadJsonFromAsset("hospitals.json", context);
-            JSONObject json = new JSONObject(jsonString);
-            JSONArray hospitals = json.getJSONArray("hospitals");
+        for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
+            Integer key = entry.getKey();
+            String name = entry.getValue();
+            String desc = "";
 
-            // Get hospital objects from data
-            for(int i = 0; i < hospitals.length(); i++){
-                Hospital hospital = new Hospital();
 
-                hospital.title = hospitals.getJSONObject(i).getString("title");
-                hospital.description = hospitals.getJSONObject(i).getString("description");
+            JSONArray equipArray = new JSONArray(equip.get(key));
 
-                hospitalList.add(hospital);
+            for (int i = 0; i < equipArray.length(); i++) {
+                JSONObject tempObject = equipArray.getJSONObject(i);
+                if (tempObject.getBoolean("toggleable")) {
+                    desc = desc + tempObject.getString("name");
+                }
+                if (i != equipArray.length() - 1) {
+                    desc += ", ";
+                }
             }
+            Hospital hospital = new Hospital(key, name, desc);
+            hospitalList.add(hospital);
+        }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return hospitalList;
     }
-
-    private static String loadJsonFromAsset(String filename, Context context) {
-        String json = null;
-
-        try {
-            InputStream is = context.getAssets().open(filename);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        }
-        catch (java.io.IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-
-        return json;
-    }
-
 
 
 }
