@@ -45,9 +45,8 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
         submitAmbulanceButton = (Button) findViewById(R.id.submitAmbulanceButton);
         ambulanceSpinner = (Spinner) findViewById(R.id.ambulanceSpinner);
 
-
         // No hospitals associated with this account
-        if (ambulanceList.size() < 1) {
+        if (ambulanceList == null || ambulanceList.size() < 1) {
             // Create a toast for the user
             Toast.makeText(getBaseContext(), "This account has no ambulances associated with it!",
                     Toast.LENGTH_LONG).show();
