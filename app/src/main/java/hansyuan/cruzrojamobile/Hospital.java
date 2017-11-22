@@ -37,32 +37,30 @@ public class Hospital {
 
         // Get the Ambulance List from the Extras
         HashMap<Integer, String> hosp = AmbulanceApp.hospitalMap;
-        HashMap<Integer, String> equip = AmbulanceApp.equipmentMap;
+        HashMap<Integer, ArrayList<String>> equip = AmbulanceApp.equipmentMap;
 
-        try {
         for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
             Integer key = entry.getKey();
             String name = entry.getValue();
             String desc = "";
 
+            ArrayList<String> e = equip.get(key);
 
-            JSONArray equipArray = new JSONArray(equip.get(key));
-
-            for (int i = 0; i < equipArray.length(); i++) {
-                JSONObject tempObject = equipArray.getJSONObject(i);
-                if (tempObject.getBoolean("toggleable")) {
-                    desc = desc + tempObject.getString("name");
+            for (int i = 0; i < e.size(); i++) {
+                String delims = "[/]";
+                String[] tokens = e.get(i).split(delims);
+                int cnt = Integer.parseInt(tokens[1]);
+                String curr = "";
+                if (cnt != 0) {
+                    curr = tokens[0] + ": " + cnt;
                 }
-                if (i != equipArray.length() - 1) {
-                    desc += ", ";
+                desc += curr;
+                if (i != e.size() -1) {
+                    desc += "\n";
                 }
             }
             Hospital hospital = new Hospital(key, name, desc);
             hospitalList.add(hospital);
-        }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         return hospitalList;
