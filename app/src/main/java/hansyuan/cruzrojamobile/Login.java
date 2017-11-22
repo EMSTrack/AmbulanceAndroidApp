@@ -30,13 +30,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private boolean log;
     MqttClient mqttServer;
 
-
     /*
     * Admin Account Login:
     * admin
     * cruzrojaadmin
     * */
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +43,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
-        // TODO should this jump to the MainActivity or AmbulanceList?
+/*        // TODO should this jump to the MainActivity or AmbulanceList?
         if (ambulance.getUserLoggedIn()) {
             //that means user is already logged in, so close this activity
             finish();
             //opens main activity
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }
+        }*/
+
 
         //user is not logged in yet,
         //initializing views and buttons and fields by ID
@@ -89,20 +88,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+
         ambulance.setUserId(id);
         ambulance.setUserPw(password);
 
+        //mqttMaster connect to MQTT
         ambulance.mqttMaster();
         mqttServer = MqttClient.getInstance(this);
 
-        dialog = new ProgressDialog(this); // this = YourActivity
+        //Sign in progress msg
+        dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setMessage("Signing in. Please wait...");
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-
-        log = mqttServer.userLogin(id, password);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -122,7 +122,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             // Create Intent and add AmbulanceList as a serialized extra
             Intent ambulanceListIntent = new Intent(getApplicationContext(), AmbulanceListActivity.class);
             ambulanceListIntent.putExtra("AmbulanceList", ambulance.ambulanceList);
-
 
             // Start the AmbulanceListActivity
             startActivity(ambulanceListIntent);

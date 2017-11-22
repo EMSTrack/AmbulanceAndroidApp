@@ -26,20 +26,11 @@ public class LPBackupExplorer extends AppCompatActivity {
         readTableOfContents();
 
     }
-
-
-
-
-
-/**
- * Displays, in order of most recent, the list of posts.
- * Each link will be the date/time, and is a link to
- * open the file and display its contents.
- */
-
-
-
-
+    /**
+     * Displays, in order of most recent, the list of posts.
+     * Each link will be the date/time, and is a link to
+     * open the file and display its contents.
+     */
 
     /**
      * Automatically initiate a toast based on the string parameter.
@@ -53,7 +44,6 @@ public class LPBackupExplorer extends AppCompatActivity {
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-
 
     /**
      *
@@ -94,9 +84,6 @@ public class LPBackupExplorer extends AppCompatActivity {
             for (File f: s) {
                 fileList.add(f);
             }
-
-
-
         } catch (Exception e) { e.printStackTrace(); }
 
         //toasting(ret);
@@ -141,7 +128,6 @@ public class LPBackupExplorer extends AppCompatActivity {
     {
         String content = "";
         try {
-
             // Open the table of contents.
             //inFile = openFileInput(tableContents);
             FileReader fr = new FileReader(
@@ -162,13 +148,7 @@ public class LPBackupExplorer extends AppCompatActivity {
                     break;
                 }
             }
-
-
         } catch (Exception e) { e.printStackTrace(); }
-
         //toasting(content);
-
     }
-
-
 }

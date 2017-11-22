@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +23,6 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -164,55 +162,23 @@ public class AmbulanceApp extends Application {
                 //Connection is successful
                 authenticated = true;
 
-
                 //subscribe to topics
                 mqttServer.subscribeToTopic("user/" + getUserId() + "/ambulances");
                 mqttServer.subscribeToTopic("user/" + getUserId() + "/hospitals");
-
-                /*
-                //subscribe to topics
-                mqttServer.subscribeToTopic("user/" + userId + "/ambulances");
-                //Log.e(TAG, "Ambulance ID Message received: ");
-                mqttServer.subscribeToTopic("ambulance/" + id_Number + "/status");
-                //Log.e(TAG, "Status Message received: ");
-                mqttServer.subscribeToTopic("ambulance/" + id_Number + "/call");
-                //Log.e(TAG, "Dispatch Message received: ");
-                lastKnownLocation = gpsTracker.getLastKnownLocation();
-                updateLastKnownLocation(lastKnownLocation);
-
-                if(id_Number != -1) {
-                    id_Object = new JSONObject();
-                    try {
-                        id_Object.put("id", id_Number);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    mqttServer.publish(id_Object, userId);
-                }
-
-                if(GPSCoordinate != null) {
-                    Log.e(TAG, "GPS IS NOT NULL");
-                    mqttServer.publish(GPSCoordinate, userId);
-                }
-                else{
-                    Log.e(TAG, "GPS IS NULL");
-                }
-                */
-
             }
 
             @Override
             public void connectionLost(Throwable cause) {
+                //TODO Hnadle connection lost - Devin?
+                //Should we manually pause subscribing and publishing?
                 Log.d(TAG, "Connection to broker lost");
             }
 
             //receiving subscribed data
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-
                 String subsData = new String(message.getPayload());
-                Log.e("MSGGGGGGG", subsData);
+                Log.e("MESSAGE ARRIVED", subsData);
 
                 if (topic.contains("call")) {
                     JSONObject c = new JSONObject(subsData);
@@ -235,7 +201,6 @@ public class AmbulanceApp extends Application {
                         Ambulance ambulance = new Ambulance(tempObject.getInt("id"), tempObject.getString("license_plate"));
                         ambulanceList.add(ambulance);
                     }
-
                 }
                 if (topic.contains("hospitals")) {
                     //Log.e(TAG, "User message received: " + subsData);
@@ -312,7 +277,7 @@ public class AmbulanceApp extends Application {
         return false;
     }
     //printerwrite, andorid equivilant
-/* Checks if external storage is available to at least read */
+    /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) ||
@@ -322,12 +287,9 @@ public class AmbulanceApp extends Application {
         return false;
     }
 
-
     //Method to write locatoins points to external stoage
-   //parameters: locationPointer point: object, carrying time of location
+    //parameters: locationPointer point: object, carrying time of location
     public void writeLocationsToFile( LocationPoint point ){
-
-
         String filename = point.toString() + ".txt";
         String string = point.getTime();
 
@@ -336,11 +298,9 @@ public class AmbulanceApp extends Application {
         if (checked == false )
             isExternalStorageWritable();
         if(writableExternalStorage) {
-
             System.err.println( "THE PERMISSION IS ... " + checkPermission());
-
             try {
-//            FileWriter fw = new FileWriter(getLPStorageDir(filename));
+                //FileWriter fw = new FileWriter(getLPStorageDir(filename));
                 //  BufferedWriter bw = new BufferedWriter(fw);
                 File file = getLPStorageDir(filename);
 
@@ -361,14 +321,10 @@ public class AmbulanceApp extends Application {
                 Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 intent.setData(Uri.fromFile(file));
                 context.sendBroadcast(intent);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 toasting("Exception was thrown trying to write to storage.");
-
             }
-
-
         }
         else{
             toasting("not writable");
@@ -421,7 +377,6 @@ Thanks Google.. Thanks for nothing!
             file.createNewFile();
         }
         catch (Exception f) {f.printStackTrace();}
-
         file.setWritable(true);
         System.err.println(" Can write? " + file.canWrite());
         return file;
@@ -429,41 +384,22 @@ Thanks Google.. Thanks for nothing!
 
 
     /*
-    Logout(Justin)
-     */
+        Logout(Justin)
+    */
     public void logout(){
-        //Publish -1 (integer) to user/@username/ambulance
-        // TODO create new JSONObject?
-//        id_Object = new JSONObject();
-//        try {
-//            id_Object.put("id", -1);
-            Log.e(TAG, "Publish: " + -1 + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        Log.e(TAG, "Publish: " + -1 + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
         mqttServer.publish(-1, userId);
-
         userLoggedIn = false;
         mqttServer.disconnect();
     }
 
-
     /*
-        function to publish the selected ambulance id to
-        // TODO publish the RETAIN Flag
+       function to publish the selected ambulance id to
+       TODO publish the RETAIN Flag
     */
     public void publishAmbulanceID(int ambulanceID) {
-
         id_Number = ambulanceID;
-
-//        id_Object = new JSONObject();
-//        try {
-//            id_Object.put("id", id_Number);
-            Log.e(TAG, "Publish: " + id_Number + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
+        Log.e(TAG, "Publish: " + id_Number + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
         mqttServer.publish(id_Number, userId);
 
     }

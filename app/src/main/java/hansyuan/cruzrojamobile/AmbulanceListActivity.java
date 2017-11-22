@@ -17,6 +17,8 @@ import java.util.Arrays;
 
 /**
  * Created by dchickey on 10/24/2017.
+ *
+ * Lists all the available ambulances after a user logs in successfully
  */
 
 public class AmbulanceListActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,7 +26,6 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
     private ArrayList<Ambulance> ambulanceList;
     private Spinner ambulanceSpinner;
     private Button submitAmbulanceButton;
-    private Toolbar toolbar;
 
     AmbulanceApp ambulanceApp;
 
@@ -34,7 +35,6 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_ambulance_list);
 
         // TODO Set the toolbar
-
 
         ambulanceApp = ((AmbulanceApp) this.getApplication());
 

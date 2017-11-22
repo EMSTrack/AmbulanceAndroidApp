@@ -1,7 +1,6 @@
 package hansyuan.cruzrojamobile;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by dchickey on 10/24/2017.

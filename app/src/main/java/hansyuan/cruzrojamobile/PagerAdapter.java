@@ -26,9 +26,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 DispatcherActivity tab1 = new DispatcherActivity();
                 return tab1;
-            //case 1:
-            //    demo_viewTransmission tab2 = new demo_viewTransmission();
-            //    return tab2;
             case 1:
                 demo_viewTransmission tab3 = new demo_viewTransmission();
                 return tab3;

@@ -84,13 +84,11 @@ public class GPSTracker extends Service implements LocationListener {
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
             m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
         }
 
         getLocation();
         Log.e("Location", "Getlocation called");
     }
-
 
     public void setLatLongTextView(TextView t) {
         LatLongTextView = t;
@@ -98,7 +96,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     public void turnOff() {
         System.out.println("\n Turning off listener");
-        //((AmbulanceApp) mContext.getApplicationContext()).toasting("Turning off GPS");
         if (m_locationManager != null)
         m_locationManager.removeUpdates(this);
     }
@@ -225,7 +222,6 @@ public class GPSTracker extends Service implements LocationListener {
             longitude = location.getLongitude();
         }
 
-        // return longitude
         return longitude;
     }
 

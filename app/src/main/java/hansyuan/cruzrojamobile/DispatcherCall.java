@@ -1,11 +1,6 @@
 package hansyuan.cruzrojamobile;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.util.Log;
-import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,14 +14,13 @@ import static android.content.ContentValues.TAG;
  */
 
 public class DispatcherCall  {
-
     String callString;
-    String address1;
+    String address1 = "No Address Received";
     static String latitude = "32.879409";
     static String longitude = "-117.2382162";
+    String description = "No description received";
 
     DispatcherCall(JSONObject c) {
-
         try {
             //GET EVERY SINGLE PART OF THE JSON OUT THE WAY
             int id = c.getInt("id");
@@ -40,7 +34,7 @@ public class DispatcherCall  {
             String city = c.getString("city");
             String state = c.getString("state");
             String assignment = c.getString("assignment");
-            String description = c.getString("description");
+            description = c.getString("description");
             String call_time = c.getString("call_time");
             String departure_time = c.getString("departure_time");
             String transfer_time = c.getString("transfer_time");
