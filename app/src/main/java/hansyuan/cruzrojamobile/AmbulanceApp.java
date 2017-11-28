@@ -53,7 +53,7 @@ public class AmbulanceApp extends Application {
     private String currStatus = "Idle";
     private String userId = "-1";
     private String userPw = "-1";
-    public static String globalAddress;
+    public static String globalAddress = "No Address Received";
     private int id_Number = 14;
     private String license_Plate = "default_Plate";
     MqttClient mqttServer;

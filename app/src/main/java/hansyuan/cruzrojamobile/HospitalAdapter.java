@@ -61,9 +61,6 @@ public class HospitalAdapter extends BaseAdapter {
 
         titleTextView.setText(hospital.name);
         subtitleTextView.setText(hospital.description);
-
-
-
         return rowView;
     }
 }

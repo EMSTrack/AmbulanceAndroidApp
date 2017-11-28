@@ -34,7 +34,7 @@
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:text="Bahía Kino 43 Infonavit Lomas del Porvenir, \n22531 Tijuana, B.C., Mexico"
+        android:text="No Address Received"
         android:textSize="20dp" />
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_below="@id/DescriptionText"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:text="Location Description"
+        android:text="No Location Description Received"
         android:textSize="20dp" />
 
     <Button

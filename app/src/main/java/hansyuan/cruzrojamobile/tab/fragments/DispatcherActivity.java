@@ -62,15 +62,11 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
 
     }
 
-    // TODO should this function be using the param msg
     public static void updateAddress(String msg) {
         Log.d(TAG, "updateAddress: message re1");
         addressText.setText(AmbulanceApp.globalAddress);
         Log.d(TAG, "updateAddress: message re2");
-
     }
-
-
 
     /*
     Functionality of google map button

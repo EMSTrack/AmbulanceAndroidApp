@@ -39,6 +39,9 @@ public class Hospital {
         HashMap<Integer, String> hosp = AmbulanceApp.hospitalMap;
         HashMap<Integer, ArrayList<String>> equip = AmbulanceApp.equipmentMap;
 
+        if(hosp == null){
+            return hospitalList;
+        }
         for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
             Integer key = entry.getKey();
             String name = entry.getValue();
