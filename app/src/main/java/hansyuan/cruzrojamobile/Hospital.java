@@ -49,6 +49,9 @@ public class Hospital {
 
             ArrayList<String> e = equip.get(key);
 
+            if(e == null){
+                return hospitalList;
+            }
             for (int i = 0; i < e.size(); i++) {
                 String delims = "[/]";
                 String[] tokens = e.get(i).split(delims);

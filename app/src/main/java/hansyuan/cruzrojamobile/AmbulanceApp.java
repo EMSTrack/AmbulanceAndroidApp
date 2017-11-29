@@ -400,8 +400,9 @@ Thanks Google.. Thanks for nothing!
     public void publishAmbulanceID(int ambulanceID) {
         id_Number = ambulanceID;
         Log.e(TAG, "Publish: " + id_Number + "  ID_NUMBER: " + id_Number + "  USER_ID: " + userId);
-        mqttServer.publish(id_Number, userId);
-
+        if(mqttServer != null) {
+            mqttServer.publish(id_Number, userId);
+        }
     }
 
 }
