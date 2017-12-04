@@ -3,12 +3,17 @@ package hansyuan.cruzrojamobile;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -185,10 +190,12 @@ public class AmbulanceApp extends Application {
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
+                    demoHeadsUp();
                     //Log.e(TAG, "Call message received: " + subsData);
                 } else if (topic.contains("status")) {
                     //Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
+                    demoHeadsUp();
                     updateStatus(currStatus);
                 } else if (topic.contains("ambulances")) {
                     //Log.d(TAG, "User message received: " + subsData);
@@ -403,6 +410,28 @@ Thanks Google.. Thanks for nothing!
         if(mqttServer != null) {
             mqttServer.publish(id_Number, userId);
         }
+    }
+
+    public void demoHeadsUp() {
+        //To be heads up , the process is the same but setPriority should be called with at leas
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.siren);
+
+
+        Intent intent = new Intent(appContext, MainActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(appContext, 0, intent, 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+        builder.setContentTitle("DISPATCH CALL ARRIVED")
+                .setContentText(globalAddress)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setContentIntent(pi)
+                .setVibrate(new long[]{Notification.DEFAULT_VIBRATE})
+                .setPriority(Notification.PRIORITY_MAX)
+                .setSound(uri);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
     }
 
 }
