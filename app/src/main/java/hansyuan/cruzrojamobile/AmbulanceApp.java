@@ -190,12 +190,11 @@ public class AmbulanceApp extends Application {
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
-                    demoHeadsUp();
+                    dispatchCallNotification();
                     //Log.e(TAG, "Call message received: " + subsData);
                 } else if (topic.contains("status")) {
                     //Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
-                    demoHeadsUp();
                     updateStatus(currStatus);
                 } else if (topic.contains("ambulances")) {
                     //Log.d(TAG, "User message received: " + subsData);
@@ -299,6 +298,8 @@ public class AmbulanceApp extends Application {
     public void writeLocationsToFile( LocationPoint point ){
         String filename = point.toString() + ".txt";
         String string = point.getTime();
+
+        Log.e("local file", "writing coordinates" + filename);
 
         FileOutputStream outputStream;
 
@@ -412,7 +413,7 @@ Thanks Google.. Thanks for nothing!
         }
     }
 
-    public void demoHeadsUp() {
+    public void dispatchCallNotification() {
         //To be heads up , the process is the same but setPriority should be called with at leas
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.siren);
 
@@ -425,10 +426,11 @@ Thanks Google.. Thanks for nothing!
                 .setContentText(globalAddress)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setContentIntent(pi)
+                .setFullScreenIntent(pi, true)
                 .setVibrate(new long[]{Notification.DEFAULT_VIBRATE})
                 .setPriority(Notification.PRIORITY_MAX)
                 .setSound(uri);
+
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0, builder.build());

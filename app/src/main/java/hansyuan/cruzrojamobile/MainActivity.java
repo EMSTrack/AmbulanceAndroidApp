@@ -50,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Test that Ambulance class made it through
         currAmbulance = (Ambulance) getIntent().getSerializableExtra("AmbulanceClass");
-        Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + currAmbulance.getLicensePlate() + " ID: " + currAmbulance.getId());
+        if(currAmbulance != null) {
+            Log.d("MAIN_ACTIVITY", "AmbulancePassed: " + currAmbulance.getLicensePlate() + " ID: " + currAmbulance.getId());
 
-        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
-        Log.d("MAIN_TITLE", titleText);
+            titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+            Log.d("MAIN_TITLE", titleText);
+        }
 
         statusText = (TextView) findViewById(R.id.statusText);
         statusText.setText(titleText);
