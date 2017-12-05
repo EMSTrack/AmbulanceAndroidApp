@@ -74,7 +74,7 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v == mapButton){
-            gps = new GPSTracker(rootView.getContext());
+            gps = new GPSTracker(rootView.getContext(), 500, -1);
             gps.getLastKnownLocationIfAllowed();
             gps.getLocation();
 

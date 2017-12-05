@@ -21,6 +21,10 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.location.LocationRequest;
+
+import java.util.TimerTask;
+
 /**
  *
  * Created by Hans Yuan on 10/19/2016.
@@ -44,7 +48,7 @@ public class GPSTracker extends Service implements LocationListener {
     public double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+    private long MIN_DISTANCE_CHANGE_FOR_UPDATES = -1; // 1 meters
     // The minimum time between updates in milliseconds
     private long MIN_TIME_BW_UPDATES = 500 * 1 * 1; // 10 sec minute
 
@@ -53,22 +57,6 @@ public class GPSTracker extends Service implements LocationListener {
      *
      * @param context
      */
-    public GPSTracker(Context context) {
-        this.mContext = context;
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-
-            provider = LocationManager.GPS_PROVIDER;
-            m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-        }
-
-        getLocation();
-        Log.e("Location", "Getlocation called");
-        //((AmbulanceApp) mContext.getApplicationContext()).toasting("GETLOCATION Invoked");
-    }
-
     public GPSTracker(Context context, long minTime, long minDist) {
         if (minTime != -1) {
             MIN_TIME_BW_UPDATES = minTime;
@@ -82,8 +70,16 @@ public class GPSTracker extends Service implements LocationListener {
 
             provider = LocationManager.GPS_PROVIDER;
             m_locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+
+            LocationRequest locationrequest = LocationRequest.create();
+            locationrequest.setInterval(5000);   // 5 seconds
+
+
+            m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDist, this);
+            m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDist, this);
+
+
         }
 
         getLocation();
@@ -97,7 +93,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void turnOff() {
         System.out.println("\n Turning off listener");
         if (m_locationManager != null)
-        m_locationManager.removeUpdates(this);
+            m_locationManager.removeUpdates(this);
     }
 
 
@@ -105,7 +101,7 @@ public class GPSTracker extends Service implements LocationListener {
      *
      * @return
      */
-    public boolean isGPSEnabled(){
+    public boolean isGPSEnabled() {
         //TODO toast if it is not enabled
         return m_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
@@ -122,11 +118,11 @@ public class GPSTracker extends Service implements LocationListener {
         return lastKnownLocation;
     }
 
-    public long getMinDistanceChangeForUpdates () {
+    public long getMinDistanceChangeForUpdates() {
         return MIN_DISTANCE_CHANGE_FOR_UPDATES;
     }
 
-    public long getMinTimeBWUpdates () {
+    public long getMinTimeBWUpdates() {
         return MIN_TIME_BW_UPDATES;
     }
 
@@ -164,9 +160,9 @@ public class GPSTracker extends Service implements LocationListener {
                     }
                     /** Adding code to check for location permission*/
                     int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-                    if (currentapiVersion >= Build.VERSION_CODES.M){
+                    if (currentapiVersion >= Build.VERSION_CODES.M) {
                         //Request Permission at Runtime!
-                    } else{
+                    } else {
                         // do something for phones running an SDK before lollipop
                     }
 
@@ -189,7 +185,7 @@ public class GPSTracker extends Service implements LocationListener {
                         }
                     }
 
-                } catch(SecurityException e) {
+                } catch (SecurityException e) {
                     //error
                 }
             }
@@ -205,8 +201,8 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to get latitude
      * */
-    public double getLatitude(){
-        if(location != null){
+    public double getLatitude() {
+        if (location != null) {
             latitude = location.getLatitude();
         }
 
@@ -217,8 +213,8 @@ public class GPSTracker extends Service implements LocationListener {
     /**
      * Function to get longitude
      * */
-    public double getLongitude(){
-        if(location != null){
+    public double getLongitude() {
+        if (location != null) {
             longitude = location.getLongitude();
         }
 
@@ -239,13 +235,13 @@ public class GPSTracker extends Service implements LocationListener {
             provider = LocationManager.GPS_PROVIDER;
             Location location = m_locationManager.getLastKnownLocation(provider);
             System.out.println("\nGET LAST KNOWN LOCATION");
-            if (location == null ) {
+            if (location == null) {
                 return null;
             }
-            lastKnownLocation = new LocationPoint (location);
+            lastKnownLocation = new LocationPoint(location);
 
             return lastKnownLocation;
-        }else {
+        } else {
             ActivityCompat.requestPermissions(
                     (Activity) mContext,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -256,8 +252,8 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
     public void display(LocationPoint point) {
-       if (point == null || LatLongTextView == null)
-           return;
+        if (point == null || LatLongTextView == null)
+            return;
         LatLongTextView.setText(point.toString());
     }
 
@@ -266,7 +262,7 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to show settings alert dialog
      * On pressing Settings button will lauch Settings Options
      * */
-    public void showSettingsAlert(){
+    public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
@@ -277,7 +273,7 @@ public class GPSTracker extends Service implements LocationListener {
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
@@ -304,7 +300,7 @@ public class GPSTracker extends Service implements LocationListener {
         }
         //if we don't have an original location
         LocationPoint newLocation = new LocationPoint(location);
-        newLocation.setStatus(((AmbulanceApp)mContext.getApplicationContext()).getCurrStatus());
+        newLocation.setStatus(((AmbulanceApp) mContext.getApplicationContext()).getCurrStatus());
         if (lastKnownLocation == null) {
             System.out.println("\nPrevious location was null\n");
             //((AmbulanceApp) mContext.getApplicationContext()).toasting("previous location was null");
@@ -341,5 +337,8 @@ public class GPSTracker extends Service implements LocationListener {
         return null;
     }
 
-
+    private static final LocationRequest REQUEST = LocationRequest.create()
+            .setInterval(5000) // 5 seconds
+            .setFastestInterval(16) // 16ms = 60fps
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 }

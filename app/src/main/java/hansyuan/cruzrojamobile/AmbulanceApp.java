@@ -106,7 +106,7 @@ public class AmbulanceApp extends Application {
 
         //gpsTracker = new GPSTracker(appContext, 500, -1);
         //txtView = (TextView) ((Activity)context).findViewById(R.id.address);
-        gpsTracker = new GPSTracker(appContext, 3000, -1);
+        gpsTracker = new GPSTracker(appContext, 500 / 4, 0);
 
         Log.e("trakcer Created", "Tracker Created");
         LocationPoint loc = new LocationPoint(-192, 123);

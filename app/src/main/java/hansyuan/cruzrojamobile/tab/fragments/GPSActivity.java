@@ -48,7 +48,7 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
         rootView = inflater.inflate(R.layout.activity_gps, container, false);
 
         //checkLocationPermission(); //Might be needed, might not.
-        gpsTracker = new GPSTracker(rootView.getContext());
+        gpsTracker = new GPSTracker(rootView.getContext(), 500, -1);
         gpsTracker.setLatLongTextView((TextView) rootView.findViewById(R.id.LatLongText));
 
         //Determine whether to listen by dist changed or time changed
