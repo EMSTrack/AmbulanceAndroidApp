@@ -296,7 +296,8 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("\nOnLocationChanged\n");
+        Log.e("ONLOCATIONCHANGED", "ONLOCATIONCHANGED");
+
         if (location == null) {
             //((AmbulanceApp) mContext.getApplicationContext()).toasting("onLocationChanged, location is null");
             return;

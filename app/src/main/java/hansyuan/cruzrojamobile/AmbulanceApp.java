@@ -415,7 +415,7 @@ Thanks Google.. Thanks for nothing!
 
     public void dispatchCallNotification() {
         //To be heads up , the process is the same but setPriority should be called with at leas
-        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.siren);
+        //Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.siren);
 
 
         Intent intent = new Intent(appContext, MainActivity.class);
@@ -428,8 +428,8 @@ Thanks Google.. Thanks for nothing!
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setFullScreenIntent(pi, true)
                 .setVibrate(new long[]{Notification.DEFAULT_VIBRATE})
-                .setPriority(Notification.PRIORITY_MAX)
-                .setSound(uri);
+                .setPriority(Notification.PRIORITY_MAX);
+                //.setSound(uri);
 
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
