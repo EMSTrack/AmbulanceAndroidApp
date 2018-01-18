@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -191,13 +192,13 @@ public class AmbulanceApp extends Application {
                     globalAddress = dCall.getAddress();
                     updateAddress(globalAddress);
                     dispatchCallNotification();
-                    //Log.e(TAG, "Call message received: " + subsData);
+                    Log.e(TAG, "Call message received: " + subsData);
                 } else if (topic.contains("status")) {
-                    //Log.e(TAG, "Status message received: " + subsData);
+                    Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
                 } else if (topic.contains("ambulances")) {
-                    //Log.d(TAG, "User message received: " + subsData);
+                    Log.d(TAG, "User message received: " + subsData);
                     JSONObject jsonObject = new JSONObject(subsData);
                     JSONArray ambulanceJSON = jsonObject.getJSONArray("ambulances");
 
@@ -213,10 +214,15 @@ public class AmbulanceApp extends Application {
                     JSONObject jsonObject = new JSONObject(subsData);
                     JSONArray hospitalJSON = jsonObject.getJSONArray("hospitals");
 
+                    Log.e("HospitalJSON ---", jsonObject.toString());
+                    Log.e("JSON Length", ""+hospitalJSON.length());
+
                     hospitalMap = new HashMap<Integer, String>();
                     equipmentMap = new HashMap<Integer, ArrayList<String>>();
+
                     for (int i = 0; i < hospitalJSON.length(); i++) {
                         JSONObject tempObject = hospitalJSON.getJSONObject(i);
+                        Log.e("OBJECT: ", tempObject.toString());
                         int id = tempObject.getInt("id");
                         hospitalMap.put(id, tempObject.getString("name"));
                         mqttServer.subscribeToTopic("hospital/" + id + "/metadata");
@@ -225,6 +231,9 @@ public class AmbulanceApp extends Application {
                 }
                 if (topic.contains("metadata")){
                     JSONObject jsonObject = new JSONObject(subsData);
+
+                    Log.e("METADATA JSON",jsonObject.toString());
+
                     JSONArray equipmentJSON = jsonObject.getJSONArray("equipment");
                     String delims = "[/]";
                     String[] tokens = topic.split(delims);
@@ -232,6 +241,7 @@ public class AmbulanceApp extends Application {
                     int id = Integer.parseInt(tokens[idIdx]);
 
                     ArrayList<String> equipList = new ArrayList<>();
+                    // Subscribe to each element in the equipment list to get the value
                     for (int i = 0; i < equipmentJSON.length(); i++) {
                         JSONObject tempObject = equipmentJSON.getJSONObject(i);
                         String name = tempObject.getString("name");
@@ -244,12 +254,15 @@ public class AmbulanceApp extends Application {
                 }
 
                 if (topic.contains("equipment")){
+                    Log.e("EQUIPMENT DATA--",topic);
                     String delims = "[/]";
                     String[] tokens = topic.split(delims);
                     int idIdx = 1;
                     int enIdx = 3;
                     int id = Integer.parseInt(tokens[idIdx]);
                     String equip = tokens[enIdx];
+
+                    // Equipment Count // TODO this should be a number and a toggle
                     int count = Integer.parseInt(subsData);
 
                     ArrayList<String> e = equipmentMap.get(id);

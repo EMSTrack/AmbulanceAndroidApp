@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -49,15 +50,20 @@ public class demo_viewTransmission extends Fragment {
     ListView listView;
 
     private ArrayList<Hospital> hospitalList;
+    private ExpandableListView hospitalExpandableList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_demo_view_transmission, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listview);
 
         hospitalList = Hospital.getHospitals();
+        if (hospitalList == null) {
+            return rootView;
+        }
 
         HospitalAdapter adapter = new HospitalAdapter(rootView.getContext(), hospitalList);
-        listView.setAdapter(adapter);
+        hospitalExpandableList = (ExpandableListView) rootView.findViewById(R.id.equipment_listview);
+        hospitalExpandableList.setAdapter(adapter);
 
         return rootView;
     }

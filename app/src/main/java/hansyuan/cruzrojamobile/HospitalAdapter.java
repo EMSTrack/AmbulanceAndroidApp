@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 import android.widget.ImageView;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  * Created by rawaa_ali on 6/1/17.
  */
 
-public class HospitalAdapter extends BaseAdapter {
+public class HospitalAdapter extends BaseExpandableListAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
     private ArrayList<Hospital> mDataSource;
@@ -25,42 +26,78 @@ public class HospitalAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    //1
     @Override
-    public int getCount() {
+    public Object getChild(int groupPosition, int childPosition) {
+        return mDataSource.get(groupPosition).getEquipment().get(childPosition);
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
+                             View view, ViewGroup parent) {
+
+        HospitalEquipment equipment = (HospitalEquipment) getChild(groupPosition, childPosition);
+        if (view == null) {
+//            LayoutInflater infalInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = mInflater.inflate(R.layout.equipment_list_body, null);
+        }
+        TextView equipmentItem = (TextView) view.findViewById(R.id.equipment_item);
+        equipmentItem.setText(equipment.getEntry().trim());
+
+        return view;
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+
+        ArrayList<HospitalEquipment> equipmentList = mDataSource.get(groupPosition).getEquipment();
+        return equipmentList.size();
+
+    }
+
+    @Override
+    public Object getGroup(int groupPosition) {
+        return mDataSource.get(groupPosition);
+    }
+
+    @Override
+    public int getGroupCount() {
         return mDataSource.size();
     }
 
-    //2
     @Override
-    public Object getItem(int position) {
-        return mDataSource.get(position);
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
     }
 
-    //3
     @Override
-    public long getItemId(int position) {
-        return position;
+    public View getGroupView(int groupPosition, boolean isLastChild, View view,
+                             ViewGroup parent) {
+
+        Hospital headerInfo = (Hospital) getGroup(groupPosition);
+        if (view == null) {
+//            LayoutInflater inf = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = mInflater.inflate(R.layout.equipment_list_header, null);
+        }
+
+        TextView heading = (TextView) view.findViewById(R.id.equipment_header);
+        heading.setText(headerInfo.getName().trim());
+
+        return view;
     }
 
-    //4
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get view for row item
-        View rowView = mInflater.inflate(R.layout.hospital_item, parent, false);
-        // Get title element
-        TextView titleTextView =
-                (TextView) rowView.findViewById(hansyuan.cruzrojamobile.R.id.hospital_list_title);
-
-        // Get subtitle element
-        TextView subtitleTextView =
-                (TextView) rowView.findViewById(hansyuan.cruzrojamobile.R.id.hospital_list_subtitle);
-
-
-        Hospital hospital = (Hospital) getItem(position);
-
-        titleTextView.setText(hospital.name);
-        subtitleTextView.setText(hospital.description);
-        return rowView;
+    public boolean hasStableIds() {
+        return true;
     }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+
 }

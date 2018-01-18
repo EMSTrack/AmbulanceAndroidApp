@@ -18,21 +18,40 @@ import android.util.Log;
 
 public class Hospital {
     private int id;
-    public ArrayList<String> equipment;
-    public String name;
-    public String description;
+    private ArrayList<HospitalEquipment> equipmentList;
+    private String name;
 
-    public Hospital(int id, String name, String desc) {
+    public Hospital(int id, String name) {
         this.id = id;
         this.name = name;
-        this.description = desc;
+        equipmentList = new ArrayList<>();
+
+        Log.e("Hospital_Created", "ID: " + id);
+        Log.e("Hospital_Created", "Name: " + name);
     }
 
     public int getId() {
         return id;
     }
 
+    public ArrayList<HospitalEquipment> getEquipment(){
+        return equipmentList;
+    }
+
+    public void addEquipment(HospitalEquipment equipment) {
+
+        equipmentList.add(equipment);
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
+    // Create the list of Hospitals and their equipment based on the maps created from the server in AmbulanceApp.java
     public static ArrayList<Hospital> getHospitals() {
+
         final ArrayList<Hospital> hospitalList = new ArrayList<>();
 
         // Get the Ambulance List from the Extras
@@ -45,31 +64,29 @@ public class Hospital {
         for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
             Integer key = entry.getKey();
             String name = entry.getValue();
-            String desc = "";
+            Hospital hospital = new Hospital(key, name);
 
             ArrayList<String> e = equip.get(key);
 
             if(e == null){
                 return hospitalList;
             }
+
             for (int i = 0; i < e.size(); i++) {
                 String delims = "[/]";
                 String[] tokens = e.get(i).split(delims);
-                int cnt = Integer.parseInt(tokens[1]);
-                String curr = "";
-                if (cnt != 0) {
-                    curr = tokens[0] + ": " + cnt;
-                }
-                desc += curr;
-                if (i != e.size() -1) {
-                    desc += "\n";
-                }
+
+                HospitalEquipment hospitalEquipment = new HospitalEquipment(tokens[0], tokens[1]);
+                hospital.addEquipment(hospitalEquipment);
             }
-            Hospital hospital = new Hospital(key, name, desc);
+
+
+
             hospitalList.add(hospital);
         }
 
         return hospitalList;
+
     }
 
 

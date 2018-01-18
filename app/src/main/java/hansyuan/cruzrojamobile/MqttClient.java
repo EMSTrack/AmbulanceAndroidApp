@@ -61,6 +61,10 @@ public class MqttClient {
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setAutomaticReconnect(true);
         mqttConnectOptions.setCleanSession(false);
+
+        Log.e(TAG, "----Username: "+username);
+        Log.e(TAG, "----Password: "+password);
+
         mqttConnectOptions.setUserName(username);
         mqttConnectOptions.setPassword(password.toCharArray());
 
