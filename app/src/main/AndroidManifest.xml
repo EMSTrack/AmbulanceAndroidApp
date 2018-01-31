@@ -23,8 +23,8 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDlUATasdP1Sat1i_W1p6MXH-OpwLLGxAo"/>
 
-    <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.google.android.gms.location.sample.basiclocationsample" />
+    <!--<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.google.android.gms.location.sample.basiclocationsample" /> -->
 
     <application
 

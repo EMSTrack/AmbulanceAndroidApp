@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.*;
 
 import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
 import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
@@ -155,7 +156,9 @@ public class AmbulanceApp extends Application {
     //MQTT
     public void mqttMaster() {
         Log.e("mqtt", "mqttmaster is called");
+        //mqttServer = "tcp://localhost:1883";
         mqttServer = MqttClient.getInstance(this);
+        Log.e("Server:", mqttServer.toString());
 
         mqttServer.connect(userId, userPw, new MqttCallbackExtended() {
             @Override
@@ -169,8 +172,8 @@ public class AmbulanceApp extends Application {
                 authenticated = true;
 
                 //subscribe to topics
-                mqttServer.subscribeToTopic("user/" + getUserId() + "/ambulances");
-                mqttServer.subscribeToTopic("user/" + getUserId() + "/hospitals");
+                mqttServer.subscribeToTopic("user/" + getUserId() + "/profile");
+                mqttServer.subscribeToTopic("user/" + getUserId() + "/error");
             }
 
             @Override
@@ -184,9 +187,18 @@ public class AmbulanceApp extends Application {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 String subsData = new String(message.getPayload());
-                Log.e("MESSAGE ARRIVED", subsData);
 
-                if (topic.contains("call")) {
+                // regex for parsing message topic - maybe refactor into a class later
+                // assumers userID is only  with _
+                Pattern profilePattern = Pattern.compile("user/[\\w]+/profile");
+                Pattern callPattern = Pattern.compile("user/[\\w]+/call");
+                Pattern metadataPattern = Pattern.compile("hospital/[\\w]+/equipment/metadata");
+                Pattern equipmentPattern = Pattern.compile("hospital/[\\w]+/equipment");
+
+                Log.e("MESSAGE ARRIVED", subsData);
+                Log.e("TOPIC", topic);
+
+                if (callPattern.matcher(topic).matches()) {
                     JSONObject c = new JSONObject(subsData);
                     DispatcherCall dCall = new DispatcherCall(c);
                     globalAddress = dCall.getAddress();
@@ -197,31 +209,28 @@ public class AmbulanceApp extends Application {
                     Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
-                } else if (topic.contains("ambulances")) {
+                } else if (profilePattern.matcher(topic).matches()) {
                     Log.d(TAG, "User message received: " + subsData);
                     JSONObject jsonObject = new JSONObject(subsData);
-                    JSONArray ambulanceJSON = jsonObject.getJSONArray("ambulances");
+                    JSONArray ambulancesJSON = jsonObject.getJSONArray("ambulances");
 
                     ambulanceList = new ArrayList<>();
-                    for (int i = 0; i < ambulanceJSON.length(); i++) {
-                        JSONObject tempObject = ambulanceJSON.getJSONObject(i);
+                    for (int i = 0; i < ambulancesJSON.length(); i++) {
+                        JSONObject tempObject = ambulancesJSON.getJSONObject(i);
                         Ambulance ambulance = new Ambulance(tempObject.getInt("id"), tempObject.getString("license_plate"));
                         ambulanceList.add(ambulance);
                     }
-                }
-                if (topic.contains("hospitals")) {
-                    //Log.e(TAG, "User message received: " + subsData);
-                    JSONObject jsonObject = new JSONObject(subsData);
-                    JSONArray hospitalJSON = jsonObject.getJSONArray("hospitals");
 
-                    Log.e("HospitalJSON ---", jsonObject.toString());
-                    Log.e("JSON Length", ""+hospitalJSON.length());
+                    JSONArray hospitalsJSON = jsonObject.getJSONArray("hospitals");
+
+                    Log.e("HospitalJSON ---", hospitalsJSON.toString());
+                    Log.e("JSON Length", ""+hospitalsJSON.length());
 
                     hospitalMap = new HashMap<Integer, String>();
                     equipmentMap = new HashMap<Integer, ArrayList<String>>();
 
-                    for (int i = 0; i < hospitalJSON.length(); i++) {
-                        JSONObject tempObject = hospitalJSON.getJSONObject(i);
+                    for (int i = 0; i < hospitalsJSON.length(); i++) {
+                        JSONObject tempObject = hospitalsJSON.getJSONObject(i);
                         Log.e("OBJECT: ", tempObject.toString());
                         int id = tempObject.getInt("id");
                         hospitalMap.put(id, tempObject.getString("name"));
@@ -229,7 +238,7 @@ public class AmbulanceApp extends Application {
                     }
 
                 }
-                if (topic.contains("metadata")){
+                if (metadataPattern.matcher(topic).matches()){
                     JSONObject jsonObject = new JSONObject(subsData);
 
                     Log.e("METADATA JSON",jsonObject.toString());
@@ -253,7 +262,7 @@ public class AmbulanceApp extends Application {
                     equipmentMap.put(id,equipList);
                 }
 
-                if (topic.contains("equipment")){
+                if (equipmentPattern.matcher(topic).matches()){
                     Log.e("EQUIPMENT DATA--",topic);
                     String delims = "[/]";
                     String[] tokens = topic.split(delims);
