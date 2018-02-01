@@ -9,21 +9,23 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Request"
-        android:textSize="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:textColor="@color/black"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/addressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
         android:text="Address"
+        android:textColor="@color/common_plus_signin_btn_text_light_default"
         android:textSize="15dp" />
 
     <TextView
@@ -35,7 +37,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:text="No Address Received"
-        android:textSize="20dp" />
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="18dp" />
 
     <TextView
         android:id="@+id/DescriptionText"
@@ -46,6 +49,7 @@
         android:layout_below="@+id/address"
         android:layout_marginBottom="5dp"
         android:text="Description"
+        android:textColor="@color/common_plus_signin_btn_text_light_default"
         android:textSize="15dp" />
 
     <TextView
@@ -53,25 +57,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/DescriptionText"
-        android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:text="No Location Description Received"
-        android:textSize="20dp" />
+        android:textColor="@color/black"
+        android:textSize="18dp" />
 
     <Button
         android:id="@+id/gmap"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="21dp"
         android:adjustViewBounds="true"
-        android:background="@color/colorPrimaryDark"
+        android:background="@android:color/transparent"
         android:drawableLeft="@drawable/nav_img"
         android:paddingBottom="16dp"
         android:paddingLeft="36dp"
         android:paddingRight="16dp"
         android:paddingTop="15dp"
         android:scaleType="fitCenter"
-        android:text="Go to Navigate"
         android:textColor="#e8e9e9"
         android:textSize="25dp" />
 
