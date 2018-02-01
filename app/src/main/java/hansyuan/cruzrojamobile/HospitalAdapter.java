@@ -1,6 +1,7 @@
 package hansyuan.cruzrojamobile;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class HospitalAdapter extends BaseExpandableListAdapter {
 
     public HospitalAdapter(Context context, ArrayList<Hospital> items) {
         mContext = context;
+        //Log.d("hospitalitems",items.get(0).getName());
         mDataSource = items;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

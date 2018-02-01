@@ -209,6 +209,7 @@ public class AmbulanceApp extends Application {
                     Log.e(TAG, "Status message received: " + subsData);
                     currStatus = subsData;
                     updateStatus(currStatus);
+                // if message is about profile
                 } else if (profilePattern.matcher(topic).matches()) {
                     Log.d(TAG, "User message received: " + subsData);
                     JSONObject jsonObject = new JSONObject(subsData);
@@ -217,7 +218,7 @@ public class AmbulanceApp extends Application {
                     ambulanceList = new ArrayList<>();
                     for (int i = 0; i < ambulancesJSON.length(); i++) {
                         JSONObject tempObject = ambulancesJSON.getJSONObject(i);
-                        Ambulance ambulance = new Ambulance(tempObject.getInt("id"), tempObject.getString("license_plate"));
+                        Ambulance ambulance = new Ambulance(tempObject.getInt("ambulance_id"), tempObject.getString("ambulance_identifier"));
                         ambulanceList.add(ambulance);
                     }
 
@@ -232,9 +233,10 @@ public class AmbulanceApp extends Application {
                     for (int i = 0; i < hospitalsJSON.length(); i++) {
                         JSONObject tempObject = hospitalsJSON.getJSONObject(i);
                         Log.e("OBJECT: ", tempObject.toString());
-                        int id = tempObject.getInt("id");
-                        hospitalMap.put(id, tempObject.getString("name"));
-                        mqttServer.subscribeToTopic("hospital/" + id + "/metadata");
+                        int id = tempObject.getInt("hospital_id");
+                        hospitalMap.put(id, tempObject.getString("hospital_name"));
+                        Log.e("HOSPITAL MAP", hospitalMap.toString());
+                        mqttServer.subscribeToTopic("hospital/" + id + "/equipment/metadata");
                     }
 
                 }

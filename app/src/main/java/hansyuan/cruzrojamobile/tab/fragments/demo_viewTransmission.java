@@ -57,6 +57,7 @@ public class demo_viewTransmission extends Fragment {
         rootView = inflater.inflate(R.layout.activity_demo_view_transmission, container, false);
 
         hospitalList = Hospital.getHospitals();
+        Log.e("HOSPITALS in demo", hospitalList.toString());
         if (hospitalList == null) {
             return rootView;
         }

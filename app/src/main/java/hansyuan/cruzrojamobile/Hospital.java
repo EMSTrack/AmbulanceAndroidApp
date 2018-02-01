@@ -58,29 +58,30 @@ public class Hospital {
         HashMap<Integer, String> hosp = AmbulanceApp.hospitalMap;
         HashMap<Integer, ArrayList<String>> equip = AmbulanceApp.equipmentMap;
 
+        Log.e("HMAP", hosp.toString());
+
         if(hosp == null){
             return hospitalList;
         }
         for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
             Integer key = entry.getKey();
+            Log.e("key", key.toString());
             String name = entry.getValue();
+            Log.e("name", name);
             Hospital hospital = new Hospital(key, name);
 
             ArrayList<String> e = equip.get(key);
 
-            if(e == null){
-                return hospitalList;
+            // maybe add an option for "no equipment available"
+            if (e != null) {
+                for (int i = 0; i < e.size(); i++) {
+                    String delims = "[/]";
+                    String[] tokens = e.get(i).split(delims);
+
+                    HospitalEquipment hospitalEquipment = new HospitalEquipment(tokens[0], tokens[1]);
+                    hospital.addEquipment(hospitalEquipment);
+                }
             }
-
-            for (int i = 0; i < e.size(); i++) {
-                String delims = "[/]";
-                String[] tokens = e.get(i).split(delims);
-
-                HospitalEquipment hospitalEquipment = new HospitalEquipment(tokens[0], tokens[1]);
-                hospital.addEquipment(hospitalEquipment);
-            }
-
-
 
             hospitalList.add(hospital);
         }
