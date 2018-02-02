@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     static TextView statusText;
+    static TextView ambulanceId;
     private ImageButton panicButton;
     private String titleText;
     private static Ambulance currAmbulance;
@@ -82,9 +83,12 @@ public class MainActivity extends AppCompatActivity {
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
+        // ambulance id on drawer
+        ambulanceId = (TextView) findViewById(R.id.ambulanceID);
+
         //set up TabLayout Structure
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_home);
-        tabLayout.addTab(tabLayout.newTab().setText("Dispatcher"));
+        tabLayout.addTab(tabLayout.newTab().setText("Dispatch"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
 //        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
 
@@ -114,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         ambulanceApp.mqttMaster();
 //        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
 //        statusText.setText(titleText);
+
     }
 
 
@@ -205,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     static void updateStatus(String newStatus){
         statusText.setText(currAmbulance.getLicensePlate() + " - " + newStatus);
+        ambulanceId.setText(currAmbulance.getId());
     }
     @Override
     public void onBackPressed() {

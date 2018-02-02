@@ -4,10 +4,12 @@
 
         <item
             android:id="@+id/home"
-            android:title="Home" />
+            android:icon="@drawable/message"
+            android:title="Dispatch" />
 
         <item
             android:id="@+id/logout"
+            android:icon="@drawable/logout"
             android:title="Logout" />
 
     </group>
