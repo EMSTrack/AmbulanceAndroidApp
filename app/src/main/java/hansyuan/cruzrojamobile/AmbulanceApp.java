@@ -192,8 +192,8 @@ public class AmbulanceApp extends Application {
                 // assumers userID is only  with _
                 Pattern profilePattern = Pattern.compile("user/[\\w]+/profile");
                 Pattern callPattern = Pattern.compile("user/[\\w]+/call");
-                Pattern metadataPattern = Pattern.compile("hospital/[\\w]+/equipment/metadata");
-                Pattern equipmentPattern = Pattern.compile("hospital/[\\w]+/equipment");
+                Pattern metadataPattern = Pattern.compile("hospital/[\\w]+/metadata");
+                Pattern equipmentPattern = Pattern.compile("hospital/[\\w]+/equipment/[\\w]+/data");
 
                 Log.e("MESSAGE ARRIVED", subsData);
                 Log.e("TOPIC", topic);
@@ -230,22 +230,22 @@ public class AmbulanceApp extends Application {
                     hospitalMap = new HashMap<Integer, String>();
                     equipmentMap = new HashMap<Integer, ArrayList<String>>();
 
+                    // create a new hospital map to hold all hospital data
                     for (int i = 0; i < hospitalsJSON.length(); i++) {
                         JSONObject tempObject = hospitalsJSON.getJSONObject(i);
-                        Log.e("OBJECT: ", tempObject.toString());
                         int id = tempObject.getInt("hospital_id");
                         hospitalMap.put(id, tempObject.getString("hospital_name"));
-                        Log.e("HOSPITAL MAP", hospitalMap.toString());
-                        mqttServer.subscribeToTopic("hospital/" + id + "/equipment/metadata");
+                        mqttServer.subscribeToTopic("hospital/" + id + "/metadata");
                     }
 
                 }
+
                 if (metadataPattern.matcher(topic).matches()){
-                    JSONObject jsonObject = new JSONObject(subsData);
+                    JSONArray equipmentJSON = new JSONArray(subsData);
 
-                    Log.e("METADATA JSON",jsonObject.toString());
+                    Log.e("METADATA TOPIC--",topic);
 
-                    JSONArray equipmentJSON = jsonObject.getJSONArray("equipment");
+                    //JSONArray equipmentJSON = jsonObject.getJSONArray("equipment");
                     String delims = "[/]";
                     String[] tokens = topic.split(delims);
                     int idIdx = 1;
@@ -256,8 +256,14 @@ public class AmbulanceApp extends Application {
                     for (int i = 0; i < equipmentJSON.length(); i++) {
                         JSONObject tempObject = equipmentJSON.getJSONObject(i);
                         String name = tempObject.getString("name");
-                        mqttServer.subscribeToTopic("hospital/" + id + "/equipment/" + name);
-
+                        mqttServer.subscribeToTopic("hospital/"+ id + "/equipment/" + name + "/data");
+                    }
+                    // Subscribe to each element in the equipment list to get the value
+                    // actual values will be gotten later when mqtt message received from
+                    //     subscription above
+                    for (int i = 0; i < equipmentJSON.length(); i++) {
+                        JSONObject tempObject = equipmentJSON.getJSONObject(i);
+                        String name = tempObject.getString("name");
                         equipList.add(name);
                     }
 
@@ -265,22 +271,21 @@ public class AmbulanceApp extends Application {
                 }
 
                 if (equipmentPattern.matcher(topic).matches()){
-                    Log.e("EQUIPMENT DATA--",topic);
-                    String delims = "[/]";
-                    String[] tokens = topic.split(delims);
-                    int idIdx = 1;
-                    int enIdx = 3;
-                    int id = Integer.parseInt(tokens[idIdx]);
-                    String equip = tokens[enIdx];
+                    Log.e("EQUIPMENT TOPIC--",topic);
 
-                    // Equipment Count // TODO this should be a number and a toggle
-                    int count = Integer.parseInt(subsData);
+                    JSONObject equipObject = new JSONObject(subsData);
 
-                    ArrayList<String> e = equipmentMap.get(id);
-                    e.set(e.indexOf(equip), equip + "/" + count);
-                    equipmentMap.put(id, e);
+                    String equipment_name = equipObject.getString("equipment_name");
+                    int hospital_id = equipObject.getInt("hospital_id");
+                    int equipment_id = equipObject.getInt("equipment_id");
+                    int value = equipObject.getInt("value");
+
+                    // equipmentMap is an int:array map with an array per hospital
+                    // each array contains data in the form equip_name/num (TO CHANGE?)
+                    ArrayList<String> e = equipmentMap.get(hospital_id);
+                    e.set(e.indexOf(equipment_name), equipment_name + "/" + value);
+                    equipmentMap.put(hospital_id, e);
                 }
-                //hospital/hosp_id/equipment/equipment_name
             }
 
             @Override

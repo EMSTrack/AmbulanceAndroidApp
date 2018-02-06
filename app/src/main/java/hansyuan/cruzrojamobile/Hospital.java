@@ -58,11 +58,10 @@ public class Hospital {
         HashMap<Integer, String> hosp = AmbulanceApp.hospitalMap;
         HashMap<Integer, ArrayList<String>> equip = AmbulanceApp.equipmentMap;
 
-        Log.e("HMAP", hosp.toString());
-
         if(hosp == null){
             return hospitalList;
         }
+
         for (HashMap.Entry<Integer, String> entry : hosp.entrySet()) {
             Integer key = entry.getKey();
             Log.e("key", key.toString());
@@ -77,7 +76,6 @@ public class Hospital {
                 for (int i = 0; i < e.size(); i++) {
                     String delims = "[/]";
                     String[] tokens = e.get(i).split(delims);
-
                     HospitalEquipment hospitalEquipment = new HospitalEquipment(tokens[0], tokens[1]);
                     hospital.addEquipment(hospitalEquipment);
                 }
