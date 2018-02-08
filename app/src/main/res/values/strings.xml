@@ -2,7 +2,7 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="app_name">CruzRojaMobile</string>
+    <string name="app_name">Cruz Roja Mobile</string>
     <string-array name="status_updates">
         <item>Left_hospital.</item>
         <item>Heading_To_Hospital_with_Patient.</item>
