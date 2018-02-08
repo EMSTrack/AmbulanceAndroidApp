@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.models;
 
 /**
  * Created by devinhickey on 1/16/18.

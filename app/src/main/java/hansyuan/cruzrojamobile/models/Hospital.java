@@ -1,17 +1,12 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.models;
 
-import android.content.Context;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import android.content.Intent;
 
 import android.util.Log;
+
+import hansyuan.cruzrojamobile.AmbulanceApp;
+
 /**
  * Created by rawaa_ali on 6/1/17.
  */

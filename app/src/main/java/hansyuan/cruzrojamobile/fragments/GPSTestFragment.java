@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile.tab.fragments;
+package hansyuan.cruzrojamobile.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,12 +10,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
-import hansyuan.cruzrojamobile.GPSTracker;
+import hansyuan.cruzrojamobile.services.GPSTracker;
 import hansyuan.cruzrojamobile.R;
 
 /**
  * Java Class AND ACTIVITY
- * implements code for the GPSActivity Activity
+ * implements code for the GPSTestFragment Activity
  * Methods for lists and buttons are here.
  *
  * TODO
@@ -31,7 +31,7 @@ import hansyuan.cruzrojamobile.R;
  * data to the server might use the LP's method that will
  * return a new JSONObject.
  */
-public class GPSActivity extends Fragment implements CompoundButton.OnCheckedChangeListener{
+public class GPSTestFragment extends Fragment implements CompoundButton.OnCheckedChangeListener{
     GPSTracker gpsTracker;
     Switch trackByTime;             // The switch for clock enable.
     Switch trackByDistance;
@@ -63,19 +63,19 @@ public class GPSActivity extends Fragment implements CompoundButton.OnCheckedCha
 
     @Override
     public void onPause() {
-        System.err.println("onPause: GPSActivity");
+        System.err.println("onPause: GPSTestFragment");
         super.onPause(); // This is required for some reason.
     }
     @Override
     public void onStop(){
-        System.err.println("onStop: GPSActivity");
+        System.err.println("onStop: GPSTestFragment");
         trackByTime.setChecked(false);
         super.onStop(); // Same.
     }
 
     @Override
     public void onDestroy() {
-        System.err.print("onDestroy: GPSActivity");
+        System.err.print("onDestroy: GPSTestFragment");
         trackByTime.setChecked(false);
         super.onDestroy(); // Same.
     }

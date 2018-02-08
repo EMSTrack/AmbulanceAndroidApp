@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,21 +6,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-import hansyuan.cruzrojamobile.tab.fragments.demo_viewTransmission;
+import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.R;
+import hansyuan.cruzrojamobile.mqtt.MqttClient;
 
 /**
  * Created by justingil1748 on 4/14/17.
  */
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     public EditText editUserName;
     public EditText editPassword;
@@ -31,7 +30,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     MqttClient mqttServer;
 
     /*
-    * Admin Account Login:
+    * Admin Account LoginActivity:
     * admin
     * cruzrojaadmin
     * */
@@ -43,12 +42,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         ambulance = ((AmbulanceApp) this.getApplication()).onCreate(this);
 
-/*        // TODO should this jump to the MainActivity or AmbulanceList?
+/*        // TODO should this jump to the HomeActivity or AmbulanceList?
         if (ambulance.getUserLoggedIn()) {
             //that means user is already logged in, so close this activity
             finish();
             //opens main activity
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
         }*/
 
 

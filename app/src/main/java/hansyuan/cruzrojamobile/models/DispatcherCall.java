@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.models;
 
 import android.util.Log;
 import org.json.JSONException;
@@ -20,7 +20,7 @@ public class DispatcherCall  {
     static String longitude = "-117.2382162";
     String description = "No description received";
 
-    DispatcherCall(JSONObject c) {
+    public DispatcherCall(JSONObject c) {
         try {
             //GET EVERY SINGLE PART OF THE JSON OUT THE WAY
             int id = c.getInt("id");
@@ -54,7 +54,7 @@ public class DispatcherCall  {
         callString = c.toString();
     }
 
-    String getAddress() {
+    public String getAddress() {
         return address1;
     }
 

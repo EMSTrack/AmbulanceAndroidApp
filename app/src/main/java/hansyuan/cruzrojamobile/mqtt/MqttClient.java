@@ -1,9 +1,7 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.mqtt;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.util.Log;
-import android.widget.Spinner;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.DisconnectedBufferOptions;
@@ -14,8 +12,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.logging.Logger;
 import org.json.JSONObject;
+
+import hansyuan.cruzrojamobile.AmbulanceApp;
 
 /**
  * Created by Fabian Choi on 5/12/2017.

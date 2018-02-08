@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.services;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -23,15 +22,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.LocationRequest;
 
-import java.util.TimerTask;
+import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.models.LocationPoint;
 
 /**
  *
  * Created by Hans Yuan on 10/19/2016.
  *
  * Java Class Only:
- * Purpose is to get the GPSActivity information from Android.
- * Use by creating a new instance of GPSTracker. This is done by the GPSActivity class.
+ * Purpose is to get the GPSTestFragment information from Android.
+ * Use by creating a new instance of GPSTracker. This is done by the GPSTestFragment class.
  */
 public class GPSTracker extends Service implements LocationListener {
     private static LocationManager m_locationManager;
@@ -97,7 +97,7 @@ public class GPSTracker extends Service implements LocationListener {
     }
 
 
-    /** checks if the GPSActivity is enabled. If it is not, returns false
+    /** checks if the GPSTestFragment is enabled. If it is not, returns false
      *
      * @return
      */
@@ -173,7 +173,7 @@ public class GPSTracker extends Service implements LocationListener {
                                     LocationManager.GPS_PROVIDER,
                                     MIN_TIME_BW_UPDATES,
                                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                            Log.d("GPSActivity Enabled", "GPSActivity Enabled");
+                            Log.d("GPSTestFragment Enabled", "GPSTestFragment Enabled");
                             if (m_locationManager != null) {
                                 location = m_locationManager
                                         .getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -266,10 +266,10 @@ public class GPSTracker extends Service implements LocationListener {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
-        alertDialog.setTitle("GPSActivity is settings");
+        alertDialog.setTitle("GPSTestFragment is settings");
 
         // Setting Dialog Message
-        alertDialog.setMessage("GPSActivity is not enabled. Do you want to go to settings menu?");
+        alertDialog.setMessage("GPSTestFragment is not enabled. Do you want to go to settings menu?");
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {

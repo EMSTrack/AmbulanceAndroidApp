@@ -1,40 +1,20 @@
-package hansyuan.cruzrojamobile.tab.fragments;
+package hansyuan.cruzrojamobile.fragments;
 
 
-import android.app.ListActivity;
-import android.content.Context;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import hansyuan.cruzrojamobile.Ambulance;
-import hansyuan.cruzrojamobile.AmbulanceApp;
-import hansyuan.cruzrojamobile.Hospital;
-import hansyuan.cruzrojamobile.HospitalAdapter;
+import hansyuan.cruzrojamobile.models.Hospital;
+import hansyuan.cruzrojamobile.adapters.HospitalAdapter;
 import hansyuan.cruzrojamobile.R;
 
 /**
@@ -45,7 +25,7 @@ import hansyuan.cruzrojamobile.R;
  *
  *
  */
-public class demo_viewTransmission extends Fragment {
+public class HospitalListFragment extends Fragment {
     View rootView;
     ListView listView;
 

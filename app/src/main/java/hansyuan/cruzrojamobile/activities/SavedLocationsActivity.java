@@ -1,10 +1,12 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class SavedLocations extends AppCompatActivity {
+import hansyuan.cruzrojamobile.R;
+
+public class SavedLocationsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

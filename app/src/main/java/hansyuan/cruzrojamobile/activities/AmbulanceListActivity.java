@@ -1,9 +1,8 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +12,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.R;
+import hansyuan.cruzrojamobile.models.Ambulance;
 
 /**
  * Created by dchickey on 10/24/2017.
@@ -106,7 +108,7 @@ public class AmbulanceListActivity extends AppCompatActivity implements View.OnC
                 ambulanceApp.publishAmbulanceID(selectedAmbulance.getId());
 
                 // Create the dashboard intent
-                Intent dashboardIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent dashboardIntent = new Intent(getApplicationContext(), HomeActivity.class);
 
                 // Add Serialized Ambulance Class
                 dashboardIntent.putExtra("AmbulanceClass", selectedAmbulance);

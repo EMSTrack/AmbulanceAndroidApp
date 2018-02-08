@@ -1,4 +1,4 @@
-package hansyuan.cruzrojamobile.tab.fragments;
+package hansyuan.cruzrojamobile.fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,20 +11,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import hansyuan.cruzrojamobile.AmbulanceApp;
-import hansyuan.cruzrojamobile.DispatcherCall;
-import hansyuan.cruzrojamobile.GPSTracker;
-import hansyuan.cruzrojamobile.LocationPoint;
+import hansyuan.cruzrojamobile.models.DispatcherCall;
+import hansyuan.cruzrojamobile.services.GPSTracker;
+import hansyuan.cruzrojamobile.models.LocationPoint;
 import hansyuan.cruzrojamobile.R;
 
 import static android.content.ContentValues.TAG;
-import static hansyuan.cruzrojamobile.DispatcherCall.getLong;
-import static hansyuan.cruzrojamobile.DispatcherCall.getLatitude;
+import static hansyuan.cruzrojamobile.models.DispatcherCall.getLong;
+import static hansyuan.cruzrojamobile.models.DispatcherCall.getLatitude;
 
 /**
  * Created by justingil1748 on 4/26/17.
  */
 
-public class DispatcherActivity extends Fragment implements View.OnClickListener {
+public class DispatcherFragment extends Fragment implements View.OnClickListener {
     View rootView;
     GPSTracker gps;
     Button mapButton;

@@ -1,15 +1,17 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
+
+import hansyuan.cruzrojamobile.R;
+import hansyuan.cruzrojamobile.models.Hospital;
+import hansyuan.cruzrojamobile.models.HospitalEquipment;
 
 /**
  * Created by rawaa_ali on 6/1/17.

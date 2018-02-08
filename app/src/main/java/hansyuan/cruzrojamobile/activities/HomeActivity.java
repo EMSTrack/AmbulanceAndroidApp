@@ -1,6 +1,5 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,16 +15,19 @@ import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
+
+import hansyuan.cruzrojamobile.AmbulanceApp;
+import hansyuan.cruzrojamobile.R;
+import hansyuan.cruzrojamobile.adapters.PagerAdapter;
+import hansyuan.cruzrojamobile.models.Ambulance;
 
 
 /**
  * This is the main activity -- the default screen
  */
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private String titleText;
     private static Ambulance currAmbulance;
     AmbulanceApp ambulanceApp;
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     /**
      * @param savedInstanceState
@@ -139,15 +141,15 @@ public class MainActivity extends AppCompatActivity {
         Class activityClass;
         switch(menuItem.getItemId()) {
             case R.id.home:
-                activityClass = MainActivity.class;
+                activityClass = HomeActivity.class;
                 break;
             case R.id.logout:
                 ambulanceApp.setUserLoggedIn(false);
                 ambulanceApp.logout();
-                activityClass = Login.class;
+                activityClass = LoginActivity.class;
                 break;
             default:
-                activityClass = MainActivity.class;
+                activityClass = HomeActivity.class;
         }
 
         // Highlight the selected item has been done by NavigationView
@@ -203,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    static void updateStatus(String newStatus){
+    public static void updateStatus(String newStatus){
         statusText.setText(currAmbulance.getLicensePlate() + " - " + newStatus);
     }
     @Override

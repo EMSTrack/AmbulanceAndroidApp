@@ -1,12 +1,12 @@
-package hansyuan.cruzrojamobile;
+package hansyuan.cruzrojamobile.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity;
-import hansyuan.cruzrojamobile.tab.fragments.GPSActivity;
-import hansyuan.cruzrojamobile.tab.fragments.demo_viewTransmission;
+import hansyuan.cruzrojamobile.fragments.DispatcherFragment;
+import hansyuan.cruzrojamobile.fragments.GPSTestFragment;
+import hansyuan.cruzrojamobile.fragments.HospitalListFragment;
 
 /**
  * Created by justingil1748 on 4/17/17.
@@ -24,13 +24,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                DispatcherActivity tab1 = new DispatcherActivity();
+                DispatcherFragment tab1 = new DispatcherFragment();
                 return tab1;
             case 1:
-                demo_viewTransmission tab3 = new demo_viewTransmission();
+                HospitalListFragment tab3 = new HospitalListFragment();
                 return tab3;
             case 2:
-                GPSActivity tab4 = new GPSActivity();
+                GPSTestFragment tab4 = new GPSTestFragment();
                 return tab4;
             default:
                 return null;

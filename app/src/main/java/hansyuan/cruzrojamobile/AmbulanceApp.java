@@ -28,12 +28,18 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static hansyuan.cruzrojamobile.tab.fragments.DispatcherActivity.updateAddress;
-import static hansyuan.cruzrojamobile.MainActivity.updateStatus;
+import hansyuan.cruzrojamobile.activities.HomeActivity;
+import hansyuan.cruzrojamobile.models.Ambulance;
+import hansyuan.cruzrojamobile.models.DispatcherCall;
+import hansyuan.cruzrojamobile.models.LocationPoint;
+import hansyuan.cruzrojamobile.mqtt.MqttClient;
+import hansyuan.cruzrojamobile.services.GPSTracker;
+
+import static hansyuan.cruzrojamobile.fragments.DispatcherFragment.updateAddress;
+import static hansyuan.cruzrojamobile.activities.HomeActivity.updateStatus;
 /**
  * Created by jkapi on 4/19/2017.
  *
@@ -69,7 +75,7 @@ public class AmbulanceApp extends Application {
     GPSTracker gpsTracker;
     JSONObject id_Object;
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     public void updateLastKnownLocation(LocationPoint location) {
         lastKnownLocation = location;
@@ -431,7 +437,7 @@ Thanks Google.. Thanks for nothing!
         //Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.siren);
 
 
-        Intent intent = new Intent(appContext, MainActivity.class);
+        Intent intent = new Intent(appContext, HomeActivity.class);
         PendingIntent pi = PendingIntent.getActivity(appContext, 0, intent, 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
