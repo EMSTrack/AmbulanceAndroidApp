@@ -80,11 +80,6 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
 
-       // findViewById(R.id.activity_main).setOnTouchListener(this);
-      //  InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        //imm.hideSoftInputFromInputMethod(getCurrentFocus().getWindowToken(), 0);
-        // Find our drawer view
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
 
