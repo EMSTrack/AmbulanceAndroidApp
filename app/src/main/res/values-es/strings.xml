@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cruz Roja Mobile</string>
+    <string name="request_text">La Pedido</string>
+    <string name="address_text">Dirección</string>
+    <string name="no_address_text">Sin Dirección</string>
+    <string name="description_text">" La Descripción"</string>
+    <string name="no_location_text">Sin Ubicación</string>
+    <string name="login_username_hint">Por favor introduzca un nombre de usuario válido.</string>
+    <string name="login_password_hint">Por favor introduzca una contraseña válida.</string>
+    <string name="login_button_text">Acceder</string>
+    <string name="select_ambulance_button_text">Seleccionar Ambulancia</string>
+    <string name="welcome_text">Bienvenido a Cruz Roja</string>
+</resources>

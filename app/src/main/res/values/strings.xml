@@ -5,11 +5,15 @@
     <string name="no_address_text"> No Address Received</string>
     <string name="description_text"> Description</string>
     <string name="no_location_text"> No Location Description</string>
+
     <string name="login_username_hint"> Enter username</string>
     <string name="login_password_hint"> Enter password</string>
     <string name="login_button_text"> Sign in</string>
+
     <string name="select_ambulance_button_text"> Select Ambulance" </string>
+
     <string name="welcome_text"> Welcome to Cruz Roja! </string>
+
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="app_name">Cruz Roja Mobile</string>
