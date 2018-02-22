@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,7 @@ import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -78,10 +80,16 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
 
+       // findViewById(R.id.activity_main).setOnTouchListener(this);
+      //  InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        //imm.hideSoftInputFromInputMethod(getCurrentFocus().getWindowToken(), 0);
         // Find our drawer view
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
+
+        // set hamburger color to be black
+        drawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black));
 
         // ambulance id on drawer
         ambulanceId = (TextView) findViewById(R.id.ambulanceID);
@@ -91,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Dispatch"));
         tabLayout.addTab(tabLayout.newTab().setText("Hospital"));
 //        tabLayout.addTab(tabLayout.newTab().setText("GPS"));
+
 
         //pager
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -116,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ambulanceApp.mqttMaster();
-//        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
-//        statusText.setText(titleText);
+        titleText = currAmbulance.getLicensePlate() + " - " + ambulanceApp.getCurrStatus();
+        statusText.setText(titleText);
 
     }
 
@@ -212,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
         statusText.setText(currAmbulance.getLicensePlate() + " - " + newStatus);
         ambulanceId.setText(currAmbulance.getId());
     }
+
+
     @Override
     public void onBackPressed() {
         finish();

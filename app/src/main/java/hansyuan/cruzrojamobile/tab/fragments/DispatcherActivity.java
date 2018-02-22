@@ -43,7 +43,6 @@ public class DispatcherActivity extends Fragment implements View.OnClickListener
         mapButton = (Button) rootView.findViewById(R.id.gmap);
         mapButton.setOnClickListener(this);
 
-        //
         addressText = ((TextView) rootView.findViewById(R.id.address));
         addressText.setText(AmbulanceApp.globalAddress);
         /*

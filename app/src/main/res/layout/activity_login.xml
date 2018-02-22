@@ -25,7 +25,7 @@
             android:layout_marginRight="30dp"
             android:layout_marginBottom="20dp"
             android:inputType="text"
-            android:hint="Enter username" />
+            android:hint="@string/login_username_hint" />
 
         <EditText
             android:id="@+id/editPassword"
@@ -34,7 +34,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="20dp"
-            android:hint="Enter password"
+            android:hint="@string/login_password_hint"
             android:inputType="textPassword"
             android:fontFamily="sans-serif" />
 
@@ -45,7 +45,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:background="@color/colorAccent"
-            android:text="Sign in"
+            android:text="@string/login_button_text"
             android:textColor="@color/common_google_signin_btn_text_dark_default" />
     </LinearLayout>
 
