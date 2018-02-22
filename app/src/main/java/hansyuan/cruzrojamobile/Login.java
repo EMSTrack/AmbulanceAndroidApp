@@ -67,6 +67,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         // TODO remove, for testing only
         editUserName.setText("admin");
         editPassword.setText("cruzrojaadmin");
+
+        //allow keyboard to disappear on screen click
         findViewById(R.id.relativeLoginLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
